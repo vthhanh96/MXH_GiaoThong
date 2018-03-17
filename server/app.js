@@ -7,11 +7,14 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var postRoutes = require('./routes/postRoutes');
 
 var app = express();
 
 //Connect DB
 var mongoose = require('mongoose');
+
+
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/mxhgiaothong').then(
     () => {
@@ -36,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-
+app.use('/post',postRoutes);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
