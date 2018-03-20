@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MXHGiaoThong</string>
+
+    <!-- REST Error Strings -->
+    <string name="api_err_no_network">No internet connection</string>
+    <string name="api_err_time_out">Request time out</string>
+    <string name="api_err_file_too_large">File too large can\'t open!</string>
+    <string name="api_err_unknown_error">Unknown error</string>
+    <string name="api_err_host_name">Server not found</string>
+</resources>
