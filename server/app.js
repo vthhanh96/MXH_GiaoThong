@@ -4,9 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var users = require('./routes/userRoutes');
 var postRoutes = require('./routes/postRoutes');
 
 var app = express();
@@ -24,6 +25,8 @@ err => {
     console.log('Kết nối DB thất bại');
 }
 );
+app.use(passport.initialize());
+require('./config/passport')(passport);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -38,8 +41,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
-app.use('/post',postRoutes);
+app.use('/api/user', users);
+app.use('/api/post',postRoutes);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

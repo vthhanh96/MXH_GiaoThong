@@ -1,26 +1,52 @@
 //Require Mongoose
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 
+delete mongoose.connection.models['User'];
+
 //Define a schema
-var UserSchema = new mongoose.Schema({
-    username:{ type: String, unique: true, required: true },
-    hash_password: { type: String, required: true},
-    email: { type: String , lowercase: true, trim: true},
-    created_date: String,
-    first_name: String,
-    last_name: String,
-    birth_date: String,
-    gender: String,
-    avatar: String
-}, {
-    collection: 'user'
+var UserSchema = new Schema({
+    email: {
+        type: String,
+        lowercase: true,
+        unique: true,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+});
+// Saves the user's password hashed (plain text password storage is not good)
+UserSchema.pre('save', function (next) {
+    var user = this;
+    if (this.isModified('password') || this.isNew) {
+        bcrypt.genSalt(10, function (err, salt) {
+            if (err) {
+                return next(err);
+            }
+            bcrypt.hash(user.password, salt, function(err, hash) {
+                if (err) {
+                    return next(err);
+                }
+                user.password = hash;
+                next();
+            });
+        });
+    } else {
+        return next();
+    }
 });
 
-// comparePassword
-UserSchema.methods.comparePassword = function (password) {
-    return bcrypt.compareSync(password, this.hash_password)
-}
+// Create method to compare password input to password saved in database
+UserSchema.methods.comparePassword = function(pw, cb) {
+    bcrypt.compare(pw, this.password, function(err, isMatch) {
+        if (err) {
+            return cb(err);
+        }
+        cb(null, isMatch);
+    });
+};
 
-//Export function to create "UserSchema" models class
-module.exports = mongoose.model('User', UserSchema );
+module.exports  = mongoose.model('User', UserSchema);
