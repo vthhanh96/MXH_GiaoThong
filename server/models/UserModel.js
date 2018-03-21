@@ -17,6 +17,8 @@ var UserSchema = new Schema({
         type: String,
         required: true
     }
+}, {
+    versionKey: false
 });
 // Saves the user's password hashed (plain text password storage is not good)
 UserSchema.pre('save', function (next) {
@@ -48,5 +50,11 @@ UserSchema.methods.comparePassword = function(pw, cb) {
         cb(null, isMatch);
     });
 };
+
+UserSchema.methods.toJSON = function() {
+    var obj = this.toObject();
+    delete obj.password;
+    return obj;
+}
 
 module.exports  = mongoose.model('User', UserSchema);

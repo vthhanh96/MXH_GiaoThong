@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/UserModel');
 var jwt = require('jsonwebtoken');
 var config = require('../config/main');
+var passport = require('passport');
 
 router.post('/register', function(req, res) {
     if(!req.body.email || !req.body.password) {
@@ -48,6 +49,12 @@ router.post('/login', function(req, res) {
     });
 });
 
-
+router.get('/me', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    res.json({
+        success: true,
+        message: "success",
+        data: req.user
+    })
+});
 
 module.exports = router;
