@@ -5,7 +5,7 @@ var User = require('../models/UserModel');
 var passport = require('passport');
 
 /* POST new bài viết. */
-router.post('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.post('/', passport.authenticate('jwt', {session: false}), function (req, res, next) {
     const newPost = new Post(req.body);
     newPost.creator = req.user;
 
@@ -45,28 +45,83 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/:postId', function (req, res, next) {
+router.use('/:postId', (req, res, next) => {
     Post.findById(req.params.postId, (err, post) => {
-        if(err) {
-            res.json({
-                success: false,
-                data: [],
-                message: `Error is: ${err}`
-            });
-        } else if(post) {
-            res.json({
-                success: true,
-                data: post,
-                message: "success"
-            });
-        } else {
+        if (err)
+            res.status(500).send(err);
+        else if (post) {
+            req.post = post;
+            next();
+        }
+        else {
             res.json({
                 success: false,
                 data: {},
                 message: "post not found"
             });
         }
-    })
+    });
+});
+
+router.get('/:postId', function (req, res, next) {
+    res.json({
+        success: true,
+        data: req.post,
+        message: "success"
+    });
+});
+
+router.put('/:postId', passport.authenticate('jwt', {session: false}), function (req, res, next) {
+    if (req.body._id)
+        delete req.body._id;
+    //user is not creator
+    console.log("1" + req.user.id);
+    console.log("2" + req.post.creator);
+    if(req.user.id.localeCompare(req.post.creator) === 0){
+        for (var p in req.body) {
+            req.post[p] = req.body[p];
+        }
+
+        req.post.save((err) => {
+            if (err)
+                res.status(500).send(err);
+            else
+                res.json({
+                    success: true,
+                    message: "update post success",
+                    data: req.post
+                });
+        });
+    } else {
+        res.json({
+            success: false,
+            message: "You don't have permission"
+        })
+    }
+});
+
+router.delete('/:postId', passport.authenticate('jwt', {session: false}), function (req, res, next) {
+    if (req.body._id)
+        delete req.body._id;
+    //user is not creator
+    console.log("1" + req.user.id);
+    console.log("2" + req.post.creator);
+    if(req.user.id.localeCompare(req.post.creator) === 0){
+        req.post.remove((err) => {
+            if(err)
+                res.status(500).send(err);
+            else
+                res.json({
+                    success: true,
+                    message: "delete post success"
+                });
+        });
+    } else {
+        res.json({
+            success: false,
+            message: "You don't have permission"
+        })
+    }
 });
 
 module.exports = router;
