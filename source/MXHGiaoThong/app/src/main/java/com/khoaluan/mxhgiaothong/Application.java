@@ -2,6 +2,9 @@ package com.khoaluan.mxhgiaothong;
 
 import android.content.Context;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 
 public class Application extends android.app.Application {
 
@@ -19,6 +22,8 @@ public class Application extends android.app.Application {
     }
 
     private void init() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 
 }

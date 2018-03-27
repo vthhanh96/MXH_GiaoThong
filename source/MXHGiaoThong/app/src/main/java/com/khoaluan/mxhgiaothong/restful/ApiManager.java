@@ -18,7 +18,7 @@ public class ApiManager {
     }
 
     public PostService getPostService() {
-        ApiGenerator.changeBaseUrl("http://10.0.2.2:3001/");
+        ApiGenerator.changeBaseUrl("http://10.0.3.2:3000/api/");
         if(mPostService == null) {
             mPostService = ApiGenerator.createService(PostService.class);
         }
