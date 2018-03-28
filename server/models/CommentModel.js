@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var User = require('./UserModel');
 
-var PostSchema = new Schema({
+var CommentSchema = new Schema({
     creator: {type: mongoose.Schema.Types.ObjectId,  ref: 'User'},
-    category: [{type: mongoose.Schema.Types.ObjectId,  ref: 'Category'}],
     content : {
         type : String,
         default: ""
@@ -15,19 +15,10 @@ var PostSchema = new Schema({
     modify_date:{
         type: Date,
         default: Date.now()
-    },
-    latitude:{
-      type: Number,
-        required: true
-    },
-    longitude:{
-        type: Number,
-        required: true
-    },
-    comments: [{type: mongoose.Schema.Types.ObjectId,  ref: 'Comment'}]
+    }
 }, {
     usePushEach: true,
     versionKey: false
 });
 
-module.exports  = mongoose.model('Post', PostSchema);
+module.exports = mongoose.model('Comment', CommentSchema);

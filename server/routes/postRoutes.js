@@ -28,7 +28,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), function (req, 
 });
 
 router.get('/', function (req, res, next) {
-    Post.find({}).limit(100).sort({name: 1}).exec((err, posts) => {
+    Post.find({}).populate('comments').limit(100).sort({name: 1}).exec((err, posts) => {
         if (err) {
             res.json({
                 success: false,
@@ -46,7 +46,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.use('/:postId', (req, res, next) => {
-    Post.findById(req.params.postId, (err, post) => {
+    Post.findById(req.params.postId).populate('creator').populate('comments').exec((err, post) => {
         if (err)
             res.status(500).send(err);
         else if (post) {
@@ -75,8 +75,6 @@ router.put('/:postId', passport.authenticate('jwt', {session: false}), function 
     if (req.body._id)
         delete req.body._id;
     //user is not creator
-    console.log("1" + req.user.id);
-    console.log("2" + req.post.creator);
     if(req.user.id.localeCompare(req.post.creator) === 0){
         for (var p in req.body) {
             req.post[p] = req.body[p];
@@ -101,11 +99,6 @@ router.put('/:postId', passport.authenticate('jwt', {session: false}), function 
 });
 
 router.delete('/:postId', passport.authenticate('jwt', {session: false}), function (req, res, next) {
-    if (req.body._id)
-        delete req.body._id;
-    //user is not creator
-    console.log("1" + req.user.id);
-    console.log("2" + req.post.creator);
     if(req.user.id.localeCompare(req.post.creator) === 0){
         req.post.remove((err) => {
             if(err)
