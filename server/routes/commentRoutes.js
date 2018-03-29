@@ -98,6 +98,7 @@ router.put('/:postId/comment/:commentId', passport.authenticate('jwt', {session:
         for (var p in req.body) {
             req.comment[p] = req.body[p];
         }
+        req.comment.modify_date = Date.now();
 
         req.comment.save((err) => {
             if (err)
