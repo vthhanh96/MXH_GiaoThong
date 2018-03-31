@@ -57,4 +57,31 @@ router.get('/me', passport.authenticate('jwt', { session: false }), function(req
     })
 });
 
+router.use('/:userId', (req, res, next) => {
+    User.findById(req.params.userId, (err, user) => {
+        if (err)
+            res.status(500).send(err);
+        else if (user) {
+            req.user = user;
+            next();
+        }
+        else {
+            res.json({
+                success: false,
+                data: {},
+                message: "user not found"
+            });
+        }
+    });
+});
+
+router.get('/:userId',passport.authenticate('jwt', { session: false }), function (req, res, next) {
+    res.json({
+        success: true,
+        data: req.user,
+        message: "success"
+    });
+});
+
+
 module.exports = router;

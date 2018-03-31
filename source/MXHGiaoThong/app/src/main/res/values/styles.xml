@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="FacebookLoginButton">
+        <item name="android:textSize">13sp</item>
+        <item name="android:background">@drawable/bg_login_facebook</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="GoogleLoginButton">
+        <item name="android:textSize">13sp</item>
+        <item name="android:background">@drawable/bg_login_google</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="btnLogin">
+        <item name="android:textSize">13sp</item>
+        <item name="android:background">@drawable/bg_btn_login</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
 </resources>

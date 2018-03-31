@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -36,7 +38,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class LoginActivity extends AppCompatActivity {
     private static final String EMAIL = "email";
     private static final String USER_POSTS = "user_posts";
     private static final int RC_SIGN_IN = 2018;
@@ -45,17 +51,36 @@ public class MainActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private GoogleSignInClient mGoogleSignInClient;
 
+    @BindView(R.id.login_button_google_back)
+    SignInButton signInButton;
+
+    @BindView(R.id.login_button_google_front)
+    Button loginGoogleFront;
+
+    @BindView(R.id.login_button_front)
+    Button loginFBFront;
+
+    @BindView(R.id.login_button_back)
+    LoginButton mLoginButton;
+
+    @BindView(R.id.tv_forgot_pass)
+    TextView tvForgotPass;
+
+    @BindView(R.id.tv_register)
+    TextView tvRegister;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
+        setListener();
 
-        if (AccessToken.getCurrentAccessToken() != null) {
-            Toast.makeText(this, "đã từng đăng nhập", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Token bằng null, chưa đăng nhập lần nào", Toast.LENGTH_SHORT).show();
-        }
+        loginWithFacebook();
+
+        loginWithGoogle();
+
         ApiManager.getInstance().getPostService().getAllPost().enqueue(new RestCallback<GetAllPostResponse>() {
             @Override
             public void success(GetAllPostResponse res) {
@@ -68,25 +93,69 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Add code to print out the key hash
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.khoaluan.mxhgiaothong",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+    }
+
+    private void setListener() {
+        loginFBFront.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLoginButton.performClick();
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        });
 
-        } catch (NoSuchAlgorithmException e) {
+        loginGoogleFront.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signInButton.performClick();
+            }
+        });
 
+        tvForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,ForgotPassActivity.class));
+            }
+        });
+
+        tvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
+    }
+
+
+    private void loginWithGoogle() {
+        signInButton = findViewById(R.id.login_button_google_back);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+        loginGoogleFront = findViewById(R.id.login_button_google_front);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+
+    private void loginWithFacebook() {
+        if (AccessToken.getCurrentAccessToken() != null) {
+            Toast.makeText(this, "đã từng đăng nhập", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Token bằng null, chưa đăng nhập lần nào", Toast.LENGTH_SHORT).show();
         }
 
         mCallbackManager = CallbackManager.Factory.create();
 
-        LoginButton mLoginButton = findViewById(R.id.login_button);
+        loginFBFront = findViewById(R.id.login_button_front);
+        mLoginButton = findViewById(R.id.login_button_back);
 
         // Set the initial permissions to request from the user while logging in
         mLoginButton.setReadPermissions(Arrays.asList(EMAIL, USER_POSTS));
@@ -108,21 +177,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException e) {
                 // Handle exception
-            }
-        });
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
     }
