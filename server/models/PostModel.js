@@ -8,6 +8,9 @@ var PostSchema = new Schema({
         type : String,
         default: ""
     },
+    imageUrl: {
+        type: String
+    },
     created_date: {
         type : Date,
         default: Date.now()
@@ -24,7 +27,20 @@ var PostSchema = new Schema({
         type: Number,
         required: true
     },
-    comments: [{type: mongoose.Schema.Types.ObjectId,  ref: 'Comment'}]
+    place: {
+      type: String,
+      required: true
+    },
+    comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
+    reaction: [{type: mongoose.Schema.Types.ObjectId, ref: 'Reaction'}],
+    like_amount: {
+        type: Number,
+        default: 0,
+    },
+    dislike_amount: {
+        type: Number,
+        default: 0,
+    }
 }, {
     usePushEach: true,
     versionKey: false

@@ -74,11 +74,24 @@ router.get('/:postId', function (req, res, next) {
 router.put('/:postId', passport.authenticate('jwt', {session: false}), function (req, res, next) {
     if (req.body._id)
         delete req.body._id;
+    if(req.body.reaction)
+        delete req.body.reaction;
+    if(req.body.comments)
+        delete req.body.comments;
+    if(req.body.creator)
+        delete req.body.creator;
+    if(req.body.dislike_amount)
+        delete req.body.dislike_amount;
+    if(req.body.like_amount)
+        delete req.body.like_amount;
+    if(req.body.category)
+        delete req.body.category;
     //user is not creator
-    if(req.user.id.localeCompare(req.post.creator) === 0){
+    if(req.user.id.localeCompare(req.post.creator._id) === 0){
         for (var p in req.body) {
             req.post[p] = req.body[p];
         }
+        req.post.modify_date = Date.now();
 
         req.post.save((err) => {
             if (err)
@@ -99,7 +112,7 @@ router.put('/:postId', passport.authenticate('jwt', {session: false}), function 
 });
 
 router.delete('/:postId', passport.authenticate('jwt', {session: false}), function (req, res, next) {
-    if(req.user.id.localeCompare(req.post.creator) === 0){
+    if(req.user.id.localeCompare(req.post.creator._id) === 0){
         req.post.remove((err) => {
             if(err)
                 res.status(500).send(err);
