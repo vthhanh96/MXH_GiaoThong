@@ -1,11 +1,13 @@
 package com.khoaluan.mxhgiaothong.restful;
 
 import com.khoaluan.mxhgiaothong.restful.service.PostService;
+import com.khoaluan.mxhgiaothong.restful.service.UserService;
 
 public class ApiManager {
     private static ApiManager instance = null;
 
     private static PostService mPostService;
+    private static UserService mUserService;
 
     private ApiManager() {}
 
@@ -24,4 +26,13 @@ public class ApiManager {
         }
         return mPostService;
     }
+
+    public UserService getUserService(){
+        ApiGenerator.changeBaseUrl("http://10.0.3.2:3000/api/user/");
+        if(mUserService == null) {
+            mUserService = ApiGenerator.createService(UserService.class);
+        }
+        return mUserService;
+    }
+
 }

@@ -32,7 +32,9 @@ import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
+import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
+import com.khoaluan.mxhgiaothong.restful.response.UserLoginResponse;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -69,62 +71,70 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.tv_register)
     TextView tvRegister;
 
+    @BindView(R.id.edt_username)
+    TextView edtUserName;
+
+    @BindView(R.id.edt_password)
+    TextView edtPassWord;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        setListener();
-
         loginWithFacebook();
 
         loginWithGoogle();
 
-        ApiManager.getInstance().getPostService().getAllPost().enqueue(new RestCallback<GetAllPostResponse>() {
+//        ApiManager.getInstance().getPostService().getAllPost().enqueue(new RestCallback<GetAllPostResponse>() {
+//            @Override
+//            public void success(GetAllPostResponse res) {
+//                Log.d("TestApi", res.getPosts().get(0).mPostContent);
+//            }
+//
+//            @Override
+//            public void failure(RestError error) {
+//                Log.d("TestApi", error.message);
+//            }
+//        });
+
+    }
+
+    @OnClick(R.id.login_button_front)
+    public void ClickLoginFacebook(){
+        mLoginButton.performClick();
+    }
+
+    @OnClick(R.id.login_button_google_front)
+    public void ClickLoginGoogle(){
+        signInButton.performClick();
+    }
+
+    @OnClick(R.id.tv_register)
+    public void Register(){
+        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+    }
+
+    @OnClick(R.id.tv_forgot_pass)
+    public void ForgotPassword(){
+        startActivity(new Intent(LoginActivity.this,ForgotPassActivity.class));
+    }
+
+    @OnClick(R.id.btn_login)
+    public void Login(){
+        ApiManager.getInstance().getUserService().login(new LoginUseRequest(edtUserName.getText().toString(),edtPassWord.getText().toString())).enqueue(new RestCallback<UserLoginResponse>() {
             @Override
-            public void success(GetAllPostResponse res) {
-                Log.d("TestApi", res.getPosts().get(0).mPostContent);
+            public void success(UserLoginResponse res) {
+                Toast.makeText(LoginActivity.this, "token " +res.getToken(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void failure(RestError error) {
-                Log.d("TestApi", error.message);
-            }
-        });
-
-    }
-
-    private void setListener() {
-        loginFBFront.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mLoginButton.performClick();
-            }
-        });
-
-        loginGoogleFront.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signInButton.performClick();
-            }
-        });
-
-        tvForgotPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this,ForgotPassActivity.class));
-            }
-        });
-
-        tvRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                Toast.makeText(LoginActivity.this, ""+error.message, Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 
     private void loginWithGoogle() {
         signInButton = findViewById(R.id.login_button_google_back);

@@ -7,6 +7,12 @@ delete mongoose.connection.models['User'];
 
 //Define a schema
 var UserSchema = new Schema({
+    fullName: {
+        type: String,
+        lowercase: true,
+        unique: true,
+        required: true
+    },
     email: {
         type: String,
         lowercase: true,
@@ -16,7 +22,10 @@ var UserSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    avatar_url: {
+        type: String,
+    },
 }, {
     versionKey: false
 });
