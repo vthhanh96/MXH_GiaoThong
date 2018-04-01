@@ -17,5 +17,8 @@ public interface UserService {
     Call<UserLoginResponse> login(@Body LoginUseRequest loginUseRequest);
 
     @POST("register")
-    Call<BaseResponse> register(@Body LoginUseRequest loginUseRequest);
+    Call<BaseResponse> register(@Body LoginUseRequest registerUseRequest);
+
+    @POST("forgotPassword")
+    Call<BaseResponse> forgotPassword(@Body LoginUseRequest email);
 }

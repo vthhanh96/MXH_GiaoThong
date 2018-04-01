@@ -4,6 +4,8 @@ var User = require('../models/UserModel');
 var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var passport = require('passport');
+const nodemailer = require('nodemailer');
+var voucher_codes = require('voucher-code-generator');
 
 router.post('/register', function(req, res) {
     if(!req.body.email || !req.body.password) {
@@ -59,6 +61,46 @@ router.get('/me', passport.authenticate('jwt', { session: false }), function(req
     })
 });
 
+router.post('/forgotPassword',function (req,res,next) {
+
+    let transporter = nodemailer.createTransport({
+        service:'Gmail',
+        auth:{
+            user:'netficuit@gmail.com',
+            pass:'@14520288Mh'
+        }
+    });
+    console.log('done');
+
+    var codeGenerates = voucher_codes.generate({
+        length: 5,
+        count: 1,
+        charset: voucher_codes.charset("alphanumeric"),
+        prefix: "UIT"
+    });
+
+    var data = {
+        from: 'NetFicUIT@gmail.com',
+        to: req.body.email,
+        subject: 'Đặt lại mật khẩu của bạn',
+        text: `Mật khẩu mới của bạn là : ${codeGenerates}`
+    };
+
+    transporter.sendMail(data,(err,info)=>{
+        if(err){
+            res.send({
+                success: false,
+                message: "Gửi thất bại"+ err
+            });
+        } else {
+            res.send({
+                success: true,
+                message: codeGenerates[0],
+            });
+        }
+    });
+});
+
 router.use('/:userId', (req, res, next) => {
     User.findById(req.params.userId, (err, user) => {
         if (err)
@@ -85,5 +127,6 @@ router.get('/:userId',passport.authenticate('jwt', { session: false }), function
     });
 });
 
+router.post('/updateUser',)
 
 module.exports = router;

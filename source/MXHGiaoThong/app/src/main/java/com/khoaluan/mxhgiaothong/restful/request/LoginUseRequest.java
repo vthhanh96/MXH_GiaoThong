@@ -37,4 +37,8 @@ public class LoginUseRequest implements Serializable {
         this.fullName = fullName;
         this.avatarUrl = avatarUrl;
     }
+
+    public LoginUseRequest(String email) {
+        this.email = email;
+    }
 }
