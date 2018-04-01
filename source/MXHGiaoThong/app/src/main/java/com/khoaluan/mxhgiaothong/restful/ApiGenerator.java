@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiGenerator {
 
-    private static Retrofit.Builder builder = createBuilder("http://10.0.3.2:3000/api/");
+    private static Retrofit.Builder builder = createBuilder("http://10.0.2.2:3000/api/");
 
     private static Retrofit retrofit = builder.build();
 
@@ -19,6 +19,7 @@ public class ApiGenerator {
     }
 
     public static <T> T createService(Class<T> serviceClass) {
+        retrofit = builder.build();
         return retrofit.create(serviceClass);
     }
 
