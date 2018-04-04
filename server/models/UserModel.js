@@ -9,8 +9,6 @@ delete mongoose.connection.models['User'];
 var UserSchema = new Schema({
     fullName: {
         type: String,
-        lowercase: true,
-        unique: true,
         required: true
     },
     email: {

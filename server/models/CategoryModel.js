@@ -1,15 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var autoIncrement = require('mongoose-auto-increment-fix');
 
 var CategorySchema = new Schema({
-    id: {
-        type: Number,
-        required: true
-    },
-    name : {
-        type : String,
-        default: ""
-    },
+    name: {type: String, default: ""}
+}, {
+    versionKey: false
 });
 
+CategorySchema.plugin(autoIncrement.plugin, 'Category');
 module.exports  = mongoose.model('Category', CategorySchema);

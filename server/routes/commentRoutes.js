@@ -6,7 +6,7 @@ var Comment = require('../models/CommentModel');
 var passport = require('passport');
 
 router.use('/:postId/comment', (req, res, next) => {
-    Post.findById(req.params.postId, (err, post) => {
+    Post.findById(req.params.postId).populate('category').exec((err, post) => {
         if (err)
             res.status(500).send(err);
         else if (post) {

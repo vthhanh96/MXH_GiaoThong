@@ -1,4 +1,4 @@
-package com.khoaluan.mxhgiaothong.post.fragments;
+package com.khoaluan.mxhgiaothong.activities.post.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
