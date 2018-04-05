@@ -70,7 +70,6 @@ router.post('/forgotPassword',function (req,res,next) {
             pass:'@14520288Mh'
         }
     });
-    console.log('done');
 
     var codeGenerates = voucher_codes.generate({
         length: 5,
@@ -127,6 +126,8 @@ router.get('/:userId',passport.authenticate('jwt', { session: false }), function
     });
 });
 
-router.post('/updateUser',)
+router.post('/resetPass',function (req,res,next) {
+
+});
 
 module.exports = router;
