@@ -5,28 +5,33 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment-fix');
+
+//Connect DB
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:27017/mxhgiaothong').then(
+    () => {
+        console.log('Kết nối DB thành công');
+    },
+    err => {
+        console.log('Kết nối DB thất bại');
+    }
+);
+
+//initialize auto increament id
+autoIncrement.initialize(mongoose.connection);
 
 var index = require('./routes/index');
 var users = require('./routes/userRoutes');
 var postRoutes = require('./routes/postRoutes');
 var commentRoutes = require('./routes/commentRoutes');
-var reactionRoutes = require('./routes/ReactionRoutes');
+var reactionRoutes = require('./routes/reactionRoutes');
+var categoryRoutes = require('./routes/categoryRoutes');
 
 var app = express();
 
-//Connect DB
-var mongoose = require('mongoose');
-
-
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/mxhgiaothong').then(
-    () => {
-    console.log('Kết nối DB thành công');
-},
-err => {
-    console.log('Kết nối DB thất bại');
-}
-);
+//initialize passport
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
@@ -42,12 +47,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//set up routes
 app.use('/', index);
 app.use('/api/user', users);
 app.use('/api/post',postRoutes);
 app.use('/api/post', commentRoutes);
 app.use('/api/post', reactionRoutes);
-
+app.use('/api/category', categoryRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -64,7 +71,10 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({
+      success: false,
+      error: `Error: ${err}`
+  });
 });
 
 module.exports = app;

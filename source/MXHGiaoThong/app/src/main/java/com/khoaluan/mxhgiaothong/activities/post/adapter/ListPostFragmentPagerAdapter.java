@@ -1,11 +1,11 @@
-package com.khoaluan.mxhgiaothong.post.adapter;
+package com.khoaluan.mxhgiaothong.activities.post.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.khoaluan.mxhgiaothong.post.fragments.ListNearMePostFragment;
-import com.khoaluan.mxhgiaothong.post.fragments.ListSelectionPostFragment;
+import com.khoaluan.mxhgiaothong.activities.post.fragments.ListNearMePostFragment;
+import com.khoaluan.mxhgiaothong.activities.post.fragments.ListSelectionPostFragment;
 
 import java.util.ArrayList;
 import java.util.List;

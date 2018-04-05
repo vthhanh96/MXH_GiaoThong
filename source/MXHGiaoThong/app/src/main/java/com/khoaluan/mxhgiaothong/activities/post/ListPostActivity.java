@@ -1,4 +1,4 @@
-package com.khoaluan.mxhgiaothong.post;
+package com.khoaluan.mxhgiaothong.activities.post;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
-import com.khoaluan.mxhgiaothong.post.adapter.ListPostFragmentPagerAdapter;
+import com.khoaluan.mxhgiaothong.activities.post.adapter.ListPostFragmentPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

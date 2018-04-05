@@ -3,7 +3,14 @@ var Schema = mongoose.Schema;
 
 var PostSchema = new Schema({
     creator: {type: mongoose.Schema.Types.ObjectId,  ref: 'User'},
-    category: [{type: mongoose.Schema.Types.ObjectId,  ref: 'Category'}],
+    category: {type: mongoose.Schema.Types.ObjectId,  ref: 'Category'},
+    level: {
+        type: Number
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
     content : {
         type : String,
         default: ""
