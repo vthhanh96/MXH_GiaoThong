@@ -23,7 +23,7 @@ router.use('/:postId/reaction', (req, res, next) => {
     });
 });
 
-router.use('/:postId/reaction', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+router.use('/:postId/reaction', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), (req, res, next) => {
     var i;
     var reactionId;
     for(i = 0; i < req.post.reaction.length; i++) {

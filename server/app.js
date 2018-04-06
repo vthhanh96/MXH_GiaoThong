@@ -56,6 +56,14 @@ app.use('/api/post', commentRoutes);
 app.use('/api/post', reactionRoutes);
 app.use('/api/category', categoryRoutes);
 
+//catch unauthorized
+app.get('/unauthorized', function (req, res) {
+    res.json({
+        success: false,
+        message: "Unauthorized"
+    })
+})
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

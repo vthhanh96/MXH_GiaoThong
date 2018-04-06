@@ -1,9 +1,14 @@
 package com.khoaluan.mxhgiaothong.restful.service;
 
+import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
+import com.khoaluan.mxhgiaothong.restful.response.CreatePostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
 
 /**
  * Created by Hong Hanh on 3/19/2018.
@@ -12,4 +17,9 @@ import retrofit2.http.GET;
 public interface PostService {
     @GET("post")
     Call<GetAllPostResponse> getAllPost();
+
+    @POST("post")
+    Call<CreatePostResponse> createPost(
+            @Header("Authorization") String token,
+            @Body CreatePostRequest request);
 }

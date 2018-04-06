@@ -48,7 +48,7 @@ router.get('/:postId/comment', (req, res, next) => {
     });
 });
 
-router.post('/:postId/comment', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+router.post('/:postId/comment', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), (req, res, next) => {
     const comment = new Comment(req.body);
     comment.creator = req.user;
 
@@ -90,7 +90,7 @@ router.get('/:postId/comment/:commentId', function (req, res, next) {
     })
 });
 
-router.put('/:postId/comment/:commentId', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+router.put('/:postId/comment/:commentId', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), (req, res, next) => {
     if (req.body._id)
         delete req.body._id;
     //user is not creator
@@ -118,7 +118,7 @@ router.put('/:postId/comment/:commentId', passport.authenticate('jwt', {session:
     }
 });
 
-router.delete('/:postId/comment/:commentId', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+router.delete('/:postId/comment/:commentId', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), (req, res, next) => {
     if(req.user.id.localeCompare(req.comment.creator) === 0){
         req.comment.remove((err) => {
             if(err)

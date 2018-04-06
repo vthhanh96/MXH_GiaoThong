@@ -6,7 +6,7 @@ var Category = require('../models/CategoryModel');
 var passport = require('passport');
 
 /* POST new bài viết. */
-router.post('/', passport.authenticate('jwt', {session: false}), function (req, res, next) {
+router.post('/', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), function (req, res, next) {
     if (req.body.category) {
         Category.findById(req.body.category).exec((err, category) => {
             if (err) {
@@ -91,7 +91,7 @@ router.get('/:postId', function (req, res, next) {
     });
 });
 
-router.put('/:postId', passport.authenticate('jwt', {session: false}), function (req, res, next) {
+router.put('/:postId', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), function (req, res, next) {
     if (req.body._id)
         delete req.body._id;
     if (req.body.reaction)
@@ -131,7 +131,7 @@ router.put('/:postId', passport.authenticate('jwt', {session: false}), function 
     }
 });
 
-router.delete('/:postId', passport.authenticate('jwt', {session: false}), function (req, res, next) {
+router.delete('/:postId', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), function (req, res, next) {
     if (req.user.id.localeCompare(req.post.creator._id) === 0) {
         req.post.remove((err) => {
             if (err)

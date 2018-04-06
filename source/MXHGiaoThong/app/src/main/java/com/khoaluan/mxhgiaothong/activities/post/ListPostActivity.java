@@ -15,6 +15,7 @@ import com.khoaluan.mxhgiaothong.activities.post.adapter.ListPostFragmentPagerAd
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ListPostActivity extends AppCompatActivity {
 
@@ -86,6 +87,11 @@ public class ListPostActivity extends AppCompatActivity {
             }
             tab.setText(tabNamesIds[i]);
         }
+    }
+
+    @OnClick(R.id.btnCreatePost)
+    public void createPost() {
+        CreatePostActivity.start(ListPostActivity.this);
     }
 
 }

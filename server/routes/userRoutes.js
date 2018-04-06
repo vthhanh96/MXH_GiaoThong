@@ -53,7 +53,7 @@ router.post('/login', function(req, res) {
     });
 });
 
-router.get('/me', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/me', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), function(req, res, next) {
     res.json({
         success: true,
         message: "success",
@@ -118,7 +118,7 @@ router.use('/:userId', (req, res, next) => {
     });
 });
 
-router.get('/:userId',passport.authenticate('jwt', { session: false }), function (req, res, next) {
+router.get('/:userId',passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), function (req, res, next) {
     res.json({
         success: true,
         data: req.user,
@@ -126,8 +126,6 @@ router.get('/:userId',passport.authenticate('jwt', { session: false }), function
     });
 });
 
-router.post('/resetPass',function (req,res,next) {
-
-});
+// router.post('/updateUser',)
 
 module.exports = router;
