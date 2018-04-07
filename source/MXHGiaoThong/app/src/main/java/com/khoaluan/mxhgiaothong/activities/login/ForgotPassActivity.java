@@ -1,4 +1,4 @@
-package com.khoaluan.mxhgiaothong.activities;
+package com.khoaluan.mxhgiaothong.activities.login;
 
 import android.os.Build;
 import android.os.Bundle;

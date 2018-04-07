@@ -9,15 +9,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.activities.post.adapter.ListPostFragmentPagerAdapter;
+import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ListPostActivity extends AppCompatActivity {
+public class ListPostActivity extends DrawerActivity {
 
     @BindView(R.id.tabLayoutPost)
     TabLayout mTabLayoutPost;
@@ -25,7 +27,17 @@ public class ListPostActivity extends AppCompatActivity {
     ViewPager mViewPagerPost;
     @BindView(R.id.topBar)
     TopBarView topBar;
-    
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_list_post;
+    }
+
+    @Override
+    protected int getNavId() {
+        return AppConstants.NAV_DRAWER_LIST_POST;
+    }
+
     public static void start(Context context) {
         Intent intent = new Intent(context, ListPostActivity.class);
         context.startActivity(intent);
@@ -34,7 +46,6 @@ public class ListPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_post);
         ButterKnife.bind(this);
         init();
     }
@@ -52,7 +63,7 @@ public class ListPostActivity extends AppCompatActivity {
         topBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
             public void onImvLeftClicked() {
-                Toast.makeText(ListPostActivity.this, "Open Menu", Toast.LENGTH_SHORT).show();
+                openDrawer();
             }
 
             @Override

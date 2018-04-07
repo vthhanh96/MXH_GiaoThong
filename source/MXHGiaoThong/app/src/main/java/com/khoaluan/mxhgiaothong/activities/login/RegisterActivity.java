@@ -1,11 +1,10 @@
-package com.khoaluan.mxhgiaothong.activities;
+package com.khoaluan.mxhgiaothong.activities.login;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
-import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 
 import java.util.Objects;
 
