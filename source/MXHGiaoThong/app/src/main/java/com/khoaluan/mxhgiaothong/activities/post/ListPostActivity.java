@@ -2,6 +2,7 @@ package com.khoaluan.mxhgiaothong.activities.post;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -28,6 +29,8 @@ public class ListPostActivity extends DrawerActivity {
     @BindView(R.id.topBar)
     TopBarView topBar;
 
+    private String token;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_list_post;
@@ -47,6 +50,12 @@ public class ListPostActivity extends DrawerActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("token","");
+
+        Toast.makeText(this, ""+token, Toast.LENGTH_SHORT).show();
+
         init();
     }
 

@@ -59,6 +59,7 @@
         android:textSize="15sp" />
 
     <EditText
+        android:inputType="textPassword"
         android:id="@+id/edt_password"
         android:maxLines="1"
         android:paddingStart="10dp"
@@ -74,6 +75,7 @@
         android:textSize="15sp" />
 
     <EditText
+        android:inputType="textPassword"
         android:id="@+id/edt_confirm_password"
         android:maxLines="1"
         android:paddingStart="10dp"

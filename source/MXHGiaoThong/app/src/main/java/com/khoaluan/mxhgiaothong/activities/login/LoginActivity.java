@@ -1,6 +1,8 @@
 package com.khoaluan.mxhgiaothong.activities.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -117,7 +120,14 @@ public class LoginActivity extends AppCompatActivity {
         ApiManager.getInstance().getUserService().login(new LoginUseRequest(edtUserName.getText().toString(),edtPassWord.getText().toString())).enqueue(new RestCallback<UserLoginResponse>() {
             @Override
             public void success(UserLoginResponse res) {
-                Toast.makeText(LoginActivity.this, "token " +res.getToken(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, ListPostActivity.class);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("token",res.getToken());
+                editor.apply();
+
+                startActivity(intent);
             }
 
             @Override
