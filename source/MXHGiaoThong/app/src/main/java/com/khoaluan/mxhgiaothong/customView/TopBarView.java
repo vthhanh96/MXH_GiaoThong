@@ -130,21 +130,25 @@ public class TopBarView extends LinearLayoutCompat {
 
     @OnClick(R.id.tv_left)
     public void ClickTvLeft(){
+        if(onItemClickListener == null) return;
         onItemClickListener.onTvLeftClicked();
     }
 
     @OnClick(R.id.tv_right)
     public void ClickTvRight(){
+        if(onItemClickListener == null) return;
         onItemClickListener.onTvRightClicked();
     }
 
     @OnClick(R.id.imv_left)
     public void ClickImageLeft(){
+        if(onItemClickListener == null) return;
         onItemClickListener.onImvLeftClicked();
     }
 
     @OnClick(R.id.imv_right)
     public void ClickImageRight(){
+        if(onItemClickListener == null) return;
         onItemClickListener.onImvRightClicked();
     }
 }

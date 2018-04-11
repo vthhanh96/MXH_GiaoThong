@@ -3,8 +3,8 @@ package com.khoaluan.mxhgiaothong.activities.login;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -96,43 +96,41 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.login_button_front)
-    public void ClickLoginFacebook(){
+    public void ClickLoginFacebook() {
         mLoginButton.performClick();
     }
 
     @OnClick(R.id.login_button_google_front)
-    public void ClickLoginGoogle(){
+    public void ClickLoginGoogle() {
         signInButton.performClick();
     }
 
     @OnClick(R.id.tv_register)
-    public void Register(){
+    public void Register() {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 
     @OnClick(R.id.tv_forgot_pass)
-    public void ForgotPassword(){
-        startActivity(new Intent(LoginActivity.this,ForgotPassActivity.class));
+    public void ForgotPassword() {
+        startActivity(new Intent(LoginActivity.this, ForgotPassActivity.class));
     }
 
     @OnClick(R.id.btn_login)
-    public void Login(){
-        ApiManager.getInstance().getUserService().login(new LoginUseRequest(edtUserName.getText().toString(),edtPassWord.getText().toString())).enqueue(new RestCallback<UserLoginResponse>() {
+    public void Login() {
+        ApiManager.getInstance().getUserService().login(new LoginUseRequest(edtUserName.getText().toString(), edtPassWord.getText().toString())).enqueue(new RestCallback<UserLoginResponse>() {
             @Override
             public void success(UserLoginResponse res) {
-                Intent intent = new Intent(LoginActivity.this, ListPostActivity.class);
-
                 SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("token",res.getToken());
+                editor.putString("token", res.getToken());
                 editor.apply();
 
-                startActivity(intent);
+                ListPostActivity.start(LoginActivity.this);
             }
 
             @Override
             public void failure(RestError error) {
-                Toast.makeText(LoginActivity.this, ""+error.message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, error.message, Toast.LENGTH_SHORT).show();
             }
         });
     }

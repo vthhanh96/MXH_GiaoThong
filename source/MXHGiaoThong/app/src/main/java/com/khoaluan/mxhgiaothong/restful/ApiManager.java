@@ -28,7 +28,7 @@ public class ApiManager {
     }
 
     public UserService getUserService(){
-        ApiGenerator.changeBaseUrl("http://10.0.3.2:3000/api/user/");
+        ApiGenerator.changeBaseUrl("http://10.0.2.2:3000/api/user/");
         if(mUserService == null) {
             mUserService = ApiGenerator.createService(UserService.class);
         }

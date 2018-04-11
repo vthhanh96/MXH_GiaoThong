@@ -2,10 +2,13 @@ package com.khoaluan.mxhgiaothong.restful.service;
 
 import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
+import com.khoaluan.mxhgiaothong.restful.response.GetUserInfoResponse;
 import com.khoaluan.mxhgiaothong.restful.response.UserLoginResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 /**
@@ -21,4 +24,7 @@ public interface UserService {
 
     @POST("forgotPassword")
     Call<BaseResponse> forgotPassword(@Body LoginUseRequest email);
+
+    @GET("me")
+    Call<GetUserInfoResponse> getUserInfo(@Header("Authorization") String token);
 }

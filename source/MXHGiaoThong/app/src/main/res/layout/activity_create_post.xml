@@ -1,80 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <com.khoaluan.mxhgiaothong.customView.TopBarView
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"/>
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         
         <ImageView
+            android:id="@+id/imgAvatar"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_margin="@dimen/margin_8dp"
-            android:background="@color/gray"/>
+            android:layout_margin="@dimen/margin_16dp"/>
         
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_marginTop="@dimen/margin_16dp"
             android:layout_marginBottom="@dimen/margin_8dp">
 
             <TextView
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="Hồng Hạnh"
-                android:textColor="@color/black"/>
+                android:layout_height="wrap_content"
+                android:text="Lê Nga"
+                android:textColor="@color/black"
+                android:layout_marginBottom="4dp"/>
 
             <LinearLayout
+                android:id="@+id/llPlace"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_corner_green"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_below="@id/tvName">
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_marker" />
-
-                <TextView
-                    android:id="@+id/tvPlace"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="Tân Sơn Nhất"/>
+                    android:src="@drawable/ic_marker"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="center_vertical"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
-                    android:background="@android:color/holo_red_light"
-                    android:paddingEnd="@dimen/margin_8dp"
-                    android:paddingStart="@dimen/margin_8dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:text="Kẹt xe"
-                    android:textColor="@color/white" />
+                    android:text="Tân Sơn Nhất"
+                    android:layout_gravity="bottom"/>
             </LinearLayout>
-        </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kẹt xe"
+                android:background="@drawable/bg_corner_solid_red"
+                android:textColor="@color/white"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_toEndOf="@id/llPlace"
+                android:layout_below="@id/tvName"
+                android:layout_marginStart="@dimen/margin_8dp"
+                android:layout_marginEnd="@dimen/margin_8dp"/>
+
+
+        </RelativeLayout>
     </LinearLayout>
 
     <EditText
+        android:id="@+id/edt_content"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="@color/white"
-        android:inputType="text"
         android:gravity="top"
-        android:paddingStart="@dimen/margin_8dp"
-        android:paddingEnd="@dimen/margin_8dp"/>
+        android:maxLines="5"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_16dp"/>
 
     <View
         android:layout_width="match_parent"
@@ -85,7 +101,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="@dimen/margin_8dp"
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:layout_marginEnd="@dimen/margin_16dp"
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:layout_marginBottom="@dimen/margin_8dp"
         android:gravity="center_vertical">
 
         <ImageView

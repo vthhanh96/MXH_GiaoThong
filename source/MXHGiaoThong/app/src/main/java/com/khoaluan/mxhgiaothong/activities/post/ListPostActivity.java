@@ -8,10 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.activities.post.adapter.ListPostFragmentPagerAdapter;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
@@ -50,9 +52,6 @@ public class ListPostActivity extends DrawerActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
-        token = sharedPreferences.getString("token","");
 
         Toast.makeText(this, ""+token, Toast.LENGTH_SHORT).show();
 
@@ -111,7 +110,14 @@ public class ListPostActivity extends DrawerActivity {
 
     @OnClick(R.id.btnCreatePost)
     public void createPost() {
-        CreatePostActivity.start(ListPostActivity.this);
+        SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("token","");
+        if(TextUtils.isEmpty(token)) {
+            Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
+            startActivity(intent);
+        } else {
+            CreatePostActivity.start(ListPostActivity.this);
+        }
     }
 
 }
