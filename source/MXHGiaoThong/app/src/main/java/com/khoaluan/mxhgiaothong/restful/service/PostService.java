@@ -9,6 +9,7 @@ import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -39,5 +40,11 @@ public interface PostService {
             @Header("Authorization") String token,
             @Path("postId") String id,
             @Body UpdatePostRequest request
+    );
+
+    @DELETE("post/{postId}")
+    Call<BaseResponse> deletePost(
+            @Header("Authorization") String token,
+            @Path("postId") String id
     );
 }
