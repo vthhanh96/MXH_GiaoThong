@@ -1,6 +1,7 @@
 package com.khoaluan.mxhgiaothong.restful.service;
 
 import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
+import com.khoaluan.mxhgiaothong.restful.request.ListPostByUserIdResquest;
 import com.khoaluan.mxhgiaothong.restful.response.CreatePostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 
@@ -22,4 +23,10 @@ public interface PostService {
     Call<CreatePostResponse> createPost(
             @Header("Authorization") String token,
             @Body CreatePostRequest request);
+
+    @POST("post/listUserPost")
+    Call<GetAllPostResponse> getPostByUserId(
+            @Header("Authorization") String token,
+            @Body ListPostByUserIdResquest request
+    );
 }

@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
+var autoIncrement = require('mongoose-auto-increment-fix');
 
 delete mongoose.connection.models['User'];
 
@@ -27,6 +28,8 @@ var UserSchema = new Schema({
 }, {
     versionKey: false
 });
+UserSchema.plugin(autoIncrement.plugin, 'User');
+
 // Saves the user's password hashed (plain text password storage is not good)
 UserSchema.pre('save', function (next) {
     var user = this;

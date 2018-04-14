@@ -1,6 +1,9 @@
 package com.khoaluan.mxhgiaothong.drawer;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -9,12 +12,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.login.ForgotPassActivity;
 import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
+import com.khoaluan.mxhgiaothong.activities.profile.EditProfileActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.drawer.adapter.MenuAdapter;
 import com.khoaluan.mxhgiaothong.drawer.dto.BodyDto;
@@ -125,14 +130,20 @@ abstract public class DrawerActivity extends AppCompatActivity {
                         }, DRAWER_LAUNCH_DELAY);
                     }
                 }
-
             }
 
             @Override
             public void onFooterClick() {
+
+                SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("token");
+                editor.apply();
+
                 mDrawerLayout.closeDrawer(Gravity.START);
                 Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
                 startActivity(intent);
+
                 finish();
             }
         });
@@ -150,6 +161,12 @@ abstract public class DrawerActivity extends AppCompatActivity {
             }
             case AppConstants.NAV_DRAWER_PROFILE_DETAIL: {
                 intent = new Intent(this, ProfileDetailActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            }
+            case AppConstants.NAV_DRAWER_PROFILE_EDIT: {
+                intent = new Intent(this, EditProfileActivity.class);
                 startActivity(intent);
                 finish();
                 break;

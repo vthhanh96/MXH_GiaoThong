@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.khoaluan.mxhgiaothong.restful.deserialize.CategoryDeserialize;
 import com.khoaluan.mxhgiaothong.restful.deserialize.CommentDeserialize;
 import com.khoaluan.mxhgiaothong.restful.deserialize.ReactionDeserialize;
-import com.khoaluan.mxhgiaothong.restful.deserialize.UserDeserialize;
 import com.khoaluan.mxhgiaothong.restful.model.Category;
 import com.khoaluan.mxhgiaothong.restful.model.Comment;
 import com.khoaluan.mxhgiaothong.restful.model.Reaction;
@@ -18,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiGenerator {
 
-    private static Retrofit.Builder builder = createBuilder("http://10.0.2.2:3000/api/");
+    private static Retrofit.Builder builder = createBuilder("http://10.0.3.2:3000/api/");
 
     private static Retrofit retrofit = builder.build();
 
@@ -50,7 +49,7 @@ public class ApiGenerator {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.excludeFieldsWithoutExposeAnnotation();
         if(classType != User.class) {
-            gsonBuilder.registerTypeAdapter(User.class, new UserDeserialize());
+//            gsonBuilder.registerTypeAdapter(User.class, new UserDeserialize());
         }
         if(classType != Reaction.class) {
             gsonBuilder.registerTypeAdapter(Reaction.class, new ReactionDeserialize());

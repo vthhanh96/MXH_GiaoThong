@@ -26,13 +26,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
+import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_LOGOUT;
+import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_SETTING;
+
 /**
  * Created by HieuMinh on 4/4/2018.
  */
 
 public class TopBarView extends LinearLayoutCompat {
 
-    private static final int LEFT_MENU = 1;
     OnItemClickListener onItemClickListener;
 
     public void setOnClickListener(OnItemClickListener callback) {
@@ -120,31 +123,35 @@ public class TopBarView extends LinearLayoutCompat {
     public void setImageViewRight(int type){
         imv_right.setVisibility(VISIBLE);
         tv_right.setVisibility(GONE);
-        if(type == 1){
+        if(type == RIGHT_SETTING){
+            imv_right.setImageResource(R.drawable.ic_setting);
+        }else if(type == RIGHT_LOGOUT){
             imv_right.setImageResource(R.drawable.ic_logout);
-        }else {
-
         }
         //Todo: Can bo sung
     }
 
     @OnClick(R.id.tv_left)
     public void ClickTvLeft(){
+        if(onItemClickListener == null) return;
         onItemClickListener.onTvLeftClicked();
     }
 
     @OnClick(R.id.tv_right)
     public void ClickTvRight(){
+        if(onItemClickListener == null) return;
         onItemClickListener.onTvRightClicked();
     }
 
     @OnClick(R.id.imv_left)
     public void ClickImageLeft(){
+        if(onItemClickListener == null) return;
         onItemClickListener.onImvLeftClicked();
     }
 
     @OnClick(R.id.imv_right)
     public void ClickImageRight(){
+        if(onItemClickListener == null) return;
         onItemClickListener.onImvRightClicked();
     }
 }

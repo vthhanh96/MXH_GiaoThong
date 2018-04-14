@@ -1,24 +1,34 @@
 package com.khoaluan.mxhgiaothong.activities.post;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.activities.post.adapter.ListPostFragmentPagerAdapter;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
+import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_LOGOUT;
 
 public class ListPostActivity extends DrawerActivity {
 
@@ -29,7 +39,7 @@ public class ListPostActivity extends DrawerActivity {
     @BindView(R.id.topBar)
     TopBarView topBar;
 
-    private String token;
+    public static String token;
 
     @Override
     protected int getLayoutId() {
@@ -46,6 +56,7 @@ public class ListPostActivity extends DrawerActivity {
         context.startActivity(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +65,11 @@ public class ListPostActivity extends DrawerActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token","");
 
-        Toast.makeText(this, ""+token, Toast.LENGTH_SHORT).show();
+        if(token == null || Objects.equals(token, "")){
+            startActivity(new Intent(ListPostActivity.this, LoginActivity.class));
+        } else {
+            Toast.makeText(this, ""+token, Toast.LENGTH_SHORT).show();
+        }
 
         init();
     }
@@ -67,8 +82,8 @@ public class ListPostActivity extends DrawerActivity {
 
     private void initTopbar() {
         topBar.setTextTitle("NetFic");
-        topBar.setImageViewLeft(1);
-        topBar.setImageViewRight(1);
+        topBar.setImageViewLeft(LEFT_MENU);
+        topBar.setImageViewRight(RIGHT_LOGOUT);
         topBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
             public void onImvLeftClicked() {
@@ -77,7 +92,16 @@ public class ListPostActivity extends DrawerActivity {
 
             @Override
             public void onImvRightClicked() {
-                Toast.makeText(ListPostActivity.this, "Logout Click", Toast.LENGTH_SHORT).show();
+
+                SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("token");
+                editor.apply();
+
+                Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
+                startActivity(intent);
+
+                finish();
             }
 
             @Override
@@ -111,7 +135,14 @@ public class ListPostActivity extends DrawerActivity {
 
     @OnClick(R.id.btnCreatePost)
     public void createPost() {
-        CreatePostActivity.start(ListPostActivity.this);
+        SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("token","");
+        if(TextUtils.isEmpty(token)) {
+            Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
+            startActivity(intent);
+        } else {
+            CreatePostActivity.start(ListPostActivity.this);
+        }
     }
 
 }

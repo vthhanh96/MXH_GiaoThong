@@ -74,7 +74,18 @@ public class ForgotPassActivity extends AppCompatActivity {
         } else if(!Objects.equals(edtNewPass.getText().toString(), edtConfirmNewPass.getText().toString())){
             Toast.makeText(this, "Nhập lại mật khẩu không khớp?", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Xử lí đặt lại mật khẩu tại đây", Toast.LENGTH_SHORT).show();
+            ApiManager.getInstance().getUserService().changePassword(new LoginUseRequest(edtEmail.getText().toString(),edtNewPass.getText().toString())).enqueue(new RestCallback<BaseResponse>() {
+                @Override
+                public void success(BaseResponse res) {
+                    Toast.makeText(ForgotPassActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
+                @Override
+                public void failure(RestError error) {
+                    Toast.makeText(ForgotPassActivity.this, ""+error.message, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

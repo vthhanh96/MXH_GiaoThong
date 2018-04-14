@@ -13,7 +13,7 @@ public class User implements Serializable {
 
     @SerializedName("_id")
     @Expose
-    private String id;
+    private int id;
 
     @SerializedName("email")
     @Expose
@@ -31,11 +31,11 @@ public class User implements Serializable {
     @Expose
     private String fullName;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

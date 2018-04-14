@@ -6,7 +6,10 @@ var Category = require('../models/CategoryModel');
 var passport = require('passport');
 
 /* POST new bài viết. */
-router.post('/', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), function (req, res, next) {
+router.post('/', passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/unauthorized'
+}), function (req, res, next) {
     if (req.body.category) {
         Category.findById(req.body.category).exec((err, category) => {
             if (err) {
@@ -20,7 +23,7 @@ router.post('/', passport.authenticate('jwt', {session: false, failureRedirect: 
                 delete req.body.category;
                 const newPost = new Post(req.body);
                 newPost.creator = req.user;
-                if(category) {
+                if (category) {
                     newPost.category = category;
                 }
 
@@ -46,6 +49,28 @@ router.post('/', passport.authenticate('jwt', {session: false, failureRedirect: 
 
 
 });
+router.post('/listUserPost', passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/unauthorized'
+}), function (req, res, next) {
+    Post.find({creator: req.body.creator}).populate("creator").exec((err, post) => {
+        if (err) {
+            res.json({
+                success: false,
+                data: [],
+                message: `Error is : ${err}`
+            });
+        } else {
+            res.json({
+                success: true,
+                data: post,
+                message: "success"
+            });
+        }
+    });
+
+});
+
 
 router.get('/', function (req, res, next) {
     Post.find({}).populate('creator').limit(100).sort({name: 1}).exec((err, posts) => {
@@ -91,7 +116,10 @@ router.get('/:postId', function (req, res, next) {
     });
 });
 
-router.put('/:postId', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), function (req, res, next) {
+router.put('/:postId', passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/unauthorized'
+}), function (req, res, next) {
     if (req.body._id)
         delete req.body._id;
     if (req.body.reaction)
@@ -131,7 +159,10 @@ router.put('/:postId', passport.authenticate('jwt', {session: false, failureRedi
     }
 });
 
-router.delete('/:postId', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), function (req, res, next) {
+router.delete('/:postId', passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/unauthorized'
+}), function (req, res, next) {
     if (req.user.id.localeCompare(req.post.creator._id) === 0) {
         req.post.remove((err) => {
             if (err)

@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var autoIncrement = require('mongoose-auto-increment-fix');
 
 var PostSchema = new Schema({
-    creator: {type: mongoose.Schema.Types.ObjectId,  ref: 'User'},
-    category: {type: mongoose.Schema.Types.ObjectId,  ref: 'Category'},
+    creator: {type: Number,  ref: 'User'},
+    category: {type: Number,  ref: 'Category'},
     level: {
         type: Number
     },
@@ -38,8 +39,8 @@ var PostSchema = new Schema({
       type: String,
       required: true
     },
-    comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
-    reaction: [{type: mongoose.Schema.Types.ObjectId, ref: 'Reaction'}],
+    comments: [{type: Number, ref: 'Comment'}],
+    reaction: [{type: Number, ref: 'Reaction'}],
     like_amount: {
         type: Number,
         default: 0,
@@ -52,5 +53,6 @@ var PostSchema = new Schema({
     usePushEach: true,
     versionKey: false
 });
+PostSchema.plugin(autoIncrement.plugin, 'Post');
 
 module.exports  = mongoose.model('Post', PostSchema);

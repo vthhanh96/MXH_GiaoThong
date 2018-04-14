@@ -12,4 +12,11 @@ public class AppConstants {
     public static final int NAV_DRAWER_LIST_POST = 6;
     public static final int NAV_DRAWER_FORGOT_PASS = 7;
     public static final int NAV_DRAWER_PROFILE_DETAIL = 8;
+    public static final int NAV_DRAWER_PROFILE_EDIT = 9;
+
+    // TopBar
+    public static final int LEFT_MENU = 1;
+    public static final int LEFT_BACK = 2;
+    public static final int RIGHT_SETTING = 3;
+    public static final int RIGHT_LOGOUT = 4;
 }

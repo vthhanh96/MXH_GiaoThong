@@ -28,7 +28,7 @@
                     android:layout_height="45dp"
                     android:layout_margin="@dimen/margin_8dp" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -40,12 +40,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="13sp"
                         tools:text="ABC" />
 
                     <LinearLayout
+                        android:id="@+id/llPlace"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvName"
+                        android:layout_marginTop="@dimen/margin_8dp">
 
                         <ImageView
                             android:layout_width="15dp"
@@ -62,30 +64,47 @@
                             android:layout_gravity="center_vertical"
                             android:text="Tân Sơn Nhất"
                             android:textSize="10sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginStart="4dp"
-                            android:background="@android:color/holo_red_light"
-                            android:paddingEnd="4dp"
-                            android:paddingStart="4dp"
-                            android:text="Kẹt xe"
-                            android:textColor="@color/white"
-                            android:textSize="13dp" />
                     </LinearLayout>
 
-                </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="@dimen/margin_8dp"
+                        android:background="@drawable/bg_corner_solid_red"
+                        android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:text="Kẹt xe"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:layout_below="@id/tvName"
+                        android:layout_toEndOf="@id/llPlace"/>
 
-                <TextView
-                    android:id="@+id/tvTime"
+                </RelativeLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:layout_marginEnd="@dimen/margin_16dp"
-                    android:layout_marginStart="@dimen/margin_16dp"
-                    tools:text="10 giờ" />
+                    android:layout_marginStart="@dimen/margin_16dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_menu_post"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tvTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="10 giờ"
+                        android:layout_gravity="bottom"/>
+                </LinearLayout>
             </LinearLayout>
 
             <TextView

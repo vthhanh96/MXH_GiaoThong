@@ -87,7 +87,7 @@ public class ListSelectionPostFragment extends Fragment {
         });
     }
 
-    public class SelectionPostAdapter extends BaseQuickAdapter<Post, BaseViewHolder>{
+    public static class SelectionPostAdapter extends BaseQuickAdapter<Post, BaseViewHolder>{
 
         public SelectionPostAdapter() {
             super(R.layout.item_post, new ArrayList<Post>());
@@ -95,7 +95,7 @@ public class ListSelectionPostFragment extends Fragment {
 
         @Override
         protected void convert(BaseViewHolder helper, Post item) {
-            helper.setText(R.id.tvName, item.getCreator().getFullName());
+//            helper.setText(R.id.tvName, item.getCreator().getFullName());
             helper.setText(R.id.tvPlace, item.getPlace());
             helper.setText(R.id.tvTime, DateUtils.getTimeAgo(mContext, item.getCreatedDate()));
             helper.setText(R.id.tvContent, item.getContent());
@@ -105,7 +105,7 @@ public class ListSelectionPostFragment extends Fragment {
             ImageView imgAvatar = helper.getView(R.id.imgAvatar);
             ImageView imgContent = helper.getView(R.id.imgContent);
 
-            Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
+//            Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
             Glide.with(mContext).load(item.getImageUrl()).into(imgContent);
 
             helper.addOnClickListener(R.id.llLike);

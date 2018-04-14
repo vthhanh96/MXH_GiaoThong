@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User = require('./UserModel');
+var autoIncrement = require('mongoose-auto-increment-fix');
 
 var CommentSchema = new Schema({
-    creator: {type: mongoose.Schema.Types.ObjectId,  ref: 'User'},
+    creator: {type: Number,  ref: 'User'},
     content : {
         type : String,
         default: ""
@@ -20,5 +21,6 @@ var CommentSchema = new Schema({
     usePushEach: true,
     versionKey: false
 });
+CommentSchema.plugin(autoIncrement.plugin, 'Comment');
 
 module.exports = mongoose.model('Comment', CommentSchema);
