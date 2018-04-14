@@ -70,7 +70,6 @@ public class ListPostActivity extends DrawerActivity {
         } else {
             Toast.makeText(this, ""+token, Toast.LENGTH_SHORT).show();
         }
-
         init();
     }
 
