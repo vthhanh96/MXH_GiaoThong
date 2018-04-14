@@ -8,6 +8,9 @@
     <color name="white">#FFFFFF</color>
     <color name="gray">#dddddd</color>
     <color name="red">#ff0000</color>
+    <color name="yellow">#ffff00</color>
+    <color name="orange">#ffa500</color>
+    <color name="green">#02ce84</color>
     <color name="transparent">#00000000</color>
     <color name="black">#000</color>
     <color name="lightorange">#fdf2df</color>

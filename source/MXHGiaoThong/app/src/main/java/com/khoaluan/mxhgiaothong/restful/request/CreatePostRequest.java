@@ -25,7 +25,7 @@ public class CreatePostRequest implements Serializable {
 
     @SerializedName("category")
     @Expose
-    private Integer category;
+    private String category;
 
     @SerializedName("level")
     @Expose
@@ -39,7 +39,7 @@ public class CreatePostRequest implements Serializable {
     @Expose
     private String imageUrl;
 
-    public CreatePostRequest(String content, Double latitude, Double longitude, String place, Integer category, Integer level, Boolean isActive, String imageUrl) {
+    public CreatePostRequest(String content, Double latitude, Double longitude, String place, String category, Integer level, Boolean isActive, String imageUrl) {
         mContent = content;
         this.latitude = latitude;
         this.longitude = longitude;

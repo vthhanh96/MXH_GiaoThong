@@ -64,7 +64,8 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:background="@color/transparent"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_right"

@@ -22,7 +22,7 @@ public class UserDeserialize implements JsonDeserializer<User> {
             user = ApiGenerator.createGson(User.class).fromJson(json, User.class);
         } catch (Exception e) {
             user = new User();
-//            user.setId(json.getAsString());
+            user.setId(json.getAsInt());
         }
         return user;
     }

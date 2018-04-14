@@ -33,6 +33,7 @@
         <service android:name=".backgroundService.BackgroundService"/>
         <activity android:name=".activities.WelcomeActivity"/>
         <activity android:name=".activities.profile.EditProfileActivity"/>
+        <activity android:name=".activities.post.ChooseCategoryActivity"/>
     </application>
 
 </manifest>
