@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -102,6 +103,14 @@ public class ChooseCategoryActivity extends AppCompatActivity {
 
             @Override
             public void onTvRightClicked() {
+                if(mSelectedCategory == null) {
+                    Toast.makeText(ChooseCategoryActivity.this, "Bạn phải chọn một chủ đề cho bài viết.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(mSelectedCategory.getId().equals("4") && mSelectedLevel == 0) {
+                    Toast.makeText(ChooseCategoryActivity.this, "Bạn phải chọn một mức độ kẹt xe.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent dataIntent = new Intent();
                 dataIntent.putExtra(AppConstants.ARG_KEY_CATEGORY_ID, mSelectedCategory);
                 dataIntent.putExtra(AppConstants.ARG_KEY_LEVEL, mSelectedLevel);

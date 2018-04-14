@@ -64,7 +64,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
     }
 
     private void initTopbar() {
-        topBar.setTextTitle("Nguyễn Minh Hiếu");
+        topBar.setTextTitle("Hạnh Văn");
         topBar.setImageViewLeft(LEFT_MENU);
         topBar.setImageViewRight(RIGHT_SETTING);
         topBar.setOnClickListener(new TopBarView.OnItemClickListener() {
@@ -95,7 +95,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
     }
 
     private void getInforUser() {
-        ApiManager.getInstance().getUserService().getUserById(token, 2).enqueue(new RestCallback<UserResponse>() {
+        ApiManager.getInstance().getUserService().getUserById(token, 0).enqueue(new RestCallback<UserResponse>() {
 
             @Override
             public void success(UserResponse res) {

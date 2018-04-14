@@ -17,6 +17,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
+import com.khoaluan.mxhgiaothong.activities.post.dialog.PostActionDialog;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -64,6 +66,8 @@ public class ListSelectionPostFragment extends Fragment {
 
                 } else if(view.getId() == R.id.llDislike){
 
+                } else if(view.getId() == R.id.imgPostOptions) {
+                    openOptionsDialog(mAdapter.getData().get(position));
                 }
             }
         });
@@ -85,6 +89,27 @@ public class ListSelectionPostFragment extends Fragment {
 
             }
         });
+    }
+
+    private void openOptionsDialog(final Post post) {
+        PostActionDialog dialog = new PostActionDialog(mContext);
+        dialog.setOnIChooseActionListener(new PostActionDialog.IChooseActionListener() {
+            @Override
+            public void onEditPostClick() {
+                CreatePostActivity.start(mContext, post);
+            }
+
+            @Override
+            public void onHidePostClick() {
+
+            }
+
+            @Override
+            public void onDeletePostClick() {
+
+            }
+        });
+        dialog.show();
     }
 
     public static class SelectionPostAdapter extends BaseQuickAdapter<Post, BaseViewHolder>{
@@ -110,6 +135,7 @@ public class ListSelectionPostFragment extends Fragment {
 
             helper.addOnClickListener(R.id.llLike);
             helper.addOnClickListener(R.id.llDislike);
+            helper.addOnClickListener(R.id.imgPostOptions);
         }
     }
 }

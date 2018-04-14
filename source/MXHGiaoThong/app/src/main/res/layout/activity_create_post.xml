@@ -92,6 +92,15 @@
         android:paddingStart="@dimen/margin_16dp"
         android:paddingEnd="@dimen/margin_16dp"/>
 
+    <ImageView
+        android:id="@+id/imgPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:layout_marginBottom="@dimen/margin_8dp"
+        android:scaleType="fitCenter"
+        android:visibility="gone"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
