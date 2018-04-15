@@ -73,7 +73,7 @@ router.post('/listUserPost', passport.authenticate('jwt', {
 
 
 router.get('/', function (req, res, next) {
-    Post.find({}).populate('creator').limit(100).sort({name: 1}).exec((err, posts) => {
+    Post.find({}).populate('creator').populate("category").limit(100).sort({name: 1}).exec((err, posts) => {
         if (err) {
             res.json({
                 success: false,
@@ -132,8 +132,8 @@ router.put('/:postId', passport.authenticate('jwt', {
         delete req.body.dislike_amount;
     if (req.body.like_amount)
         delete req.body.like_amount;
-    if (req.body.category)
-        delete req.body.category;
+    // if (req.body.category)
+    //     delete req.body.category;
     //user is not creator
     if (req.user.id.localeCompare(req.post.creator._id) === 0) {
         for (var p in req.body) {

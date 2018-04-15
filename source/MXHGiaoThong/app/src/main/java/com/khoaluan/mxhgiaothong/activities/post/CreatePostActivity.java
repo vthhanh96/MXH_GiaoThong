@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +25,10 @@ import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.model.Category;
+import com.khoaluan.mxhgiaothong.restful.model.Post;
 import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
+import com.khoaluan.mxhgiaothong.restful.request.UpdatePostRequest;
+import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.CreatePostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetUserInfoResponse;
 import com.khoaluan.mxhgiaothong.utils.GeoHelper;
@@ -40,6 +44,7 @@ import butterknife.OnClick;
 public class CreatePostActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CHOOSE_CATEGORY = 10;
+    private static final String ARG_KEY_POST = "ARG_KEY_POST";
 
     @BindView(R.id.topBar)
     TopBarView mTopBar;
@@ -53,6 +58,10 @@ public class CreatePostActivity extends AppCompatActivity {
     TextView mTvPlace;
     @BindView(R.id.tvCategory)
     TextView mTvCategory;
+    @BindView(R.id.imgPost)
+    ImageView mImgPost;
+    @BindView(R.id.tvPostAction)
+    TextView mTvPostAction;
 
     private Context mContext;
     private String token;
@@ -60,9 +69,11 @@ public class CreatePostActivity extends AppCompatActivity {
     private String mImageUrl;
     private Category mCategory;
     private int mLevel;
+    private Post mPost;
 
-    public static void start(Context context) {
+    public static void start(Context context, Post post) {
         Intent intent = new Intent(context, CreatePostActivity.class);
+        intent.putExtra(ARG_KEY_POST, post);
         context.startActivity(intent);
     }
 
@@ -76,10 +87,34 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     private void init() {
+        getExtras();
         getToken();
         initTopBar();
-        getUserInfo();
-        getCurrentLocation();
+    }
+
+    private void getExtras() {
+        mPost = (Post) getIntent().getSerializableExtra(ARG_KEY_POST);
+        if(mPost != null) {
+            fillData();
+        } else {
+            getCurrentLocation();
+            getUserInfo();
+        }
+    }
+
+    private void fillData() {
+        mTvPostAction.setVisibility(View.GONE);
+        mEdtContent.setText(mPost.getContent());
+        Glide.with(mContext).load(mPost.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        mTvName.setText(mPost.getCreator().getFullName());
+        if(!TextUtils.isEmpty(mPost.getImageUrl())) {
+            mImgPost.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(mPost.getImageUrl()).into(mImgPost);
+        }
+        mTvPlace.setText(mPost.getPlace());
+        mCategory = mPost.getCategory();
+        mLevel = mPost.getLevel();
+        updateUICategory();
     }
 
     private void getToken() {
@@ -89,7 +124,8 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void initTopBar() {
         mTopBar.setImageViewLeft(AppConstants.LEFT_BACK);
-        mTopBar.setTextTitle("Đăng bài viết");
+        mTopBar.setTextTitle(mPost == null ? "Đăng bài viết" : "Chỉnh sửa bài viết");
+        mTopBar.setTextViewRight("Lưu");
         mTopBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
             public void onImvLeftClicked() {
@@ -108,7 +144,27 @@ public class CreatePostActivity extends AppCompatActivity {
 
             @Override
             public void onTvRightClicked() {
+                if(mPost == null) finish();
+                UpdatePostRequest request = new UpdatePostRequest(
+                        mEdtContent.getText().toString(),
+                        mPost.getLatitude(),
+                        mPost.getLongitude(),
+                        mPost.getPlace(),
+                        mCategory,
+                        mLevel,
+                        mPost.getImageUrl());
+                ApiManager.getInstance().getPostService().updatePost(token, mPost.getId(), request).enqueue(new RestCallback<BaseResponse>() {
+                    @Override
+                    public void success(BaseResponse res) {
+                        Toast.makeText(mContext, "Chỉnh sửa bài viết thành công", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
 
+                    @Override
+                    public void failure(RestError error) {
+                        Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
@@ -156,6 +212,7 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             public void success(CreatePostResponse res) {
                 Toast.makeText(CreatePostActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             @Override

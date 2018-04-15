@@ -92,6 +92,7 @@
                     android:layout_marginStart="@dimen/margin_16dp">
 
                     <ImageView
+                        android:id="@+id/imgPostOptions"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_menu_post"

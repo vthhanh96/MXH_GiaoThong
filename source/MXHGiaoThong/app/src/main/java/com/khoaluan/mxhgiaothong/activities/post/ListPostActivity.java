@@ -142,7 +142,7 @@ public class ListPostActivity extends DrawerActivity {
             Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
             startActivity(intent);
         } else {
-            CreatePostActivity.start(ListPostActivity.this);
+            CreatePostActivity.start(ListPostActivity.this, null);
         }
     }
 

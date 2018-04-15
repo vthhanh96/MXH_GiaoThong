@@ -69,7 +69,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
     }
 
     private void initTopbar() {
-        topBar.setTextTitle("Nguyễn Minh Hiếu");
+        topBar.setTextTitle("Hạnh Văn");
         topBar.setImageViewLeft(LEFT_MENU);
         if(userID == loginUserID) {
             topBar.setImageViewRight(RIGHT_SETTING);
@@ -105,7 +105,6 @@ public class ProfileDetailActivity   extends DrawerActivity {
 
     private void getInforUser() {
         ApiManager.getInstance().getUserService().getUserById(token, userID).enqueue(new RestCallback<UserResponse>() {
-
             @Override
             public void success(UserResponse res) {
                 tvUserName.setText(res.getUser().getFullName());
