@@ -1,6 +1,7 @@
 package com.khoaluan.mxhgiaothong.activities.profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
+import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.ListPostByUserIdResquest;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.UserResponse;
@@ -28,6 +30,7 @@ import butterknife.OnClick;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_SETTING;
+import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.loginUserID;
 import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.token;
 
 /**
@@ -42,7 +45,8 @@ public class ProfileDetailActivity   extends DrawerActivity {
     RecyclerView mSelectionPostRecyclerView;
     @BindView(R.id.tvUserName)
     TextView tvUserName;
-
+    private int userID;
+    private User user;
     ListSelectionPostFragment.SelectionPostAdapter mAdapter;
 
     @Override
@@ -59,6 +63,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+        userID = getIntent().getIntExtra("UserID",-1);
         initTopbar();
         init();
     }
@@ -66,7 +71,9 @@ public class ProfileDetailActivity   extends DrawerActivity {
     private void initTopbar() {
         topBar.setTextTitle("Nguyễn Minh Hiếu");
         topBar.setImageViewLeft(LEFT_MENU);
-        topBar.setImageViewRight(RIGHT_SETTING);
+        if(userID == loginUserID) {
+            topBar.setImageViewRight(RIGHT_SETTING);
+        }
         topBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
             public void onImvLeftClicked() {
@@ -75,7 +82,9 @@ public class ProfileDetailActivity   extends DrawerActivity {
 
             @Override
             public void onImvRightClicked() {
-
+                Intent intent = new Intent(ProfileDetailActivity.this, EditProfileActivity.class);
+                intent.putExtra("userLogin",user);
+                startActivity(intent);
             }
 
             @Override
@@ -95,12 +104,13 @@ public class ProfileDetailActivity   extends DrawerActivity {
     }
 
     private void getInforUser() {
-        ApiManager.getInstance().getUserService().getUserById(token, 2).enqueue(new RestCallback<UserResponse>() {
+        ApiManager.getInstance().getUserService().getUserById(token, userID).enqueue(new RestCallback<UserResponse>() {
 
             @Override
             public void success(UserResponse res) {
                 tvUserName.setText(res.getUser().getFullName());
-                getListPostUser(res.getUser().getId());
+                getListPostUser(userID);
+                user = res.getUser();
             }
 
             @Override
@@ -135,7 +145,6 @@ public class ProfileDetailActivity   extends DrawerActivity {
                     mAdapter.notifyDataSetChanged();
                 }
             }
-
             @Override
             public void failure(RestError error) {
                 Toast.makeText(ProfileDetailActivity.this, ""+error.message, Toast.LENGTH_SHORT).show();

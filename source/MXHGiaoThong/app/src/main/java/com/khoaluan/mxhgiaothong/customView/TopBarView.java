@@ -57,6 +57,9 @@ public class TopBarView extends LinearLayoutCompat {
     @BindView(R.id.tv_title)
     TextView tv_title;
 
+    @BindView(R.id.lnTopbar)
+    LinearLayout lnTopBar;
+
     public TopBarView( Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context,attrs);
@@ -153,6 +156,10 @@ public class TopBarView extends LinearLayoutCompat {
     public void ClickImageRight(){
         if(onItemClickListener == null) return;
         onItemClickListener.onImvRightClicked();
+    }
+
+    public void setTranpatentTopBar(){
+        lnTopBar.setBackgroundColor(getResources().getColor(R.color.transparent));
     }
 }
 

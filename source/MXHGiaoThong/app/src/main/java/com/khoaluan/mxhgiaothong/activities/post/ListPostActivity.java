@@ -40,6 +40,7 @@ public class ListPostActivity extends DrawerActivity {
     TopBarView topBar;
 
     public static String token;
+    public static int loginUserID;
 
     @Override
     protected int getLayoutId() {
@@ -64,6 +65,7 @@ public class ListPostActivity extends DrawerActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
         token = sharedPreferences.getString("token","");
+        loginUserID = sharedPreferences.getInt("loginUserID",0);
 
         if(token == null || Objects.equals(token, "")){
             startActivity(new Intent(ListPostActivity.this, LoginActivity.class));

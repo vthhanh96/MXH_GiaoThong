@@ -149,30 +149,6 @@ public class MenuAdapter extends RecyclerView.Adapter {
        public void bind(BodyDto bodyDto) {
             tvTitle.setText(bodyDto.title);
             imvIcon.setImageResource(bodyDto.icon);
-
-//            boolean isSelected = bodyDto.isSelected;
-//            mTvTitle.setSelected(isSelected);
-//            mContainer.setSelected(isSelected);
-//           mTvTitle.setText(bodyDto.title);
-
-//            switch (bodyDto.key) {
-//                case AppConstants.NAV_DRAWER_LIST_POST: {
-////                    mContainer.setEnabled(false);
-//                    break;
-//                }
-//                case AppConstants.NAV_DRAWER_ID_B: {
-////                    mContainer.setEnabled(false);
-//                    break;
-//                }
-//                case AppConstants.NAV_DRAWER_ID_MAIN: {
-//                    mContainer.setEnabled(false);
-//                    break;
-//                }
-//                default: {
-//                    mContainer.setEnabled(true);
-//                    break;
-//                }
-//            }
         }
 
         @Override

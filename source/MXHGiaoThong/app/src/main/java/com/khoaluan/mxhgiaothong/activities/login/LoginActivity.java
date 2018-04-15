@@ -123,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("token", res.getToken());
+                editor.putInt("loginUserID",res.getId());
                 editor.apply();
 
                 ListPostActivity.start(LoginActivity.this);
@@ -156,9 +157,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginWithFacebook() {
         if (AccessToken.getCurrentAccessToken() != null) {
-            Toast.makeText(this, "đã từng đăng nhập", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "đã từng đăng nhập facebook", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Token bằng null, chưa đăng nhập lần nào", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Token bằng null, chưa đăng nhập facebook lần nào", Toast.LENGTH_SHORT).show();
         }
 
         mCallbackManager = CallbackManager.Factory.create();

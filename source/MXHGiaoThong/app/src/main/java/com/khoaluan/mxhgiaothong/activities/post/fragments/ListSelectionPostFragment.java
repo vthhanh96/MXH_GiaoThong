@@ -1,6 +1,7 @@
 package com.khoaluan.mxhgiaothong.activities.post.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.profile.EditProfileActivity;
+import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -29,6 +32,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.loginUserID;
+
 public class ListSelectionPostFragment extends Fragment {
 
     @BindView(R.id.rcvSelectionPost)
@@ -39,7 +44,6 @@ public class ListSelectionPostFragment extends Fragment {
 
     public ListSelectionPostFragment() {
     }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,6 +68,10 @@ public class ListSelectionPostFragment extends Fragment {
 
                 } else if(view.getId() == R.id.llDislike){
 
+                } else if(view.getId() == R.id.imgAvatar){
+                    Intent intent = new Intent(getActivity(),ProfileDetailActivity.class);
+                    intent.putExtra("UserID",mAdapter.getItem(position).getCreator().getId());
+                    startActivity(intent);
                 }
             }
         });
@@ -106,10 +114,13 @@ public class ListSelectionPostFragment extends Fragment {
             ImageView imgContent = helper.getView(R.id.imgContent);
 
             Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
+            Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
             Glide.with(mContext).load(item.getImageUrl()).into(imgContent);
 
             helper.addOnClickListener(R.id.llLike);
             helper.addOnClickListener(R.id.llDislike);
+            helper.addOnClickListener(R.id.imgAvatar);
+
         }
     }
 }

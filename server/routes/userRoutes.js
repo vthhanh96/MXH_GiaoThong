@@ -7,12 +7,12 @@ var passport = require('passport');
 const nodemailer = require('nodemailer');
 var voucher_codes = require('voucher-code-generator');
 
-function getNextSequenceValue(sequenceName){
+function getNextSequenceValue(sequenceName) {
     var sequenceDocument = db.counters.findAndModify(
         {
-            query:{_id: sequenceName },
-            update: {$inc:{sequence_value:1}},
-            new:true
+            query: {_id: sequenceName},
+            update: {$inc: {sequence_value: 1}},
+            new: true
         });
     return sequenceDocument.sequence_value;
 }
@@ -31,7 +31,7 @@ router.post('/register', function (req, res) {
         // Attempt to save the user
         newUser.save(function (err) {
             if (err) {
-                return res.json({success: false, message: 'Kiem tra lai server hoac body cua ban'});
+                return res.json({success: false, message: err});
             }
             res.json({success: true, message: 'Successfully created new user.'});
         });
@@ -39,17 +39,17 @@ router.post('/register', function (req, res) {
 });
 
 router.post('/changePass', function (req, res) {
-   User.findOne({email: req.body.email}).exec(
-       function (err,user) {
-       if(err) throw err;
-       if(!user){
-           res.send({success: false, message: 'Authentication failed. User not found.', status: 400});
-       } else {
-           user.password = req.body.password;
-           user.save();
-           res.send({success: true, data: user, status: 200});
-       }
-   });
+    User.findOne({email: req.body.email}).exec(
+        function (err, user) {
+            if (err) throw err;
+            if (!user) {
+                res.send({success: false, message: 'Authentication failed. User not found.', status: 400});
+            } else {
+                user.password = req.body.password;
+                user.save();
+                res.send({success: true, data: user, status: 200});
+            }
+        });
 });
 
 router.post('/login', function (req, res) {
@@ -68,7 +68,7 @@ router.post('/login', function (req, res) {
                     var token = jwt.sign(user.toJSON(), config.secret, {
                         expiresIn: 10080 // in seconds
                     });
-                    res.json({success: true, token: 'JWT ' + token});
+                    res.json({success: true, token: 'JWT ' + token, _id: user._id});
                 } else {
                     res.send({success: false, message: 'Authentication failed. Passwords did not match.'});
                 }
@@ -151,7 +151,32 @@ router.get('/:userId', passport.authenticate('jwt', {
     });
 });
 
-
+//edit user
+router.post('/editUser', passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/unauthorized'
+}), function (req, res) {
+    User.findOne({_id: req.body._id}).exec(
+        function (err, user) {
+            if (err) throw err;
+            if (!user) {
+                res.send({success: false, message: 'Authentication failed. User not found.', status: 400});
+            } else {
+                if (req.body.gender != null)
+                    user.gender = req.body.gender;
+                if (req.body.address != null)
+                user.address = req.body.address;
+                if (req.body.avatar_url != null)
+                user.avatar_url = req.body.avatar_url;
+                if (req.body.fullName != null)
+                user.fullName = req.body.fullName;
+                if (req.body.password != null)
+                user.password = req.body.password;
+                user.save();
+                res.send({success: true, data: user, status: 200});
+            }
+        });
+});
 // router.post('/updateUser',)
 
 module.exports = router;

@@ -1,5 +1,6 @@
 package com.khoaluan.mxhgiaothong.restful.service;
 
+import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetUserInfoResponse;
@@ -39,4 +40,9 @@ public interface UserService {
             @Header("Authorization") String token,
             @Path("id") int id
     );
+
+    @POST("editUser")
+    Call<BaseResponse> editUser(
+            @Header("Authorization") String token,
+            @Body User userRequest);
 }

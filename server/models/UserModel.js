@@ -25,6 +25,12 @@ var UserSchema = new Schema({
     avatar_url: {
         type: String,
     },
+    address: {
+        type: String,
+    },
+    gender: {
+        type: String,
+    },
 }, {
     versionKey: false
 });

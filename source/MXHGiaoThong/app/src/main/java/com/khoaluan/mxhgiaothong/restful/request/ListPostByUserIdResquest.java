@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 public class ListPostByUserIdResquest implements Serializable {
 
-    @SerializedName("post_user_id")
+    @SerializedName("creator")
     @Expose
     private int postUserId;
 

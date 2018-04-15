@@ -12,6 +12,18 @@ public class UserLoginResponse extends BaseResponse{
     @Expose
     private String token;
 
+    @SerializedName("_id")
+    @Expose
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getToken() {
         return token;
     }

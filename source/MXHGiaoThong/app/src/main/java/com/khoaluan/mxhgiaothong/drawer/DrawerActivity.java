@@ -32,6 +32,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.loginUserID;
+
 /**
  * Created by HieuMinh on 4/7/2018.
  */
@@ -109,6 +111,7 @@ abstract public class DrawerActivity extends AppCompatActivity {
                 if (!isSelected) {
                     mDrawerLayout.closeDrawer(Gravity.START);
                     Intent intent = new Intent(DrawerActivity.this, ProfileDetailActivity.class);
+                    intent.putExtra("UserID",loginUserID);
                     startActivity(intent);
                     finish();
                 }
