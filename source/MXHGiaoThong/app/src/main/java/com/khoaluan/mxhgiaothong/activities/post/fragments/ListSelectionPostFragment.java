@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.profile.EditProfileActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
@@ -28,6 +31,7 @@ import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.model.Post;
+import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.utils.DateUtils;
@@ -41,11 +45,15 @@ import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.loginUs
 
 public class ListSelectionPostFragment extends Fragment {
 
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.rcvSelectionPost)
     RecyclerView mSelectionPostRecyclerView;
 
     private Context mContext;
     SelectionPostAdapter mAdapter;
+    private User mUser;
+    private String token;
 
     public ListSelectionPostFragment() {
     }
@@ -60,8 +68,24 @@ public class ListSelectionPostFragment extends Fragment {
     }
 
     private void init() {
+        getUser();
+        initRefresh();
         initRecyclerView();
         getAllPost();
+    }
+
+    private void getUser() {
+        mUser = PreferManager.getInstance(mContext).getUser();
+        token = PreferManager.getInstance(mContext).getToken();
+    }
+
+    private void initRefresh() {
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAllPost();
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -90,20 +114,28 @@ public class ListSelectionPostFragment extends Fragment {
         ApiManager.getInstance().getPostService().getAllPost().enqueue(new RestCallback<GetAllPostResponse>() {
             @Override
             public void success(GetAllPostResponse res) {
+                mRefreshLayout.setRefreshing(false);
                 if(res.getPosts() != null) {
-                    mAdapter.addData(res.getPosts());
+                    mAdapter.setNewData(res.getPosts());
                 }
             }
 
             @Override
             public void failure(RestError error) {
-
+                mRefreshLayout.setRefreshing(false);
             }
         });
     }
 
     private void openOptionsDialog(final Post post) {
         PostActionDialog dialog = new PostActionDialog(mContext);
+        if(TextUtils.isEmpty(token) || mUser == null || mUser.getId() != post.getCreator().getId()) {
+            dialog.setEnableEditAction(false);
+            dialog.setEnableDeleteAction(false);
+        } else {
+            dialog.setEnableEditAction(true);
+            dialog.setEnableDeleteAction(true);
+        }
         dialog.setOnIChooseActionListener(new PostActionDialog.IChooseActionListener() {
             @Override
             public void onEditPostClick() {
@@ -117,8 +149,7 @@ public class ListSelectionPostFragment extends Fragment {
 
             @Override
             public void onDeletePostClick() {
-                SharedPreferences sharedPreferences = mContext.getSharedPreferences("data_token", Context.MODE_PRIVATE);
-                String token = sharedPreferences.getString("token", "");
+                String token = PreferManager.getInstance(mContext).getToken();
                 ApiManager.getInstance().getPostService().deletePost(token, post.getId()).enqueue(new RestCallback<BaseResponse>() {
                     @Override
                     public void success(BaseResponse res) {

@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.AppConstants;
+import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
@@ -63,9 +64,8 @@ public class ListPostActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
-        token = sharedPreferences.getString("token","");
-        loginUserID = sharedPreferences.getInt("loginUserID",0);
+        token = PreferManager.getInstance(ListPostActivity.this).getToken();
+        loginUserID = PreferManager.getInstance(ListPostActivity.this).getUserId();
 
         if(token == null || Objects.equals(token, "")){
             startActivity(new Intent(ListPostActivity.this, LoginActivity.class));
@@ -93,11 +93,8 @@ public class ListPostActivity extends DrawerActivity {
 
             @Override
             public void onImvRightClicked() {
-
-                SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("token");
-                editor.apply();
+                PreferManager.getInstance(ListPostActivity.this).saveToken(null);
+                PreferManager.getInstance(ListPostActivity.this).saveUser(null);
 
                 Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
                 startActivity(intent);
@@ -136,8 +133,7 @@ public class ListPostActivity extends DrawerActivity {
 
     @OnClick(R.id.btnCreatePost)
     public void createPost() {
-        SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
-        token = sharedPreferences.getString("token","");
+        token = PreferManager.getInstance(ListPostActivity.this).getToken();
         if(TextUtils.isEmpty(token)) {
             Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
             startActivity(intent);

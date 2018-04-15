@@ -7,9 +7,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.khoaluan.mxhgiaothong.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -19,10 +21,24 @@ import butterknife.OnClick;
 
 public class PostActionDialog extends Dialog {
 
+    @BindView(R.id.tvEditPost) TextView mTvEditPost;
+    @BindView(R.id.tvDeletePost) TextView mTvDeletePost;
+
     private IChooseActionListener mListener;
+
+    private boolean isEnableEdit;
+    private boolean isEnableDelete;
 
     public void setOnIChooseActionListener(IChooseActionListener listener) {
         mListener = listener;
+    }
+
+    public void setEnableEditAction(boolean isEnable) {
+        isEnableEdit = isEnable;
+    }
+
+    public void setEnableDeleteAction(boolean isEnable) {
+        isEnableDelete = isEnable;
     }
 
     public PostActionDialog(@NonNull Context context) {
@@ -38,6 +54,13 @@ public class PostActionDialog extends Dialog {
         }
         setContentView(R.layout.dialog_post_action);
         ButterKnife.bind(this);
+
+        init();
+    }
+
+    private void init() {
+        mTvEditPost.setEnabled(isEnableEdit);
+        mTvDeletePost.setEnabled(isEnableDelete);
     }
 
     @OnClick(R.id.tvEditPost)
