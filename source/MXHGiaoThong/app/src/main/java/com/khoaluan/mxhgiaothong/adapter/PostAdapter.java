@@ -55,11 +55,11 @@ public class PostAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         ImageView imgContent = helper.getView(R.id.imgContent);
 
         Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
-        Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
         Glide.with(mContext).load(item.getImageUrl()).into(imgContent);
 
         helper.addOnClickListener(R.id.llLike);
         helper.addOnClickListener(R.id.llDislike);
+        helper.addOnClickListener(R.id.llComments);
         helper.addOnClickListener(R.id.imgAvatar);
         helper.addOnClickListener(R.id.imgPostOptions);
     }

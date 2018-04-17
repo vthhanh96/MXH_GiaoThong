@@ -22,6 +22,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.PostActionDialog;
@@ -94,6 +95,7 @@ public class ListSelectionPostFragment extends Fragment {
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if(mAdapter.getItem(position) == null) return;
                 if(view.getId() == R.id.llLike) {
                     doReaction(mAdapter.getItem(position), 1);
 
@@ -108,6 +110,8 @@ public class ListSelectionPostFragment extends Fragment {
                 } else if(view.getId() == R.id.imgPostOptions) {
                     openOptionsDialog(mAdapter.getData().get(position));
 
+                } else if(view.getId() == R.id.llComments) {
+                    ListCommentsActivity.start(mContext, mAdapter.getItem(position).getId());
                 }
             }
         });

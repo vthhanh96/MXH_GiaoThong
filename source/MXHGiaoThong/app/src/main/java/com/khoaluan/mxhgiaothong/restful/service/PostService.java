@@ -1,5 +1,7 @@
 package com.khoaluan.mxhgiaothong.restful.service;
 
+import com.khoaluan.mxhgiaothong.restful.RestResponse;
+import com.khoaluan.mxhgiaothong.restful.model.Post;
 import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
 import com.khoaluan.mxhgiaothong.restful.request.ListPostByUserIdResquest;
@@ -47,6 +49,11 @@ public interface PostService {
     @DELETE("post/{postId}")
     Call<BaseResponse> deletePost(
             @Header("Authorization") String token,
+            @Path("postId") String id
+    );
+
+    @GET("post/{postId}")
+    Call<PostResponse> getPostInfo(
             @Path("postId") String id
     );
 

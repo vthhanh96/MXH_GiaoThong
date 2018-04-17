@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Hong Hanh on 4/1/2018.
@@ -25,11 +26,11 @@ public class Comment implements Serializable{
 
     @SerializedName("created_date")
     @Expose
-    private User createdDate;
+    private Date createdDate;
 
     @SerializedName("modify_date")
     @Expose
-    private User modifyDate;
+    private Date modifyDate;
 
     public String getId() {
         return id;
@@ -55,19 +56,19 @@ public class Comment implements Serializable{
         this.content = content;
     }
 
-    public User getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(User createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    public User getModifyDate() {
+    public Date getModifyDate() {
         return modifyDate;
     }
 
-    public void setModifyDate(User modifyDate) {
+    public void setModifyDate(Date modifyDate) {
         this.modifyDate = modifyDate;
     }
 }
