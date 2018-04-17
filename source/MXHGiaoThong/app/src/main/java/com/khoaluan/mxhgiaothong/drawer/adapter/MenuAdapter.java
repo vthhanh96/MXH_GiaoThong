@@ -134,6 +134,7 @@ public class MenuAdapter extends RecyclerView.Adapter {
     class BodyHolder
             extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+
        @BindView(R.id.imv_icon)
                ImageView imvIcon;
 
