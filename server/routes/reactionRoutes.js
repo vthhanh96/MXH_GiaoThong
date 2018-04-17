@@ -51,15 +51,85 @@ router.use('/:postId/reaction', passport.authenticate('jwt', {session: false, fa
         next();
 });
 
-//create new reaction for user
 router.post('/:postId/reaction', (req, res, next) => {
-    if(req.reaction)
-        res.json({
-            success: false,
-            data: {},
-            message: 'You have reacted this post.'
-        });
+    if(req.reaction) {
+        //change reaction
+        if(req.body.status_reaction !== 1 && req.body.status_reaction !== 2) {
+            res.json({
+                success: false,
+                data: {},
+                message: 'Field status_reaction is invalid'
+            })
+        } else {
+            if(req.reaction.status_reaction === req.body.status_reaction) {
+                //delete reaction
+                req.reaction.remove((err) => {
+                    if(err)
+                        res.json({
+                            success: true,
+                            message: `Error when delete reaction ${err}`
+                        });
+                    else
+                    if(req.reaction.status_reaction === 1) {
+                        req.post.like_amount -= 1;
+                    } else {
+                        req.post.dislike_amount -= 1;
+                    }
+                    req.post.save((err) => {
+                        if(err)
+                            res.json({
+                                success: false,
+                                data: {},
+                                message: `Error: ${err}`
+                            });
+                        else
+                            res.json({
+                                success: true,
+                                data: req.post,
+                                message: 'Success update reaction'
+                            });
+                    })
+                })
+            } else {
+                req.reaction.status_reaction = req.body.status_reaction;
+                req.reaction.modify_date = Date.now();
+                req.reaction.save((err) => {
+                    if(err) {
+                        res.json({
+                            success: false,
+                            data: {},
+                            message: `Error: ${err}`
+                        });
+                    } else {
+                        if(req.reaction.status_reaction === 1) {
+                            req.post.like_amount += 1;
+                            req.post.dislike_amount -= 1;
+                        } else {
+                            req.post.dislike_amount += 1;
+                            req.post.like_amount -= 1;
+                        }
+                        req.post.save((err) => {
+                            if(err)
+                                res.json({
+                                    success: false,
+                                    data: {},
+                                    message: `Error: ${err}`
+                                });
+                            else
+                                res.json({
+                                    success: true,
+                                    data: req.post,
+                                    message: 'Success update reaction'
+                                });
+                        })
+
+                    }
+                })
+            }
+        }
+    }
     else {
+        //create reaction
         req.reaction = new Reaction(req.body);
         req.reaction.creator = req.user;
         if(req.reaction.status_reaction !== 1 && req.reaction.status_reaction !== 2) {
@@ -93,8 +163,8 @@ router.post('/:postId/reaction', (req, res, next) => {
                         else
                             res.json({
                                 success: true,
-                                data: {},
-                                message: req.post
+                                data: req.post,
+                                message: "Create reaction success"
                             });
                     })
 

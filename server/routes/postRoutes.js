@@ -73,7 +73,7 @@ router.post('/listUserPost', passport.authenticate('jwt', {
 
 
 router.get('/', function (req, res, next) {
-    Post.find({}).populate('creator').populate("category").limit(100).sort({name: 1}).exec((err, posts) => {
+    Post.find({}).populate('creator').populate("category").populate("reaction").limit(100).sort({name: 1}).exec((err, posts) => {
         if (err) {
             res.json({
                 success: false,

@@ -57,11 +57,11 @@ public class Post implements Serializable {
     @Expose
     private float longitude;
 
-    @SerializedName("likeAmount")
+    @SerializedName("like_amount")
     @Expose
     private int likeAmount;
 
-    @SerializedName("dislikeAmount")
+    @SerializedName("dislike_amount")
     @Expose
     private int dislikeAmount;
 
