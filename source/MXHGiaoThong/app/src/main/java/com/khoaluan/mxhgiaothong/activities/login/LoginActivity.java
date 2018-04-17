@@ -24,12 +24,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
+import com.khoaluan.mxhgiaothong.restful.response.GetUserInfoResponse;
 import com.khoaluan.mxhgiaothong.restful.response.UserLoginResponse;
 
 import java.util.Arrays;
@@ -120,18 +122,29 @@ public class LoginActivity extends AppCompatActivity {
         ApiManager.getInstance().getUserService().login(new LoginUseRequest(edtUserName.getText().toString(), edtPassWord.getText().toString())).enqueue(new RestCallback<UserLoginResponse>() {
             @Override
             public void success(UserLoginResponse res) {
-                SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("token", res.getToken());
-                editor.putInt("loginUserID",res.getId());
-                editor.apply();
-
-                ListPostActivity.start(LoginActivity.this);
+                PreferManager.getInstance(LoginActivity.this).saveToken(res.getToken());
+                PreferManager.getInstance(LoginActivity.this).saveUserId(res.getId());
+                getUserInfo(res.getToken());
             }
 
             @Override
             public void failure(RestError error) {
                 Toast.makeText(LoginActivity.this, error.message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getUserInfo(String token) {
+        ApiManager.getInstance().getUserService().getUserInfo(token).enqueue(new RestCallback<GetUserInfoResponse>() {
+            @Override
+            public void success(GetUserInfoResponse res) {
+                PreferManager.getInstance(LoginActivity.this).saveUser(res.getUser());
+                ListPostActivity.start(LoginActivity.this);
+            }
+
+            @Override
+            public void failure(RestError error) {
+
             }
         });
     }

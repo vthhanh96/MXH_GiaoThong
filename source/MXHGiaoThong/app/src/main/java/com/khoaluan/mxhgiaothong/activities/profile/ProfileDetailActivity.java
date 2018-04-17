@@ -14,6 +14,7 @@ import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
 import com.khoaluan.mxhgiaothong.activities.post.fragments.ListSelectionPostFragment;
+import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
@@ -47,7 +48,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
     TextView tvUserName;
     private int userID;
     private User user;
-    ListSelectionPostFragment.SelectionPostAdapter mAdapter;
+    PostAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -120,7 +121,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
     }
 
     private void initRecyclerView() {
-        mAdapter = new ListSelectionPostFragment.SelectionPostAdapter();
+        mAdapter = new PostAdapter(user);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {

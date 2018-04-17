@@ -73,7 +73,7 @@ router.post('/listUserPost', passport.authenticate('jwt', {
 
 
 router.get('/', function (req, res, next) {
-    Post.find({}).populate('creator').populate("category").limit(100).sort({name: 1}).exec((err, posts) => {
+    Post.find({}).populate('creator').populate("category").populate("reaction").limit(100).sort({name: 1}).exec((err, posts) => {
         if (err) {
             res.json({
                 success: false,
@@ -91,7 +91,16 @@ router.get('/', function (req, res, next) {
 });
 
 router.use('/:postId', (req, res, next) => {
-    Post.findById(req.params.postId).populate('creator').populate('category').populate('comments').exec((err, post) => {
+    Post.findById(req.params.postId).populate('creator').populate('category')
+        .populate({
+            path: 'comments',
+            model: 'Comment',
+            populate: {
+                path: 'creator',
+                model: 'User'
+            }
+        })
+        .exec((err, post) => {
         if (err)
             res.status(500).send(err);
         else if (post) {

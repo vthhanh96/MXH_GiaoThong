@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.AppConstants;
+import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.login.ForgotPassActivity;
 import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
@@ -137,11 +138,7 @@ abstract public class DrawerActivity extends AppCompatActivity {
 
             @Override
             public void onFooterClick() {
-
-                SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("token");
-                editor.apply();
+                PreferManager.getInstance(DrawerActivity.this).saveToken(null);
 
                 mDrawerLayout.closeDrawer(Gravity.START);
                 Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);

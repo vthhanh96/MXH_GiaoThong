@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.Application;
+import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
@@ -26,6 +27,7 @@ import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.model.Category;
 import com.khoaluan.mxhgiaothong.restful.model.Post;
+import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.request.UpdatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
@@ -118,8 +120,7 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     private void getToken() {
-        SharedPreferences sharedPreferences = getSharedPreferences("data_token", Context.MODE_PRIVATE);
-        token = sharedPreferences.getString("token", "");
+        token = PreferManager.getInstance(mContext).getToken();
     }
 
     private void initTopBar() {
@@ -170,18 +171,10 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     private void getUserInfo() {
-        ApiManager.getInstance().getUserService().getUserInfo(token).enqueue(new RestCallback<GetUserInfoResponse>() {
-            @Override
-            public void success(GetUserInfoResponse res) {
-                Glide.with(mContext).load(res.getUser().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
-                mTvName.setText(res.getUser().getFullName());
-            }
-
-            @Override
-            public void failure(RestError error) {
-
-            }
-        });
+        User user = PreferManager.getInstance(mContext).getUser();
+        if (user == null) return;
+        Glide.with(mContext).load(user.getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        mTvName.setText(user.getFullName());
     }
 
     private void getCurrentLocation() {

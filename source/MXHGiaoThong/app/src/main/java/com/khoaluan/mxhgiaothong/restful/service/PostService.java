@@ -1,11 +1,15 @@
 package com.khoaluan.mxhgiaothong.restful.service;
 
+import com.khoaluan.mxhgiaothong.restful.RestResponse;
+import com.khoaluan.mxhgiaothong.restful.model.Post;
 import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
+import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
 import com.khoaluan.mxhgiaothong.restful.request.ListPostByUserIdResquest;
 import com.khoaluan.mxhgiaothong.restful.request.UpdatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.CreatePostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
+import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -46,5 +50,17 @@ public interface PostService {
     Call<BaseResponse> deletePost(
             @Header("Authorization") String token,
             @Path("postId") String id
+    );
+
+    @GET("post/{postId}")
+    Call<PostResponse> getPostInfo(
+            @Path("postId") String id
+    );
+
+    @POST("post/{postId}/reaction")
+    Call<PostResponse> doReaction(
+            @Header("Authorization") String token,
+            @Path("postId") String id,
+            @Body DoReactionRequest request
     );
 }

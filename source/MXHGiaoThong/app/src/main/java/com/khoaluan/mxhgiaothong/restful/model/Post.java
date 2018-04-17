@@ -57,17 +57,17 @@ public class Post implements Serializable {
     @Expose
     private float longitude;
 
-    @SerializedName("likeAmount")
+    @SerializedName("like_amount")
     @Expose
     private int likeAmount;
 
-    @SerializedName("dislikeAmount")
+    @SerializedName("dislike_amount")
     @Expose
     private int dislikeAmount;
 
-//    @SerializedName("comments")
-//    @Expose
-//    private List<Comment> comments;
+    @SerializedName("comments")
+    @Expose
+    private List<Comment> comments;
 
     @SerializedName("reaction")
     @Expose
@@ -185,13 +185,13 @@ public class Post implements Serializable {
         this.dislikeAmount = dislikeAmount;
     }
 
-//    public List<Comment> getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(List<Comment> comments) {
-//        this.comments = comments;
-//    }
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     public List<Reaction> getReaction() {
         return reaction;

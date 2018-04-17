@@ -2,13 +2,14 @@ package com.khoaluan.mxhgiaothong.activities.post.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,33 +20,42 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.activities.profile.EditProfileActivity;
+import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.PostActionDialog;
+import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.model.Post;
+import com.khoaluan.mxhgiaothong.restful.model.Reaction;
+import com.khoaluan.mxhgiaothong.restful.model.User;
+import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
+import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.utils.DateUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.loginUserID;
-
 public class ListSelectionPostFragment extends Fragment {
 
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.rcvSelectionPost)
     RecyclerView mSelectionPostRecyclerView;
 
     private Context mContext;
-    SelectionPostAdapter mAdapter;
+    PostAdapter mAdapter;
+    private User mUser;
+    private String token;
 
     public ListSelectionPostFragment() {
     }
@@ -60,25 +70,48 @@ public class ListSelectionPostFragment extends Fragment {
     }
 
     private void init() {
+        getUser();
+        initRefresh();
         initRecyclerView();
         getAllPost();
     }
 
+    private void getUser() {
+        mUser = PreferManager.getInstance(mContext).getUser();
+        token = PreferManager.getInstance(mContext).getToken();
+    }
+
+    private void initRefresh() {
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAllPost();
+            }
+        });
+    }
+
     private void initRecyclerView() {
-        mAdapter = new SelectionPostAdapter();
+        mAdapter = new PostAdapter(mUser);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if(mAdapter.getItem(position) == null) return;
                 if(view.getId() == R.id.llLike) {
+                    doReaction(mAdapter.getItem(position), 1);
 
                 } else if(view.getId() == R.id.llDislike){
+                    doReaction(mAdapter.getItem(position), 2);
 
                 } else if(view.getId() == R.id.imgAvatar){
                     Intent intent = new Intent(getActivity(),ProfileDetailActivity.class);
                     intent.putExtra("UserID",mAdapter.getItem(position).getCreator().getId());
                     startActivity(intent);
+
                 } else if(view.getId() == R.id.imgPostOptions) {
                     openOptionsDialog(mAdapter.getData().get(position));
+
+                } else if(view.getId() == R.id.llComments) {
+                    ListCommentsActivity.start(mContext, mAdapter.getItem(position).getId());
                 }
             }
         });
@@ -90,20 +123,28 @@ public class ListSelectionPostFragment extends Fragment {
         ApiManager.getInstance().getPostService().getAllPost().enqueue(new RestCallback<GetAllPostResponse>() {
             @Override
             public void success(GetAllPostResponse res) {
+                mRefreshLayout.setRefreshing(false);
                 if(res.getPosts() != null) {
-                    mAdapter.addData(res.getPosts());
+                    mAdapter.setNewData(res.getPosts());
                 }
             }
 
             @Override
             public void failure(RestError error) {
-
+                mRefreshLayout.setRefreshing(false);
             }
         });
     }
 
     private void openOptionsDialog(final Post post) {
         PostActionDialog dialog = new PostActionDialog(mContext);
+        if(TextUtils.isEmpty(token) || mUser == null || mUser.getId() != post.getCreator().getId()) {
+            dialog.setEnableEditAction(false);
+            dialog.setEnableDeleteAction(false);
+        } else {
+            dialog.setEnableEditAction(true);
+            dialog.setEnableDeleteAction(true);
+        }
         dialog.setOnIChooseActionListener(new PostActionDialog.IChooseActionListener() {
             @Override
             public void onEditPostClick() {
@@ -117,8 +158,7 @@ public class ListSelectionPostFragment extends Fragment {
 
             @Override
             public void onDeletePostClick() {
-                SharedPreferences sharedPreferences = mContext.getSharedPreferences("data_token", Context.MODE_PRIVATE);
-                String token = sharedPreferences.getString("token", "");
+                String token = PreferManager.getInstance(mContext).getToken();
                 ApiManager.getInstance().getPostService().deletePost(token, post.getId()).enqueue(new RestCallback<BaseResponse>() {
                     @Override
                     public void success(BaseResponse res) {
@@ -137,32 +177,17 @@ public class ListSelectionPostFragment extends Fragment {
         dialog.show();
     }
 
-    public static class SelectionPostAdapter extends BaseQuickAdapter<Post, BaseViewHolder>{
+    private void doReaction(final Post post, int typeReaction) {
+        ApiManager.getInstance().getPostService().doReaction(token, post.getId(), new DoReactionRequest(typeReaction)).enqueue(new RestCallback<PostResponse>() {
+            @Override
+            public void success(PostResponse res) {
+                getAllPost();
+            }
 
-        public SelectionPostAdapter() {
-            super(R.layout.item_post, new ArrayList<Post>());
-        }
+            @Override
+            public void failure(RestError error) {
 
-        @Override
-        protected void convert(BaseViewHolder helper, Post item) {
-            helper.setText(R.id.tvName, item.getCreator().getFullName());
-            helper.setText(R.id.tvPlace, item.getPlace());
-            helper.setText(R.id.tvTime, DateUtils.getTimeAgo(mContext, item.getCreatedDate()));
-            helper.setText(R.id.tvContent, item.getContent());
-            helper.setText(R.id.tvLikeAmount, String.valueOf(item.getLikeAmount()));
-            helper.setText(R.id.tvDislikeAmount, String.valueOf(item.getDislikeAmount()));
-
-            ImageView imgAvatar = helper.getView(R.id.imgAvatar);
-            ImageView imgContent = helper.getView(R.id.imgContent);
-
-            Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
-            Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
-            Glide.with(mContext).load(item.getImageUrl()).into(imgContent);
-
-            helper.addOnClickListener(R.id.llLike);
-            helper.addOnClickListener(R.id.llDislike);
-            helper.addOnClickListener(R.id.imgAvatar);
-            helper.addOnClickListener(R.id.imgPostOptions);
-        }
+            }
+        });
     }
 }
