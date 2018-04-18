@@ -117,7 +117,7 @@ router.put('/:postId/comment/:commentId', passport.authenticate('jwt', {session:
                 res.json({
                     success: true,
                     message: "update comment success",
-                    data: req.comment
+                    data: req.post
                 });
         });
     } else {

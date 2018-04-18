@@ -30,6 +30,7 @@ public class InputDialog extends Dialog {
 
     private Context mContext;
     private InputDialogListener mListener;
+    private String mContent;
 
     public void setListener(InputDialogListener listener) {
         mListener = listener;
@@ -43,6 +44,10 @@ public class InputDialog extends Dialog {
     public InputDialog(@NonNull Context context) {
         super(context);
         mContext = context;
+    }
+
+    public void setContentInput(String content) {
+        mContent = content;
     }
 
     @Override
@@ -68,7 +73,7 @@ public class InputDialog extends Dialog {
     }
 
     private void init() {
-
+        mEdtInput.setText(mContent);
     }
 
     @OnClick(R.id.tv_cancel)
