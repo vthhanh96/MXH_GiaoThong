@@ -3,7 +3,6 @@ package com.khoaluan.mxhgiaothong.activities.post;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +21,7 @@ import com.khoaluan.mxhgiaothong.Application;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -163,7 +163,9 @@ public class CreatePostActivity extends AppCompatActivity {
 
                     @Override
                     public void failure(RestError error) {
-                        Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
+                        ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                        errorDialog.setError(error.message);
+                        errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
                     }
                 });
             }
@@ -175,6 +177,20 @@ public class CreatePostActivity extends AppCompatActivity {
         if (user == null) return;
         Glide.with(mContext).load(user.getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
         mTvName.setText(user.getFullName());
+        ApiManager.getInstance().getUserService().getUserInfo(token).enqueue(new RestCallback<GetUserInfoResponse>() {
+            @Override
+            public void success(GetUserInfoResponse res) {
+                Glide.with(mContext).load(res.getUser().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+                mTvName.setText(res.getUser().getFullName());
+            }
+
+            @Override
+            public void failure(RestError error) {
+                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                errorDialog.setError(error.message);
+                errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
+            }
+        });
     }
 
     private void getCurrentLocation() {
@@ -210,7 +226,9 @@ public class CreatePostActivity extends AppCompatActivity {
 
             @Override
             public void failure(RestError error) {
-                Toast.makeText(CreatePostActivity.this, error.message, Toast.LENGTH_SHORT).show();
+                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                errorDialog.setError(error.message);
+                errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
             }
         });
     }

@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -61,7 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                 @Override
                 public void failure(RestError error) {
-                    Toast.makeText(RegisterActivity.this, ""+error.message, Toast.LENGTH_SHORT).show();
+                    ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                    errorDialog.setError(error.message);
+                    errorDialog.show(getSupportFragmentManager(), RegisterActivity.class.getName());
                 }
             });
         }

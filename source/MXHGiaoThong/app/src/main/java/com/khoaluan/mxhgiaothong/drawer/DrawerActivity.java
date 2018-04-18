@@ -187,14 +187,36 @@ abstract public class DrawerActivity extends AppCompatActivity {
         // Body
         mMenuList.add(new BodyDto(
                 AppConstants.NAV_DRAWER_LIST_POST,
-                R.drawable.ic_camera_gray,
+                R.drawable.ic_home,
                 "Trang chủ",
                 getNavId())
         );
+
         mMenuList.add(new BodyDto(
                 AppConstants.NAV_DRAWER_PROFILE_DETAIL,
-                R.drawable.ic_like,
-                "Profile Detail",
+                R.drawable.ic_map,
+                "Chỉ đường",
+                getNavId())
+        );
+
+        mMenuList.add(new BodyDto(
+                AppConstants.NAV_DRAWER_PROFILE_DETAIL,
+                R.drawable.ic_alarm,
+                "Thông báo",
+                getNavId())
+        );
+
+        mMenuList.add(new BodyDto(
+                AppConstants.NAV_DRAWER_PROFILE_DETAIL,
+                R.drawable.ic_search,
+                "Tìm kiếm",
+                getNavId())
+        );
+
+        mMenuList.add(new BodyDto(
+                AppConstants.NAV_DRAWER_PROFILE_DETAIL,
+                R.drawable.ic_chart,
+                "Thống kê",
                 getNavId())
         );
 

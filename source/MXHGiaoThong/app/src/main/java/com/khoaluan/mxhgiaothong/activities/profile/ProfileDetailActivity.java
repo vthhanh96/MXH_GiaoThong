@@ -1,21 +1,18 @@
 package com.khoaluan.mxhgiaothong.activities.profile;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
-import com.khoaluan.mxhgiaothong.activities.post.fragments.ListSelectionPostFragment;
 import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
@@ -27,7 +24,6 @@ import com.khoaluan.mxhgiaothong.restful.response.UserResponse;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_SETTING;
@@ -57,7 +53,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
 
     @Override
     protected int getNavId() {
-        return AppConstants.NAV_DRAWER_PROFILE_EDIT;
+        return AppConstants.NAV_DRAWER_PROFILE_DETAIL;
     }
 
     @Override
@@ -115,7 +111,9 @@ public class ProfileDetailActivity   extends DrawerActivity {
 
             @Override
             public void failure(RestError error) {
-                Toast.makeText(ProfileDetailActivity.this, ""+error.message, Toast.LENGTH_SHORT).show();
+                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                errorDialog.setError(error.message);
+                errorDialog.show(getSupportFragmentManager(), ProfileDetailActivity.class.getName());
             }
         });
     }
@@ -147,7 +145,9 @@ public class ProfileDetailActivity   extends DrawerActivity {
             }
             @Override
             public void failure(RestError error) {
-                Toast.makeText(ProfileDetailActivity.this, ""+error.message, Toast.LENGTH_SHORT).show();
+                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                errorDialog.setError(error.message);
+                errorDialog.show(getSupportFragmentManager(), ProfileDetailActivity.class.getName());
             }
         });
     }

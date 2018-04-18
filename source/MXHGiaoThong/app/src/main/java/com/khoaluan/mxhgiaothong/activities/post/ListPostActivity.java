@@ -1,16 +1,13 @@
 package com.khoaluan.mxhgiaothong.activities.post;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -18,8 +15,10 @@ import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
-import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.activities.post.adapter.ListPostFragmentPagerAdapter;
+import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.customView.dialog.QuestionDialog;
+import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionListener;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 
 import java.util.Objects;
@@ -93,13 +92,26 @@ public class ListPostActivity extends DrawerActivity {
 
             @Override
             public void onImvRightClicked() {
-                PreferManager.getInstance(ListPostActivity.this).saveToken(null);
-                PreferManager.getInstance(ListPostActivity.this).saveUser(null);
 
-                Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
-                startActivity(intent);
+                final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn đăng xuất?");
+                questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+                    @Override
+                    public void dialogCancel() {
+                        questionDialog.dismissDialog();
+                    }
 
-                finish();
+                    @Override
+                    public void dialogPerformAction() {
+                        PreferManager.getInstance(ListPostActivity.this).saveToken(null);
+                        PreferManager.getInstance(ListPostActivity.this).saveUser(null);
+
+                        Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
+                        startActivity(intent);
+
+                        finish();
+                    }
+                });
+                questionDialog.show(getSupportFragmentManager(), ListPostActivity.class.getName());
             }
 
             @Override

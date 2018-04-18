@@ -1,6 +1,7 @@
 package com.khoaluan.mxhgiaothong.drawer.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,6 +135,8 @@ public class MenuAdapter extends RecyclerView.Adapter {
     class BodyHolder
             extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @BindView(R.id.view_select)
+        View viewSelect;
 
        @BindView(R.id.imv_icon)
                ImageView imvIcon;
@@ -150,6 +153,11 @@ public class MenuAdapter extends RecyclerView.Adapter {
        public void bind(BodyDto bodyDto) {
             tvTitle.setText(bodyDto.title);
             imvIcon.setImageResource(bodyDto.icon);
+            if(bodyDto.isSelected){
+                viewSelect.setBackgroundColor(Color.WHITE);
+            } else {
+                viewSelect.setBackgroundColor(Color.TRANSPARENT);
+            }
         }
 
         @Override

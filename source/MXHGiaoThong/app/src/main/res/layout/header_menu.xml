@@ -2,60 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
     android:layout_marginTop="20dp"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:elevation="4dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/bg_circle" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
             android:id="@+id/profile_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@color/appColor"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
-
-        <LinearLayout
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="5dp"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="10dp">
-
-            <TextView
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:text="Nguyễn Minh Hiếu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:text="Lập trình viên"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@color/colorPrimaryDark" />
 
 
-    </LinearLayout>
 
+    </FrameLayout>
 
-    <View
+    <TextView
+        android:textColor="@color/white"
+        android:textSize="19sp"
+        android:layout_marginTop="15dp"
+        android:text="Nguyễn Minh Hiếu"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textColor="#f7f7f7"
         android:layout_marginBottom="15dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/black"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        />
+        android:textSize="15sp"
+        android:layout_marginTop="6dp"
+        android:text="hieuit275@gmail.com"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

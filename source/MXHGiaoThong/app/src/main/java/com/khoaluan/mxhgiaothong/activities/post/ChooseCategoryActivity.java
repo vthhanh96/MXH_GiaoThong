@@ -17,7 +17,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.items.LevelItem;
+import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -167,7 +169,9 @@ public class ChooseCategoryActivity extends AppCompatActivity {
 
             @Override
             public void failure(RestError error) {
-
+                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                errorDialog.setError(error.message);
+                errorDialog.show(getSupportFragmentManager(), ChooseCategoryActivity.class.getName());
             }
         });
     }

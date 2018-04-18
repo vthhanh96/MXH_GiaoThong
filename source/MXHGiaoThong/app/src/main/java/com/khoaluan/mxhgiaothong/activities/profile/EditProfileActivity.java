@@ -1,12 +1,10 @@
 package com.khoaluan.mxhgiaothong.activities.profile;
 
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -33,7 +32,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_BACK;
-import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.loginUserID;
 import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.token;
 
 /**
@@ -171,7 +169,9 @@ public class EditProfileActivity extends AppCompatActivity{
 
                 @Override
                 public void failure(RestError error) {
-                    Toast.makeText(EditProfileActivity.this, ""+error.message, Toast.LENGTH_SHORT).show();
+                    ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                    errorDialog.setError(error.message);
+                    errorDialog.show(getSupportFragmentManager(), EditProfileActivity.class.getName());
                 }
             });
         }

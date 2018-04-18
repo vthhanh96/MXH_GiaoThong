@@ -1,11 +1,8 @@
 package com.khoaluan.mxhgiaothong.activities.login;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
+import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -129,7 +127,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void failure(RestError error) {
-                Toast.makeText(LoginActivity.this, error.message, Toast.LENGTH_SHORT).show();
+                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                errorDialog.setError(error.message);
+                errorDialog.show(getSupportFragmentManager(), LoginActivity.class.getName());
             }
         });
     }
@@ -144,8 +144,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void failure(RestError error) {
-
-            }
+                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                errorDialog.setError(error.message);
+                errorDialog.show(getSupportFragmentManager(), LoginActivity.class.getName());            }
         });
     }
 
@@ -199,7 +200,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException e) {
-                // Handle exception
+                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                errorDialog.setError(e.getMessage());
+                errorDialog.show(getSupportFragmentManager(), LoginActivity.class.getName());
             }
         });
     }
@@ -221,8 +224,9 @@ public class LoginActivity extends AppCompatActivity {
 //            updateUI(account);
             Toast.makeText(this, "account : " + account.getEmail(), Toast.LENGTH_SHORT).show();
         } catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-//            updateUI(null);
+            ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+            errorDialog.setError(e.getMessage());
+            errorDialog.show(getSupportFragmentManager(), LoginActivity.class.getName());
         }
     }
 
