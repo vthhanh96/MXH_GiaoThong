@@ -1,7 +1,6 @@
 package com.khoaluan.mxhgiaothong.restful.service;
 
-import com.khoaluan.mxhgiaothong.restful.RestResponse;
-import com.khoaluan.mxhgiaothong.restful.model.Post;
+import com.khoaluan.mxhgiaothong.restful.request.CommentRequest;
 import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
 import com.khoaluan.mxhgiaothong.restful.request.ListPostByUserIdResquest;
@@ -62,5 +61,27 @@ public interface PostService {
             @Header("Authorization") String token,
             @Path("postId") String id,
             @Body DoReactionRequest request
+    );
+
+    @POST("post/{postId}/comment")
+    Call<PostResponse> createComment(
+            @Header("Authorization") String token,
+            @Path("postId") String id,
+            @Body CommentRequest request
+    );
+
+    @PUT("post/{postId}/comment/{commentId}")
+    Call<PostResponse> editComment(
+            @Header("Authorization") String token,
+            @Path("postId") String postId,
+            @Path("commentId") String commentId,
+            @Body CommentRequest request
+    );
+
+    @DELETE("post/{postId}/comment/{commentId}")
+    Call<BaseResponse> deleteComment(
+            @Header("Authorization") String token,
+            @Path("postId") String postId,
+            @Path("commentId") String commentId
     );
 }
