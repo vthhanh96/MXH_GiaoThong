@@ -125,6 +125,7 @@
                             android:textSize="16sp" />
 
                         <ImageView
+                            android:id="@+id/btn_choise_date"
                             android:layout_marginEnd="5dp"
                             android:layout_gravity="center_vertical"
                             android:layout_width="25dp"
@@ -171,13 +172,14 @@
                             android:textColor="@color/black"
                             android:textSize="16sp" />
 
-                        <ImageView
-                            android:layout_marginEnd="5dp"
+                        <Spinner
+                            android:layout_marginStart="5dp"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:background="@drawable/ic_arrow_down"
+                            android:id="@+id/spiner_gender"
                             android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_arrow_down" />
-
+                            android:layout_height="25dp"/>
                     </LinearLayout>
 
                 </LinearLayout>

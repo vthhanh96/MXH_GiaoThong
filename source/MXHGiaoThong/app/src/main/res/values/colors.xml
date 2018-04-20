@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#02ce84</color>
-    <color name="colorPrimaryDark">#029b64</color>
+    <color name="colorPrimaryDark">#c831669f</color>
     <color name="colorAccent">#02ce84</color>
-    <color name="appColor">#02ce84</color>
+    <color name="appColor">#3167a1</color>
     <color name="borderColor">#b4b4b4</color>
     <color name="white">#FFFFFF</color>
     <color name="gray">#dddddd</color>

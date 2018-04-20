@@ -1,13 +1,19 @@
 package com.khoaluan.mxhgiaothong.activities.profile;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +29,9 @@ import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -66,9 +75,13 @@ public class EditProfileActivity extends AppCompatActivity{
     LinearLayout lnNewPass;
     @BindView(R.id.tvEmail_edit)
     TextView tvEmail;
+    @BindView(R.id.btn_choise_date)
+    ImageView btnChoiseDate;
+    @BindView(R.id.spiner_gender)
+    Spinner spinerGender;
 
     private User userLogin;
-
+    private int mYear, mMonth, mDay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +110,26 @@ public class EditProfileActivity extends AppCompatActivity{
         edtPassword.setText(userLogin.getPassword());
         edtAddress.setText(userLogin.getAddress());
         tvEmail.setText(userLogin.getEmail());
+
+        List<String> listGender = new ArrayList<>();
+        listGender.add("Nam");
+        listGender.add("Nữ");
+        listGender.add("Khác");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,listGender);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spinerGender.setAdapter(adapter);
+        spinerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tvGender.setText(spinerGender.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void initTopBar() {
@@ -135,6 +168,30 @@ public class EditProfileActivity extends AppCompatActivity{
             edtNewPass.setText("");
             edtConfirmNewPass.setText("");
         }
+    }
+
+    @OnClick(R.id.btn_choise_date)
+    public void choiseDate(){
+        // Get Current Date
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        tvDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

@@ -81,18 +81,6 @@ public class LoginActivity extends AppCompatActivity {
 
         loginWithGoogle();
 
-//        ApiManager.getInstance().getPostService().getAllPost().enqueue(new RestCallback<GetAllPostResponse>() {
-//            @Override
-//            public void success(GetAllPostResponse res) {
-//                Log.d("TestApi", res.getPosts().get(0).mPostContent);
-//            }
-//
-//            @Override
-//            public void failure(RestError error) {
-//                Log.d("TestApi", error.message);
-//            }
-//        });
-
     }
 
     @OnClick(R.id.login_button_front)

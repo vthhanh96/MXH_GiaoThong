@@ -66,7 +66,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
     }
 
     private void initTopbar() {
-        topBar.setTextTitle("Hạnh Văn");
+        topBar.setTextTitle("NetFic");
         topBar.setImageViewLeft(LEFT_MENU);
         if(userID == loginUserID) {
             topBar.setImageViewRight(RIGHT_SETTING);
@@ -95,8 +95,13 @@ public class ProfileDetailActivity   extends DrawerActivity {
         });
     }
 
-    private void init() {
+    @Override
+    protected void onResume() {
+        super.onResume();
         getInforUser();
+    }
+
+    private void init() {
         initRecyclerView();
     }
 

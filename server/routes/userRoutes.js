@@ -66,7 +66,7 @@ router.post('/login', function (req, res) {
                 if (isMatch && !err) {
                     // Create token if the password matched and no error was thrown
                     var token = jwt.sign(user.toJSON(), config.secret, {
-                        expiresIn: 10080 // in seconds
+                        expiresIn: 86400000*7 // in 7 days
                     });
                     res.json({success: true, token: 'JWT ' + token, _id: user._id});
                 } else {
@@ -172,6 +172,8 @@ router.post('/editUser', passport.authenticate('jwt', {
                 user.fullName = req.body.fullName;
                 if (req.body.password != null)
                 user.password = req.body.password;
+                if(req.body.birthDate != null)
+                    user.birthDate = req.body.birthDate;
                 user.save();
                 res.send({success: true, data: user, status: 200});
             }
