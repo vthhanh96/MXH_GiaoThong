@@ -18,7 +18,10 @@ router.use('/:postId/comment', (req, res, next) => {
         })
         .exec((err, post) => {
         if (err)
-            res.status(500).send(err);
+            res.json({
+                success: false,
+                message: `Error: ${err}`
+            });
         else if (post) {
             req.post = post;
             next();
@@ -34,9 +37,12 @@ router.use('/:postId/comment', (req, res, next) => {
 });
 
 router.use('/:postId/comment/:commentId', (req, res, next) => {
-   Comment.findById(req.params.commentId, (err, comment) => {
+   Comment.findById(req.params.commentId).populate('creator').exec((err, comment) => {
        if(err)
-           res.status(500).send(err);
+           res.json({
+               success: false,
+               message: `Error: ${err}`
+           });
        else if(comment) {
            req.comment = comment;
            next();
@@ -83,7 +89,7 @@ router.post('/:postId/comment', passport.authenticate('jwt', {session: false, fa
                 else {
                     res.json({
                         success: true,
-                        data: req.post,
+                        data: comment,
                         message: "success upload new comment"
                     })
                 }
@@ -104,7 +110,7 @@ router.put('/:postId/comment/:commentId', passport.authenticate('jwt', {session:
     if (req.body._id)
         delete req.body._id;
     //user is not creator
-    if(req.user.id.localeCompare(req.comment.creator) === 0){
+    if(req.user.id.localeCompare(req.comment.creator._id) === 0){
         for (var p in req.body) {
             req.comment[p] = req.body[p];
         }
@@ -112,12 +118,15 @@ router.put('/:postId/comment/:commentId', passport.authenticate('jwt', {session:
 
         req.comment.save((err) => {
             if (err)
-                res.status(500).send(err);
+                res.json({
+                    success: false,
+                    message: `Error: ${err}`
+                });
             else
                 res.json({
                     success: true,
                     message: "update comment success",
-                    data: req.post
+                    data: req.comment
                 });
         });
     } else {
@@ -129,15 +138,28 @@ router.put('/:postId/comment/:commentId', passport.authenticate('jwt', {session:
 });
 
 router.delete('/:postId/comment/:commentId', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), (req, res, next) => {
-    if(req.user.id.localeCompare(req.comment.creator) === 0){
+    if(req.user.id.localeCompare(req.comment.creator._id) === 0){
         req.comment.remove((err) => {
             if(err)
-                res.status(500).send(err);
-            else
                 res.json({
-                    success: true,
-                    message: "delete comment success"
+                    success: false,
+                    message: `Error: ${err}`
                 });
+            else {
+                req.post.comments.remove(req.comment);
+                req.post.save((err) => {
+                    if(err)
+                        res.json({
+                            success: false,
+                            message: `Error: ${err}`
+                        });
+                    else
+                        res.json({
+                            success: true,
+                            message: "delete comment success"
+                        });
+                });
+            }
         });
     } else {
         res.json({

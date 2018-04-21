@@ -84,7 +84,7 @@ public class InputDialog extends Dialog {
 
     @OnClick(R.id.tv_done)
     public void onDone() {
-        if(TextUtils.isEmpty(mEdtInput.getText().toString())) {
+        if(TextUtils.isEmpty(mEdtInput.getText().toString().trim())) {
             Toast.makeText(mContext, "Bạn phải nhập nội dung bình luận.", Toast.LENGTH_SHORT).show();
         }
         dismiss();

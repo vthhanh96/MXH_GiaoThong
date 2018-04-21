@@ -29,6 +29,7 @@ import com.khoaluan.mxhgiaothong.restful.model.Comment;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.CommentRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
+import com.khoaluan.mxhgiaothong.restful.response.CommentResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.utils.DateUtils;
 
@@ -196,18 +197,21 @@ public class ListCommentsActivity extends AppCompatActivity{
 
             @Override
             public void onDoneClick(String content) {
-                editComment(content, comment.getId());
+                editComment(content, comment);
             }
         });
         inputDialog.setContentInput(comment.getContent());
         inputDialog.show();
     }
 
-    private void editComment(String content, String commentId) {
-        ApiManager.getInstance().getPostService().editComment(mToken, mPostId, commentId, new CommentRequest(content)).enqueue(new RestCallback<PostResponse>() {
+    private void editComment(String content, final Comment comment) {
+        ApiManager.getInstance().getPostService().editComment(mToken, mPostId, comment.getId(), new CommentRequest(content)).enqueue(new RestCallback<CommentResponse>() {
             @Override
-            public void success(PostResponse res) {
-                mAdapter.setNewData(res.getPost().getComments());
+            public void success(CommentResponse res) {
+                int position = mAdapter.getData().indexOf(comment);
+                mAdapter.getData().remove(comment);
+                mAdapter.getData().add(position, res.getComment());
+                mAdapter.setNewData(mAdapter.getData());
             }
 
             @Override
@@ -237,10 +241,11 @@ public class ListCommentsActivity extends AppCompatActivity{
     }
 
     private void createComment(String content) {
-        ApiManager.getInstance().getPostService().createComment(mToken, mPostId, new CommentRequest(content)).enqueue(new RestCallback<PostResponse>() {
+        ApiManager.getInstance().getPostService().createComment(mToken, mPostId, new CommentRequest(content)).enqueue(new RestCallback<CommentResponse>() {
             @Override
-            public void success(PostResponse res) {
-                mAdapter.setNewData(res.getPost().getComments());
+            public void success(CommentResponse res) {
+                mAdapter.getData().add(res.getComment());
+                mAdapter.setNewData(mAdapter.getData());
             }
 
             @Override

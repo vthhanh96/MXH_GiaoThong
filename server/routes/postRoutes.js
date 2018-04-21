@@ -102,7 +102,10 @@ router.use('/:postId', (req, res, next) => {
         })
         .exec((err, post) => {
         if (err)
-            res.status(500).send(err);
+            res.json({
+                success: false,
+                message: `Error: ${err}`
+            });
         else if (post) {
             req.post = post;
             next();
@@ -141,8 +144,6 @@ router.put('/:postId', passport.authenticate('jwt', {
         delete req.body.dislike_amount;
     if (req.body.like_amount)
         delete req.body.like_amount;
-    // if (req.body.category)
-    //     delete req.body.category;
     //user is not creator
     if (req.user.id.localeCompare(req.post.creator._id) === 0) {
         for (var p in req.body) {
@@ -152,7 +153,10 @@ router.put('/:postId', passport.authenticate('jwt', {
 
         req.post.save((err) => {
             if (err)
-                res.status(500).send(err);
+                res.json({
+                    success: false,
+                    message: `Error: ${err}`
+                });
             else
                 res.json({
                     success: true,
@@ -175,7 +179,10 @@ router.delete('/:postId', passport.authenticate('jwt', {
     if (req.user.id.localeCompare(req.post.creator._id) === 0) {
         req.post.remove((err) => {
             if (err)
-                res.status(500).send(err);
+                res.json({
+                    success: false,
+                    message: `Error: ${err}`
+                });
             else
                 res.json({
                     success: true,

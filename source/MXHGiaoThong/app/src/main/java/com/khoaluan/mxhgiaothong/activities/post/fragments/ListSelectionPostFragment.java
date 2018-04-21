@@ -11,15 +11,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
@@ -31,16 +29,11 @@ import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.model.Post;
-import com.khoaluan.mxhgiaothong.restful.model.Reaction;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
-import com.khoaluan.mxhgiaothong.utils.DateUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -108,7 +101,7 @@ public class ListSelectionPostFragment extends Fragment {
                     startActivity(intent);
 
                 } else if(view.getId() == R.id.imgPostOptions) {
-                    openOptionsDialog(mAdapter.getData().get(position));
+                    openOptionsPopup(mAdapter.getData().get(position), view);
 
                 } else if(view.getId() == R.id.llComments) {
                     ListCommentsActivity.start(mContext, mAdapter.getItem(position).getId());
@@ -136,45 +129,53 @@ public class ListSelectionPostFragment extends Fragment {
         });
     }
 
-    private void openOptionsDialog(final Post post) {
-        PostActionDialog dialog = new PostActionDialog(mContext);
+    private void openOptionsPopup(final Post post, View view) {
+        PopupMenu popupMenu = new PopupMenu(mContext, view);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_post_action, popupMenu.getMenu());
         if(TextUtils.isEmpty(token) || mUser == null || mUser.getId() != post.getCreator().getId()) {
-            dialog.setEnableEditAction(false);
-            dialog.setEnableDeleteAction(false);
+            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(false);
+            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(false);
         } else {
-            dialog.setEnableEditAction(true);
-            dialog.setEnableDeleteAction(true);
+            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(true);
+            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(true);
         }
-        dialog.setOnIChooseActionListener(new PostActionDialog.IChooseActionListener() {
-            @Override
-            public void onEditPostClick() {
-                CreatePostActivity.start(mContext, post);
-            }
 
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
-            public void onHidePostClick() {
-
-            }
-
-            @Override
-            public void onDeletePostClick() {
-                String token = PreferManager.getInstance(mContext).getToken();
-                ApiManager.getInstance().getPostService().deletePost(token, post.getId()).enqueue(new RestCallback<BaseResponse>() {
-                    @Override
-                    public void success(BaseResponse res) {
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.edit_post:
+                        CreatePostActivity.start(mContext, post);
+                        break;
+                    case R.id.delete_post:
+                        deletePost(post);
+                        break;
+                    case R.id.hide_post:
                         mAdapter.getData().remove(post);
                         mAdapter.setNewData(mAdapter.getData());
-                        Toast.makeText(mContext, "Xóa bài viết thành công.", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void failure(RestError error) {
-                        Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        break;
+                }
+                return true;
             }
         });
-        dialog.show();
+        popupMenu.show();
+    }
+
+    private void deletePost(final Post post) {
+        String token = PreferManager.getInstance(mContext).getToken();
+        ApiManager.getInstance().getPostService().deletePost(token, post.getId()).enqueue(new RestCallback<BaseResponse>() {
+            @Override
+            public void success(BaseResponse res) {
+                mAdapter.getData().remove(post);
+                mAdapter.setNewData(mAdapter.getData());
+                Toast.makeText(mContext, "Xóa bài viết thành công.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void failure(RestError error) {
+                Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void doReaction(final Post post, int typeReaction) {

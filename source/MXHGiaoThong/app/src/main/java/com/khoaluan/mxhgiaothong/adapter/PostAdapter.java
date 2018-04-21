@@ -1,6 +1,7 @@
 package com.khoaluan.mxhgiaothong.adapter;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -57,6 +58,23 @@ public class PostAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
         Glide.with(mContext).load(item.getImageUrl()).into(imgContent);
 
+        helper.setText(R.id.tvCategory, item.getCategory().getName());
+
+        switch (item.getLevel()) {
+            case 0:
+                helper.setBackgroundRes(R.id.tvCategory, R.drawable.bg_corner_solid_green);
+                break;
+            case 1:
+                helper.setBackgroundRes(R.id.tvCategory, R.drawable.bg_corner_solid_yellow);
+                break;
+            case 2:
+                helper.setBackgroundRes(R.id.tvCategory, R.drawable.bg_corner_solid_orange);
+                break;
+            case 3:
+                helper.setBackgroundRes(R.id.tvCategory, R.drawable.bg_corner_solid_red);
+                break;
+        }
+
         helper.addOnClickListener(R.id.llLike);
         helper.addOnClickListener(R.id.llDislike);
         helper.addOnClickListener(R.id.llComments);
@@ -65,7 +83,7 @@ public class PostAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
     }
 
     private int isReaction(List<Reaction> reactions) {
-        if(reactions == null) return 0;
+        if(reactions == null || mUser == null) return 0;
         for(Reaction reaction : reactions) {
             if(reaction.getCreator().getId() == mUser.getId()) {
                 return reaction.getStatus_reaction();

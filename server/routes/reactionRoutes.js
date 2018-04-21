@@ -6,9 +6,12 @@ var Reaction = require('../models/ReactionModels');
 var passport = require('passport');
 
 router.use('/:postId/reaction', (req, res, next) => {
-    Post.findById(req.params.postId).populate('reaction').exec((err, post) => {
+    Post.findById(req.params.postId).populate('reaction').populate('creator').exec((err, post) => {
         if (err)
-            res.status(500).send(err);
+            res.json({
+                success: false,
+                message: `Error: ${err}`
+            });
         else if (post) {
             req.post = post;
             next();
@@ -23,20 +26,26 @@ router.use('/:postId/reaction', (req, res, next) => {
     });
 });
 
-router.use('/:postId/reaction', passport.authenticate('jwt', {session: false, failureRedirect: '/unauthorized'}), (req, res, next) => {
+router.use('/:postId/reaction', passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/unauthorized'
+}), (req, res, next) => {
     var i;
     var reactionId;
-    for(i = 0; i < req.post.reaction.length; i++) {
-        if(req.user.id.localeCompare(req.post.reaction[i].creator) === 0) {
+    for (i = 0; i < req.post.reaction.length; i++) {
+        if (req.user.id.localeCompare(req.post.reaction[i].creator) === 0) {
             reactionId = req.post.reaction[i]._id;
             break;
         }
     }
-    if(reactionId) {
+    if (reactionId) {
         Reaction.findById(reactionId).exec((err, reaction) => {
-            if(err)
-                res.status(500).send(err);
-            else if(reaction) {
+            if (err)
+                res.json({
+                    success: false,
+                    message: `Error: ${err}`
+                });
+            else if (reaction) {
                 req.reaction = reaction;
                 next();
             } else {
@@ -52,16 +61,16 @@ router.use('/:postId/reaction', passport.authenticate('jwt', {session: false, fa
 });
 
 router.post('/:postId/reaction', (req, res, next) => {
-    if(req.reaction) {
+    if (req.reaction) {
         //change reaction
-        if(req.body.status_reaction !== 1 && req.body.status_reaction !== 2) {
+        if (req.body.status_reaction !== 1 && req.body.status_reaction !== 2) {
             res.json({
                 success: false,
                 data: {},
                 message: 'Field status_reaction is invalid'
             })
         } else {
-            if(req.reaction.status_reaction === req.body.status_reaction) {
+            if (req.reaction.status_reaction === req.body.status_reaction) {
                 //delete reaction
                 req.reaction.remove((err) => {
                     if(err)
@@ -75,7 +84,8 @@ router.post('/:postId/reaction', (req, res, next) => {
                     } else {
                         req.post.dislike_amount -= 1;
                     }
-                    req.post.save((err) => {
+                    req.post.reaction.remove(req.reaction);
+                    req.post.save((err, post) => {
                         if(err)
                             res.json({
                                 success: false,
@@ -85,7 +95,7 @@ router.post('/:postId/reaction', (req, res, next) => {
                         else
                             res.json({
                                 success: true,
-                                data: req.post,
+                                data: post,
                                 message: 'Success update reaction'
                             });
                     })
@@ -94,14 +104,14 @@ router.post('/:postId/reaction', (req, res, next) => {
                 req.reaction.status_reaction = req.body.status_reaction;
                 req.reaction.modify_date = Date.now();
                 req.reaction.save((err) => {
-                    if(err) {
+                    if (err) {
                         res.json({
                             success: false,
                             data: {},
                             message: `Error: ${err}`
                         });
                     } else {
-                        if(req.reaction.status_reaction === 1) {
+                        if (req.reaction.status_reaction === 1) {
                             req.post.like_amount += 1;
                             req.post.dislike_amount -= 1;
                         } else {
@@ -109,7 +119,7 @@ router.post('/:postId/reaction', (req, res, next) => {
                             req.post.like_amount -= 1;
                         }
                         req.post.save((err) => {
-                            if(err)
+                            if (err)
                                 res.json({
                                     success: false,
                                     data: {},
@@ -132,7 +142,7 @@ router.post('/:postId/reaction', (req, res, next) => {
         //create reaction
         req.reaction = new Reaction(req.body);
         req.reaction.creator = req.user;
-        if(req.reaction.status_reaction !== 1 && req.reaction.status_reaction !== 2) {
+        if (req.reaction.status_reaction !== 1 && req.reaction.status_reaction !== 2) {
             res.json({
                 success: false,
                 data: {},
@@ -140,7 +150,7 @@ router.post('/:postId/reaction', (req, res, next) => {
             })
         } else {
             req.reaction.save((err) => {
-                if(err) {
+                if (err) {
                     res.json({
                         success: false,
                         data: {},
@@ -148,13 +158,13 @@ router.post('/:postId/reaction', (req, res, next) => {
                     });
                 } else {
                     req.post.reaction.push(req.reaction);
-                    if(req.reaction.status_reaction === 1) {
+                    if (req.reaction.status_reaction === 1) {
                         req.post.like_amount += 1;
                     } else {
                         req.post.dislike_amount += 1;
                     }
                     req.post.save((err) => {
-                        if(err)
+                        if (err)
                             res.json({
                                 success: false,
                                 data: {},
@@ -176,15 +186,15 @@ router.post('/:postId/reaction', (req, res, next) => {
 });
 
 router.put('/:postId/reaction', (req, res, next) => {
-    if(req.reaction) {
-        if(req.body.status_reaction !== 1 && req.body.status_reaction !== 2) {
+    if (req.reaction) {
+        if (req.body.status_reaction !== 1 && req.body.status_reaction !== 2) {
             res.json({
                 success: false,
                 data: {},
                 message: 'Field status_reaction is invalid'
             })
         } else {
-            if(req.reaction.status_reaction === req.body.status_reaction) {
+            if (req.reaction.status_reaction === req.body.status_reaction) {
                 res.json({
                     success: false,
                     data: {},
@@ -194,14 +204,14 @@ router.put('/:postId/reaction', (req, res, next) => {
                 req.reaction.status_reaction = req.body.status_reaction;
                 req.reaction.modify_date = Date.now();
                 req.reaction.save((err) => {
-                    if(err) {
+                    if (err) {
                         res.json({
                             success: false,
                             data: {},
                             message: `Error: ${err}`
                         });
                     } else {
-                        if(req.reaction.status_reaction === 1) {
+                        if (req.reaction.status_reaction === 1) {
                             req.post.like_amount += 1;
                             req.post.dislike_amount -= 1;
                         } else {
@@ -209,7 +219,7 @@ router.put('/:postId/reaction', (req, res, next) => {
                             req.post.like_amount -= 1;
                         }
                         req.post.save((err) => {
-                            if(err)
+                            if (err)
                                 res.json({
                                     success: false,
                                     data: {},
@@ -237,9 +247,9 @@ router.put('/:postId/reaction', (req, res, next) => {
 });
 
 router.delete('/:postId/reaction', (req, res, next) => {
-    if(req.reaction) {
+    if (req.reaction) {
         req.reaction.remove((err) => {
-            if(err)
+            if (err)
                 res.json({
                     success: true,
                     message: `Error when delete reaction ${err}`

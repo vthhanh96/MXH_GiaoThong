@@ -126,7 +126,9 @@ public class CreatePostActivity extends AppCompatActivity {
     private void initTopBar() {
         mTopBar.setImageViewLeft(AppConstants.LEFT_BACK);
         mTopBar.setTextTitle(mPost == null ? "Đăng bài viết" : "Chỉnh sửa bài viết");
-        mTopBar.setTextViewRight("Lưu");
+        if(mPost != null) {
+            mTopBar.setTextViewRight("Lưu");
+        }
         mTopBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
             public void onImvLeftClicked() {
@@ -177,20 +179,6 @@ public class CreatePostActivity extends AppCompatActivity {
         if (user == null) return;
         Glide.with(mContext).load(user.getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
         mTvName.setText(user.getFullName());
-        ApiManager.getInstance().getUserService().getUserInfo(token).enqueue(new RestCallback<GetUserInfoResponse>() {
-            @Override
-            public void success(GetUserInfoResponse res) {
-                Glide.with(mContext).load(res.getUser().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
-                mTvName.setText(res.getUser().getFullName());
-            }
-
-            @Override
-            public void failure(RestError error) {
-                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
-                errorDialog.setError(error.message);
-                errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
-            }
-        });
     }
 
     private void getCurrentLocation() {
@@ -206,7 +194,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
     @OnClick(R.id.tvPostAction)
     public void createPost() {
-        if(mCategory == null) return;
+        if(mCategory == null || mLocation == null) return;
         CreatePostRequest request = new CreatePostRequest(
                 mEdtContent.getText().toString(),
                 mLocation.getLatitude(),

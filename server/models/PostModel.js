@@ -53,6 +53,7 @@ var PostSchema = new Schema({
     usePushEach: true,
     versionKey: false
 });
+
 PostSchema.plugin(autoIncrement.plugin, 'Post');
 
 module.exports  = mongoose.model('Post', PostSchema);

@@ -6,6 +6,7 @@ import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
 import com.khoaluan.mxhgiaothong.restful.request.ListPostByUserIdResquest;
 import com.khoaluan.mxhgiaothong.restful.request.UpdatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
+import com.khoaluan.mxhgiaothong.restful.response.CommentResponse;
 import com.khoaluan.mxhgiaothong.restful.response.CreatePostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
@@ -64,14 +65,14 @@ public interface PostService {
     );
 
     @POST("post/{postId}/comment")
-    Call<PostResponse> createComment(
+    Call<CommentResponse> createComment(
             @Header("Authorization") String token,
             @Path("postId") String id,
             @Body CommentRequest request
     );
 
     @PUT("post/{postId}/comment/{commentId}")
-    Call<PostResponse> editComment(
+    Call<CommentResponse> editComment(
             @Header("Authorization") String token,
             @Path("postId") String postId,
             @Path("commentId") String commentId,
