@@ -19,29 +19,18 @@ import butterknife.OnClick;
  * Created by Hong Hanh on 4/14/2018.
  */
 
-public class PostActionDialog extends Dialog {
+public class ChooseActionGetImageDialog extends Dialog {
 
-    @BindView(R.id.tvEditPost) TextView mTvEditPost;
-    @BindView(R.id.tvDeletePost) TextView mTvDeletePost;
+    @BindView(R.id.tvCamera) TextView mTvCamera;
+    @BindView(R.id.tvLibrary) TextView mTvLibrary;
 
     private IChooseActionListener mListener;
-
-    private boolean isEnableEdit;
-    private boolean isEnableDelete;
 
     public void setOnIChooseActionListener(IChooseActionListener listener) {
         mListener = listener;
     }
 
-    public void setEnableEditAction(boolean isEnable) {
-        isEnableEdit = isEnable;
-    }
-
-    public void setEnableDeleteAction(boolean isEnable) {
-        isEnableDelete = isEnable;
-    }
-
-    public PostActionDialog(@NonNull Context context) {
+    public ChooseActionGetImageDialog(@NonNull Context context) {
         super(context);
     }
 
@@ -59,37 +48,27 @@ public class PostActionDialog extends Dialog {
     }
 
     private void init() {
-        mTvEditPost.setEnabled(isEnableEdit);
-        mTvDeletePost.setEnabled(isEnableDelete);
+
     }
 
-    @OnClick(R.id.tvEditPost)
+    @OnClick(R.id.tvCamera)
     public void onEditPost() {
         if(mListener != null) {
-            mListener.onEditPostClick();
+            mListener.onCameraClick();
         }
         dismiss();
     }
 
-    @OnClick(R.id.tvHidePost)
+    @OnClick(R.id.tvLibrary)
     public void onHidePost() {
         if(mListener != null) {
-            mListener.onHidePostClick();
-        }
-        dismiss();
-    }
-
-    @OnClick(R.id.tvDeletePost)
-    public void onDeletePost() {
-        if(mListener != null) {
-            mListener.onDeletePostClick();
+            mListener.onLibraryClick();
         }
         dismiss();
     }
 
     public static interface IChooseActionListener {
-        void onEditPostClick();
-        void onHidePostClick();
-        void onDeletePostClick();
+        void onCameraClick();
+        void onLibraryClick();
     }
 }

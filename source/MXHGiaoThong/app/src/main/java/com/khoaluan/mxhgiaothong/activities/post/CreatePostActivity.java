@@ -1,11 +1,17 @@
 package com.khoaluan.mxhgiaothong.activities.post;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,6 +26,8 @@ import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.Application;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.UploadImageListener;
+import com.khoaluan.mxhgiaothong.activities.post.dialog.ChooseActionGetImageDialog;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
@@ -32,8 +40,13 @@ import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.request.UpdatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.CreatePostResponse;
-import com.khoaluan.mxhgiaothong.restful.response.GetUserInfoResponse;
+import com.khoaluan.mxhgiaothong.utils.FileUtils;
 import com.khoaluan.mxhgiaothong.utils.GeoHelper;
+import com.khoaluan.mxhgiaothong.utils.PermissionUtils;
+import com.khoaluan.mxhgiaothong.utils.UploadImageUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +60,9 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CHOOSE_CATEGORY = 10;
     private static final String ARG_KEY_POST = "ARG_KEY_POST";
+    private static final int REQUEST_CODE_TAKE_PICTURE = 11;
+    private static final int REQUEST_CODE_CAMERA = 12;
+    private static final int REQUEST_CODE_GET_IMAGE = 13;
 
     @BindView(R.id.topBar)
     TopBarView mTopBar;
@@ -72,6 +88,8 @@ public class CreatePostActivity extends AppCompatActivity {
     private Category mCategory;
     private int mLevel;
     private Post mPost;
+    private File mFile;
+    private Uri mImageUri;
 
     public static void start(Context context, Post post) {
         Intent intent = new Intent(context, CreatePostActivity.class);
@@ -147,29 +165,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
             @Override
             public void onTvRightClicked() {
-                if(mPost == null) finish();
-                UpdatePostRequest request = new UpdatePostRequest(
-                        mEdtContent.getText().toString(),
-                        mPost.getLatitude(),
-                        mPost.getLongitude(),
-                        mPost.getPlace(),
-                        mCategory,
-                        mLevel,
-                        mPost.getImageUrl());
-                ApiManager.getInstance().getPostService().updatePost(token, mPost.getId(), request).enqueue(new RestCallback<BaseResponse>() {
-                    @Override
-                    public void success(BaseResponse res) {
-                        Toast.makeText(mContext, "Chỉnh sửa bài viết thành công", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-
-                    @Override
-                    public void failure(RestError error) {
-                        ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
-                        errorDialog.setError(error.message);
-                        errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
-                    }
-                });
+                updatePost();
             }
         });
     }
@@ -194,6 +190,29 @@ public class CreatePostActivity extends AppCompatActivity {
 
     @OnClick(R.id.tvPostAction)
     public void createPost() {
+        if(mImageUri == null) {
+            saveNewPost();
+        } else {
+            uploadImage();
+        }
+    }
+
+    private void uploadImage() {
+        UploadImageUtils.uploadImage(mImageUri, new UploadImageListener() {
+            @Override
+            public void uploadSuccess(String url) {
+                mImageUrl = url;
+                saveNewPost();
+            }
+
+            @Override
+            public void uploadFailure(String err) {
+                Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void saveNewPost() {
         if(mCategory == null || mLocation == null) return;
         CreatePostRequest request = new CreatePostRequest(
                 mEdtContent.getText().toString(),
@@ -209,6 +228,32 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             public void success(CreatePostResponse res) {
                 Toast.makeText(CreatePostActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void failure(RestError error) {
+                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                errorDialog.setError(error.message);
+                errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
+            }
+        });
+    }
+
+    private void updatePost() {
+        if(mPost == null) finish();
+        UpdatePostRequest request = new UpdatePostRequest(
+                mEdtContent.getText().toString(),
+                mPost.getLatitude(),
+                mPost.getLongitude(),
+                mPost.getPlace(),
+                mCategory,
+                mLevel,
+                mPost.getImageUrl());
+        ApiManager.getInstance().getPostService().updatePost(token, mPost.getId(), request).enqueue(new RestCallback<BaseResponse>() {
+            @Override
+            public void success(BaseResponse res) {
+                Toast.makeText(mContext, "Chỉnh sửa bài viết thành công", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
@@ -245,6 +290,60 @@ public class CreatePostActivity extends AppCompatActivity {
         ChooseCategoryActivity.start(this, REQUEST_CODE_CHOOSE_CATEGORY, mCategory, mLevel);
     }
 
+    @OnClick(R.id.imgCamera)
+    public void takePicture() {
+        if (PermissionUtils.checkPermission(mContext, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})) {
+            openDialog();
+        } else {
+            PermissionUtils.requestPermission(CreatePostActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_CAMERA);
+        }
+    }
+
+    private void openDialog() {
+        ChooseActionGetImageDialog dialog = new ChooseActionGetImageDialog(mContext);
+        dialog.setOnIChooseActionListener(new ChooseActionGetImageDialog.IChooseActionListener() {
+            @Override
+            public void onCameraClick() {
+                openCamera();
+            }
+
+            @Override
+            public void onLibraryClick() {
+                openLibrary();
+            }
+        });
+        dialog.show();
+    }
+
+    private void openCamera() {
+        try {
+            mFile = FileUtils.createImageFile();
+            mImageUri = FileProvider.getUriForFile(mContext, mContext.getApplicationContext().getPackageName() + ".provider", mFile);
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+            startActivityForResult(intent, REQUEST_CODE_TAKE_PICTURE);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void openLibrary() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE_GET_IMAGE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if ((grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED))
+            return;
+        if (requestCode == REQUEST_CODE_CAMERA) {
+            openDialog();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -253,6 +352,18 @@ public class CreatePostActivity extends AppCompatActivity {
             mCategory = (Category) data.getSerializableExtra(AppConstants.ARG_KEY_CATEGORY_ID);
             mLevel = data.getIntExtra(AppConstants.ARG_KEY_LEVEL, 0);
             updateUICategory();
+        } else if(requestCode == REQUEST_CODE_TAKE_PICTURE) {
+            if(mFile == null) return;mFile = new File(FileUtils.getPath(mContext, data.getData()));
+            mImageUri = FileProvider.getUriForFile(mContext, mContext.getApplicationContext().getPackageName() + ".provider", mFile);
+            mImgPost.setVisibility(View.VISIBLE);
+            Glide.with(mContext.getApplicationContext()).load(mFile).into(mImgPost);
+        } else if(requestCode == REQUEST_CODE_GET_IMAGE) {
+            if (data == null || data.getData() == null)
+                return;
+            mImgPost.setVisibility(View.VISIBLE);
+            Glide.with(mContext.getApplicationContext()).load(data.getData()).into(mImgPost);
+            mFile = new File(FileUtils.getPath(mContext, data.getData()));
+            mImageUri = FileProvider.getUriForFile(mContext, mContext.getApplicationContext().getPackageName() + ".provider", mFile);
         }
     }
 }

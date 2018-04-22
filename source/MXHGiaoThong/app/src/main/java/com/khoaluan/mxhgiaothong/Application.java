@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import com.cloudinary.android.MediaManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.khoaluan.mxhgiaothong.backgroundService.BackgroundService;
@@ -41,6 +42,7 @@ public class Application extends android.app.Application {
     private void init() {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+        MediaManager.init(this);
         startBackgroundService();
     }
 

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA"/>
     
     <application
         android:name=".Application"
@@ -16,11 +17,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:authorities="com.khoaluan.mxhgiaothong.provider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path"/>
+        </provider>
         <activity android:name=".activities.login.LoginActivity"/>
         <activity android:name=".activities.login.ForgotPassActivity"/>
         <activity android:name=".activities.login.RegisterActivity"/>
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="CLOUDINARY_URL"
+            android:value="cloudinary://644779138511211:ELDLC1yakqdT3O13lHFhElY4bGA@netficcloud"/>
         <activity android:name=".activities.post.ListPostActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
