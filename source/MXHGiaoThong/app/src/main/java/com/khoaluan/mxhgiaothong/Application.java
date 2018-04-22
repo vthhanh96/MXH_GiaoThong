@@ -43,6 +43,8 @@ public class Application extends android.app.Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         MediaManager.init(this);
+        PreferManager.getInstance(mContext).getToken();
+        PreferManager.getInstance(mContext).getUser();
         startBackgroundService();
     }
 

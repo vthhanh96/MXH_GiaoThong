@@ -14,6 +14,8 @@ import com.khoaluan.mxhgiaothong.restful.model.User;
 
 public class PreferManager {
     private static PreferManager preferManager;
+    private static User mUser;
+    private static String mToken;
 
     public static PreferManager getInstance(Context context) {
         if(preferManager == null) {
@@ -42,7 +44,9 @@ public class PreferManager {
     }
 
     public String getToken() {
-        return mPreferences.getString(KEY_TOKEN, null);
+        if(mToken != null) return mToken;
+        mToken = mPreferences.getString(KEY_TOKEN, null);
+        return mToken;
     }
 
     ///////////////////User_ID////////////////////
@@ -72,14 +76,14 @@ public class PreferManager {
     }
 
     public User getUser() {
-        User user = null;
+        if(mUser != null) return mUser;
         if (mPreferences.contains(KEY_USER)) {
             try {
-                user = new Gson().fromJson(mPreferences.getString(KEY_USER, new Gson().toJson(new User())), User.class);
+                mUser = new Gson().fromJson(mPreferences.getString(KEY_USER, new Gson().toJson(new User())), User.class);
             } catch (Exception ignored) {
-                user = null;
+                mUser = null;
             }
         }
-        return user;
+        return mUser;
     }
 }
