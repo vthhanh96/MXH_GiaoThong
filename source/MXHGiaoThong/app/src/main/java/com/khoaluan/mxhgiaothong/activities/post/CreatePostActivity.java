@@ -353,8 +353,7 @@ public class CreatePostActivity extends AppCompatActivity {
             mLevel = data.getIntExtra(AppConstants.ARG_KEY_LEVEL, 0);
             updateUICategory();
         } else if(requestCode == REQUEST_CODE_TAKE_PICTURE) {
-            if(mFile == null) return;mFile = new File(FileUtils.getPath(mContext, data.getData()));
-            mImageUri = FileProvider.getUriForFile(mContext, mContext.getApplicationContext().getPackageName() + ".provider", mFile);
+            if(mFile == null) return;
             mImgPost.setVisibility(View.VISIBLE);
             Glide.with(mContext.getApplicationContext()).load(mFile).into(mImgPost);
         } else if(requestCode == REQUEST_CODE_GET_IMAGE) {
