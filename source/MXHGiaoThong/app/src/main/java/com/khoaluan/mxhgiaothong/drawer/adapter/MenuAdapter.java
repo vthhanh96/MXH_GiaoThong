@@ -9,16 +9,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.khoaluan.mxhgiaothong.AppConstants;
+import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.drawer.dto.BodyDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.FooterDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.HeaderDto;
+import com.khoaluan.mxhgiaothong.restful.model.User;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MenuAdapter extends RecyclerView.Adapter {
@@ -114,6 +119,13 @@ public class MenuAdapter extends RecyclerView.Adapter {
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
+        @BindView(R.id.menu_header_avatar)
+        CircleImageView avatar;
+        @BindView(R.id.menu_header_email)
+        TextView email;
+        @BindView(R.id.menu_header_fullName)
+        TextView fullName;
+
         HeaderHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -128,7 +140,11 @@ public class MenuAdapter extends RecyclerView.Adapter {
         }
 
         public void bind() {
-
+            User user = PreferManager.getInstance(mContext).getUser();
+            if (user == null) return;
+            Glide.with(mContext).load(user.getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(avatar);
+            fullName.setText(user.getFullName());
+            email.setText(user.getEmail());
         }
     }
 
@@ -138,11 +154,11 @@ public class MenuAdapter extends RecyclerView.Adapter {
         @BindView(R.id.view_select)
         View viewSelect;
 
-       @BindView(R.id.imv_icon)
-               ImageView imvIcon;
+        @BindView(R.id.imv_icon)
+        ImageView imvIcon;
 
-       @BindView(R.id.tvTitle_Menu)
-               TextView tvTitle;
+        @BindView(R.id.tvTitle_Menu)
+        TextView tvTitle;
 
         BodyHolder(View itemView) {
             super(itemView);
@@ -150,10 +166,10 @@ public class MenuAdapter extends RecyclerView.Adapter {
             itemView.setOnClickListener(this);
         }
 
-       public void bind(BodyDto bodyDto) {
+        public void bind(BodyDto bodyDto) {
             tvTitle.setText(bodyDto.title);
             imvIcon.setImageResource(bodyDto.icon);
-            if(bodyDto.isSelected){
+            if (bodyDto.isSelected) {
                 viewSelect.setBackgroundColor(Color.WHITE);
             } else {
                 viewSelect.setBackgroundColor(Color.TRANSPARENT);
@@ -178,7 +194,7 @@ public class MenuAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-                onItemClickListener.onFooterClick();
+            onItemClickListener.onFooterClick();
         }
 
         public void bind(FooterDto footerDto) {

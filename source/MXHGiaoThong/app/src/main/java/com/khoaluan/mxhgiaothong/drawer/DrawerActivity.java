@@ -1,9 +1,6 @@
 package com.khoaluan.mxhgiaothong.drawer;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -12,16 +9,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.activities.login.ForgotPassActivity;
 import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.EditProfileActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
+import com.khoaluan.mxhgiaothong.customView.dialog.QuestionDialog;
+import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionListener;
 import com.khoaluan.mxhgiaothong.drawer.adapter.MenuAdapter;
 import com.khoaluan.mxhgiaothong.drawer.dto.BodyDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.FooterDto;
@@ -55,7 +52,9 @@ abstract public class DrawerActivity extends AppCompatActivity {
     abstract protected int getLayoutId();
 
     abstract protected int getNavId();
+
     private static final int DRAWER_LAUNCH_DELAY = 50;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,13 +137,24 @@ abstract public class DrawerActivity extends AppCompatActivity {
 
             @Override
             public void onFooterClick() {
-                PreferManager.getInstance(DrawerActivity.this).saveToken(null);
+                final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn đăng xuất?");
+                questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+                    @Override
+                    public void dialogCancel() {
+                        questionDialog.dismissDialog();
+                    }
 
-                mDrawerLayout.closeDrawer(Gravity.START);
-                Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
-                startActivity(intent);
-
-                finish();
+                    @Override
+                    public void dialogPerformAction() {
+                        PreferManager.getInstance(DrawerActivity.this).saveUser(null);
+                        PreferManager.getInstance(DrawerActivity.this).saveToken(null);
+                        mDrawerLayout.closeDrawer(Gravity.START);
+                        Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                questionDialog.show(getSupportFragmentManager(), ListPostActivity.class.getName());
             }
         });
     }
@@ -263,4 +273,6 @@ abstract public class DrawerActivity extends AppCompatActivity {
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
     }
+
+
 }

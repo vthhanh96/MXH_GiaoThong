@@ -22,7 +22,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
-            android:id="@+id/profile_image"
+            android:id="@+id/menu_header_avatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@color/colorPrimaryDark" />
@@ -32,6 +32,7 @@
     </FrameLayout>
 
     <TextView
+        android:id="@+id/menu_header_fullName"
         android:textColor="@color/white"
         android:textSize="19sp"
         android:layout_marginTop="15dp"
@@ -41,6 +42,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/menu_header_email"
         android:textColor="#f7f7f7"
         android:layout_marginBottom="15dp"
         android:textSize="15sp"

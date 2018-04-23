@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
@@ -24,6 +26,7 @@ import com.khoaluan.mxhgiaothong.restful.response.UserResponse;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_SETTING;
@@ -42,6 +45,11 @@ public class ProfileDetailActivity   extends DrawerActivity {
     RecyclerView mSelectionPostRecyclerView;
     @BindView(R.id.tvUserName)
     TextView tvUserName;
+    @BindView(R.id.imvAvatar)
+    CircleImageView imvAvatar;
+    @BindView(R.id.tvAddress)
+    TextView tvAddress;
+
     private int userID;
     private User user;
     PostAdapter mAdapter;
@@ -110,6 +118,8 @@ public class ProfileDetailActivity   extends DrawerActivity {
             @Override
             public void success(UserResponse res) {
                 tvUserName.setText(res.getUser().getFullName());
+                Glide.with(getApplicationContext()).load(res.getUser().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imvAvatar);
+                tvAddress.setText(res.getUser().getAddress());
                 getListPostUser(userID);
                 user = res.getUser();
             }
