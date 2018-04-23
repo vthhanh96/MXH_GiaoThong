@@ -29,11 +29,11 @@ router.post('/register', function (req, res) {
         });
 
         // Attempt to save the user
-        newUser.save(function (err) {
+        newUser.save(function (err,user) {
             if (err) {
                 return res.json({success: false, message: err});
             }
-            res.json({success: true, message: 'Successfully created new user.'});
+            res.json({success: true, data:user, message: 'Successfully created new user.'});
         });
     }
 });
@@ -176,6 +176,42 @@ router.post('/editUser', passport.authenticate('jwt', {
                     user.birthDate = req.body.birthDate;
                 user.save();
                 res.send({success: true, data: user, status: 200});
+            }
+        });
+});
+
+router.post('/loginFacebookGoogle', function (req, res) {
+    User.findOne({id_fb_gg: req.body.id_fb_gg}).exec(
+        function (err, user) {
+            if (err) throw err;
+            if (!user) {
+                // Tạo một tài khoản mới với email đã cho
+                var newUser = new User({
+                    email: req.body.email,
+                    id_fb_gg : req.body.id_fb_gg,
+                    fullName: req.body.fullName,
+                    avatar_url: req.body.avatar_url,
+                    password: ""
+                });
+
+                // Attempt to save the user
+                newUser.save(function (err,user) {
+                    if (err) {
+                        return res.json({success: false, message: err});
+                    }else {
+                        var token = jwt.sign(user.toJSON(), config.secret, {
+                            expiresIn: 86400000*7 // in 7 days
+                        });
+                        res.json({success: true, token: 'JWT ' + token, _id: user._id});
+
+                    }
+                });
+            } else {
+                // Create token if the password matched and no error was thrown
+                var token = jwt.sign(user.toJSON(), config.secret, {
+                    expiresIn: 86400000*7 // in 7 days
+                });
+                res.json({success: true, token: 'JWT ' + token, _id: user._id});
             }
         });
 });

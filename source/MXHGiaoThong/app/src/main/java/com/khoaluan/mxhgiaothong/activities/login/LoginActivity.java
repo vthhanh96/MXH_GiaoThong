@@ -12,6 +12,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -28,9 +30,12 @@ import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
+import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.GetUserInfoResponse;
 import com.khoaluan.mxhgiaothong.restful.response.UserLoginResponse;
+
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -134,7 +139,8 @@ public class LoginActivity extends AppCompatActivity {
             public void failure(RestError error) {
                 ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
                 errorDialog.setError(error.message);
-                errorDialog.show(getSupportFragmentManager(), LoginActivity.class.getName());            }
+                errorDialog.show(getSupportFragmentManager(), LoginActivity.class.getName());
+            }
         });
     }
 
@@ -158,11 +164,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginWithFacebook() {
-        if (AccessToken.getCurrentAccessToken() != null) {
-            Toast.makeText(this, "đã từng đăng nhập facebook", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Token bằng null, chưa đăng nhập facebook lần nào", Toast.LENGTH_SHORT).show();
-        }
+        AccessToken.setCurrentAccessToken(null);
 
         mCallbackManager = CallbackManager.Factory.create();
 
@@ -171,13 +173,55 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set the initial permissions to request from the user while logging in
         mLoginButton.setReadPermissions(Arrays.asList(EMAIL, USER_POSTS));
-
         // Register a callback to respond to the user
         mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 setResult(RESULT_OK);
-                finish();
+                GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject me, GraphResponse response) {
+                                if (response.getError() != null) {
+                                    // handle error
+                                } else {
+                                    String gender = me.optString("gender");
+                                    String fullname = me.optString("name");
+                                    String birthday = me.optString("birthday");
+                                    String id = me.optString("id");
+                                    String email = id;
+                                    String address = me.optString("address");
+                                    String image_url = "http://graph.facebook.com/" + id + "/picture?type=large";
+
+                                    User user = new User.Builder()
+                                            .setAvatarUrl(image_url)
+                                            .setBirthDate(birthday)
+                                            .setEmail(email)
+                                            .setFullName(fullname)
+                                            .setGender(gender)
+                                            .setId_fb_gg(id)
+                                            .setAddress(address)
+                                            .build();
+
+                                    ApiManager.getInstance().getUserService().loginFacebookGoogle(user).enqueue(new RestCallback<UserLoginResponse>() {
+                                        @Override
+                                        public void success(UserLoginResponse res) {
+                                            PreferManager.getInstance(LoginActivity.this).saveToken(res.getToken());
+                                            PreferManager.getInstance(LoginActivity.this).saveUserId(res.getId());
+                                            getUserInfo(res.getToken());
+                                        }
+
+                                        @Override
+                                        public void failure(RestError error) {
+                                            ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                                            errorDialog.setError(error.message);
+                                            errorDialog.show(getSupportFragmentManager(), LoginActivity.class.getName());
+                                        }
+                                    });
+                                }
+                            }
+                        }).executeAsync();
+//                finish();
             }
 
             @Override
@@ -224,6 +268,5 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 //        updateUI(account);
 //        Toast.makeText(this, "account : " +account.getDisplayName(), Toast.LENGTH_SHORT).show();
-
     }
 }

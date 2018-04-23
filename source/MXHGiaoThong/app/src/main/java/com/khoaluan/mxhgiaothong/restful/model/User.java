@@ -43,6 +43,17 @@ public class User implements Serializable {
     @Expose
     private String birthDate;
 
+    @SerializedName("id_fb_gg")
+    @Expose
+    private String id_fb_gg;
+
+    public String getId_fb_gg() {
+        return id_fb_gg;
+    }
+
+    public void setId_fb_gg(String id_fb_gg) {
+        this.id_fb_gg = id_fb_gg;
+    }
 
     public String getBirthDate() {
         return birthDate;
@@ -120,6 +131,7 @@ public class User implements Serializable {
         this.gender = builder.gender;
         this.address = builder.address;
         this.birthDate = builder.birthDate;
+        this.id_fb_gg = builder.id_fb_gg;
     }
 
     public static class Builder {
@@ -131,6 +143,16 @@ public class User implements Serializable {
         private String gender;
         private String address;
         private String birthDate;
+        private String id_fb_gg;
+
+        public String getId_fb_gg() {
+            return id_fb_gg;
+        }
+
+        public Builder setId_fb_gg(String id_fb_gg) {
+            this.id_fb_gg = id_fb_gg;
+            return this;
+        }
 
         public Builder() {
             this.email = null;
@@ -140,6 +162,7 @@ public class User implements Serializable {
             this.gender = null;
             this.address = null;
             this.birthDate = null;
+            this.id_fb_gg = null;
         }
         public User build(){
             return  new User(this);

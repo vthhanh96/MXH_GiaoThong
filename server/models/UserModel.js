@@ -20,7 +20,6 @@ var UserSchema = new Schema({
     },
     password: {
         type: String,
-        required: true
     },
     avatar_url: {
         type: String,
@@ -33,6 +32,9 @@ var UserSchema = new Schema({
     },
     birthDate:{
         type: String,
+    },
+    id_fb_gg:{
+        type: String
     }
 }, {
     versionKey: false
