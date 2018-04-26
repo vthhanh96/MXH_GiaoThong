@@ -74,7 +74,6 @@ public class ProfileDetailActivity   extends DrawerActivity {
     }
 
     private void initTopbar() {
-        topBar.setTextTitle("NetFic");
         topBar.setImageViewLeft(LEFT_MENU);
         if(userID == loginUserID) {
             topBar.setImageViewRight(RIGHT_SETTING);

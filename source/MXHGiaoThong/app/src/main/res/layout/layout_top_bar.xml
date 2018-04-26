@@ -41,16 +41,30 @@
 
     </FrameLayout>
 
-    <TextView
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:id="@+id/tv_title"
-        android:text="@string/app_name"
-        android:layout_weight="1"
+    <FrameLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent" />
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imv_logo_app_name"
+            android:src="@drawable/ic_netfic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
 
     <FrameLayout
         android:layout_marginEnd="10dp"

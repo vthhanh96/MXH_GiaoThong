@@ -81,7 +81,6 @@ public class ListPostActivity extends DrawerActivity {
     }
 
     private void initTopbar() {
-        topBar.setTextTitle("NetFic");
         topBar.setImageViewLeft(LEFT_MENU);
         topBar.setImageViewRight(RIGHT_LOGOUT);
         topBar.setOnClickListener(new TopBarView.OnItemClickListener() {

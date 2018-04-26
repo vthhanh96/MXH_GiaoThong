@@ -1,23 +1,11 @@
 package com.khoaluan.mxhgiaothong.customView;
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.khoaluan.mxhgiaothong.R;
@@ -60,6 +48,9 @@ public class TopBarView extends LinearLayoutCompat {
     @BindView(R.id.lnTopbar)
     LinearLayout lnTopBar;
 
+    @BindView(R.id.imv_logo_app_name)
+    ImageView imvLogoApp;
+
     public TopBarView( Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context,attrs);
@@ -80,6 +71,8 @@ public class TopBarView extends LinearLayoutCompat {
 //        inflater.inflate(R.layout.layout_top_bar, this, false);
         ButterKnife.bind(this,view);
         this.addView(view);
+        imvLogoApp.setVisibility(VISIBLE);
+        tv_title.setVisibility(GONE);
     }
 
     public interface OnItemClickListener {
@@ -94,6 +87,8 @@ public class TopBarView extends LinearLayoutCompat {
     }
 
     public void setTextTitle(String title) {
+        imvLogoApp.setVisibility(GONE);
+        tv_title.setVisibility(VISIBLE);
         tv_title.setText(title);
     }
 
