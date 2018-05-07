@@ -12,6 +12,8 @@
         android:layout_height="260dp">
 
         <ImageView
+            android:scaleType="center"
+            android:src="@drawable/background"
             android:id="@+id/imvAvatarBlur"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -29,11 +31,11 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imvAvatar"
-                android:layout_marginTop="@dimen/small_30dp"
-                android:layout_width="100dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="110dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@color/borderColor"
-                android:layout_height="100dp" />
+                android:layout_height="110dp" />
 
             <EditText
                 android:id="@+id/edtFullName_edit"
