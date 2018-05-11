@@ -67,11 +67,11 @@ public class ListPostActivity extends DrawerActivity {
         token = PreferManager.getInstance(ListPostActivity.this).getToken();
         loginUserID = PreferManager.getInstance(ListPostActivity.this).getUserId();
 
-        if(token == null || Objects.equals(token, "")){
-            startActivity(new Intent(ListPostActivity.this, LoginActivity.class));
-        } else {
-            Toast.makeText(this, ""+token, Toast.LENGTH_SHORT).show();
-        }
+//        if(token == null || Objects.equals(token, "")){
+//            startActivity(new Intent(ListPostActivity.this, LoginActivity.class));
+//        } else {
+//            Toast.makeText(this, ""+token, Toast.LENGTH_SHORT).show();
+//        }
         init();
     }
 
