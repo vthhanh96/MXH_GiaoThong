@@ -12,11 +12,15 @@
     <color name="yellow">#ffd700</color>
     <color name="orange">#ffa500</color>
     <color name="green">#02ce84</color>
-    <color name="transparent">#00000000</color>
+    <color name="transparent">#ffffff</color>
     <color name="black">#000</color>
     <color name="lightorange">#fdf2df</color>
     <color name="lightorangedark">#ebd6ab</color>
     <color name="graylight">#fafafa</color>
     <color name="startblue">#09c6df</color>
     <color name="endblue">#0bcce6</color>
+    <color name="text">#0099FF</color>
+    <color name="background">#e5e5e5</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
 </resources>

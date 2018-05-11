@@ -33,6 +33,12 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
         <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCVx9d1SWvimYuz2q77pxN5VgN1NzsJ-qI" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
             android:name="CLOUDINARY_URL"
             android:value="cloudinary://644779138511211:ELDLC1yakqdT3O13lHFhElY4bGA@netficcloud"/>
         <activity android:name=".activities.post.ListPostActivity">
@@ -49,6 +55,7 @@
         <activity android:name=".activities.profile.EditProfileActivity"/>
         <activity android:name=".activities.post.ChooseCategoryActivity"/>
         <activity android:name=".activities.post.ListCommentsActivity"/>
+        <activity android:name=".activities.map.view.MainActivity"/>
     </application>
 
 </manifest>

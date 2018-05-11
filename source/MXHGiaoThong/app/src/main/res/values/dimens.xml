@@ -8,4 +8,6 @@
     <dimen name="small_30dp">30dp</dimen>
     <dimen name="cornerRadius_dialog">10dp</dimen>
     <dimen name="fontSize_16">16sp</dimen>
+    <dimen name="buttonIconSize">24dp</dimen>
+    <dimen name="textSize">14sp</dimen>
 </resources>
