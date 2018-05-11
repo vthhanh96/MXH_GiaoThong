@@ -1,5 +1,6 @@
 package com.khoaluan.mxhgiaothong.activities.post.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,26 +19,41 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.post.ChooseCategoryActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
+import com.khoaluan.mxhgiaothong.activities.post.items.CategoryFilter;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
 import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
+import com.khoaluan.mxhgiaothong.restful.model.Category;
 import com.khoaluan.mxhgiaothong.restful.model.Post;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
+import com.khoaluan.mxhgiaothong.restful.request.FilterPostRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
+import com.khoaluan.mxhgiaothong.view.ActionSheet.BottomSheet;
+import com.xiaofeng.flowlayoutmanager.Alignment;
+import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ListSelectionPostFragment extends Fragment {
+
+    private static final int REQUEST_CODE_CHOOSE_CATEGORY = 10;
 
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout mRefreshLayout;
@@ -45,12 +61,15 @@ public class ListSelectionPostFragment extends Fragment {
     RecyclerView mSelectionPostRecyclerView;
 
     private Context mContext;
-    PostAdapter mAdapter;
+    private PostAdapter mAdapter;
     private User mUser;
     private String token;
+    private BottomSheet<CategoryFilter> mCategoryFilterBottomSheet;
+    private List<CategoryFilter> mCategoryFilters;
 
     public ListSelectionPostFragment() {
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,10 +80,15 @@ public class ListSelectionPostFragment extends Fragment {
         return view;
     }
 
+    public void chooseCategory() {
+        mCategoryFilterBottomSheet.show();
+    }
+
     private void init() {
         getUser();
         initRefresh();
         initRecyclerView();
+        initBottomSheet();
         getAllPost();
     }
 
@@ -109,6 +133,57 @@ public class ListSelectionPostFragment extends Fragment {
         });
         mSelectionPostRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mSelectionPostRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void initBottomSheet() {
+        mCategoryFilterBottomSheet = new BottomSheet<>(mContext);
+        mCategoryFilterBottomSheet.addDefaultHeaderView("Lọc theo thể loại");
+        mCategoryFilterBottomSheet.initRecyclerView(R.layout.item_category_filter, new BottomSheet.RecyclerViewInterface<CategoryFilter>() {
+            @Override
+            public void onBind(BaseViewHolder helper, CategoryFilter item) {
+                if(item == null) return;
+                helper.setText(R.id.tvCategoryFilter, item.mName);
+                helper.setBackgroundRes(R.id.tvCategoryFilter, item.isSelected() ? R.drawable.bg_corner_solid_blue : R.drawable.bg_corner_blue);
+                helper.setTextColor(R.id.tvCategoryFilter, item.isSelected() ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black));
+            }
+        });
+
+        mCategoryFilters = new ArrayList<>();
+        mCategoryFilters.add(new CategoryFilter("4", "Kẹt xe cao", 3));
+        mCategoryFilters.add(new CategoryFilter("4", "Kẹt xe trung bình", 2));
+        mCategoryFilters.add(new CategoryFilter("4", "Kẹt xe nhẹ", 1));
+        mCategoryFilters.add(new CategoryFilter("5", "Công trình xây dựng", 0));
+        mCategoryFilters.add(new CategoryFilter("6", "Tai nạn giao thông", 0));
+
+        mCategoryFilterBottomSheet.addItems(mCategoryFilters);
+
+        mCategoryFilterBottomSheet.setOnActionButtonClicked(new BottomSheet.ActionButtonInterface<CategoryFilter>() {
+            @Override
+            public void onClicked(CategoryFilter selectedItem) {
+                if(mCategoryFilterBottomSheet.getSelectedItems().size() == 0) return;
+                getListPostFilter(mCategoryFilterBottomSheet.getSelectedItems());
+            }
+        });
+    }
+
+    private void getListPostFilter(List<CategoryFilter> categoryFilters) {
+        List<String> categoryIds = new ArrayList<>();
+        for(CategoryFilter item : categoryFilters) {
+            categoryIds.add(item.mId);
+        }
+        ApiManager.getInstance().getPostService().getPostFilter(new FilterPostRequest(categoryIds)).enqueue(new RestCallback<GetAllPostResponse>() {
+            @Override
+            public void success(GetAllPostResponse res) {
+                if(res.getPosts() != null) {
+                    mAdapter.setNewData(res.getPosts());
+                }
+            }
+
+            @Override
+            public void failure(RestError error) {
+
+            }
+        });
     }
 
     private void getAllPost() {

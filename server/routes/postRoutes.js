@@ -90,6 +90,24 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.post('/filter', function (req, res, next) {
+    Post.find({'category': {$in: req.body.category}}).populate('creator').populate("category").populate("reaction").limit(100).sort({name: 1}).exec((err, posts) => {
+        if (err) {
+            res.json({
+                success: false,
+                data: [],
+                message: `Error is : ${err}`
+            });
+        } else {
+            res.json({
+                success: true,
+                data: posts,
+                message: "success"
+            });
+        }
+    });
+});
+
 router.use('/:postId', (req, res, next) => {
     Post.findById(req.params.postId).populate('creator').populate('category')
         .populate({

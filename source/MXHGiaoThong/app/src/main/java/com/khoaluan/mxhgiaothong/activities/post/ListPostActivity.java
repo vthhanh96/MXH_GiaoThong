@@ -16,6 +16,7 @@ import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
 import com.khoaluan.mxhgiaothong.activities.post.adapter.ListPostFragmentPagerAdapter;
+import com.khoaluan.mxhgiaothong.activities.post.fragments.ListSelectionPostFragment;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.QuestionDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionListener;
@@ -150,6 +151,12 @@ public class ListPostActivity extends DrawerActivity {
         } else {
             CreatePostActivity.start(ListPostActivity.this, null);
         }
+    }
+
+    @OnClick(R.id.btnFilterPost)
+    public void filterPost() {
+        ListPostFragmentPagerAdapter adapter = (ListPostFragmentPagerAdapter) mViewPagerPost.getAdapter();
+        ((ListSelectionPostFragment) adapter.getItem(mViewPagerPost.getCurrentItem())).chooseCategory();
     }
 
 }

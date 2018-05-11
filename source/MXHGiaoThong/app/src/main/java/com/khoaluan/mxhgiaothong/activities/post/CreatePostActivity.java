@@ -165,7 +165,11 @@ public class CreatePostActivity extends AppCompatActivity {
 
             @Override
             public void onTvRightClicked() {
-                updatePost();
+                if(mImageUri == null) {
+                    updatePost();
+                } else {
+                    uploadImage();
+                }
             }
         });
     }
@@ -249,7 +253,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 mPost.getPlace(),
                 mCategory,
                 mLevel,
-                mPost.getImageUrl());
+                TextUtils.isEmpty(mImageUrl) ? mPost.getImageUrl() : mImageUrl);
         ApiManager.getInstance().getPostService().updatePost(token, mPost.getId(), request).enqueue(new RestCallback<BaseResponse>() {
             @Override
             public void success(BaseResponse res) {

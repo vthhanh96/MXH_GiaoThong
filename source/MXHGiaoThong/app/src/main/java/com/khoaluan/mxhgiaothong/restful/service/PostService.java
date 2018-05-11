@@ -3,6 +3,7 @@ package com.khoaluan.mxhgiaothong.restful.service;
 import com.khoaluan.mxhgiaothong.restful.request.CommentRequest;
 import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
+import com.khoaluan.mxhgiaothong.restful.request.FilterPostRequest;
 import com.khoaluan.mxhgiaothong.restful.request.ListPostByUserIdResquest;
 import com.khoaluan.mxhgiaothong.restful.request.UpdatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
@@ -84,5 +85,10 @@ public interface PostService {
             @Header("Authorization") String token,
             @Path("postId") String postId,
             @Path("commentId") String commentId
+    );
+
+    @POST("post/filter")
+    Call<GetAllPostResponse> getPostFilter(
+            @Body FilterPostRequest request
     );
 }
