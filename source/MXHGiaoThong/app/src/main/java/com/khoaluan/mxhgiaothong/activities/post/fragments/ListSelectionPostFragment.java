@@ -1,6 +1,5 @@
 package com.khoaluan.mxhgiaothong.activities.post.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,19 +19,17 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.activities.post.ChooseCategoryActivity;
+import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
 import com.khoaluan.mxhgiaothong.activities.post.items.CategoryFilter;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
-import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
 import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
+import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
-import com.khoaluan.mxhgiaothong.restful.model.Category;
 import com.khoaluan.mxhgiaothong.restful.model.Post;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
@@ -41,24 +38,17 @@ import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.view.ActionSheet.BottomSheet;
-import com.xiaofeng.flowlayoutmanager.Alignment;
-import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ListSelectionPostFragment extends Fragment {
 
-    private static final int REQUEST_CODE_CHOOSE_CATEGORY = 10;
-
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.rcvSelectionPost)
-    RecyclerView mSelectionPostRecyclerView;
+    @BindView(R.id.refreshLayout) SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.rcvSelectionPost) RecyclerView mSelectionPostRecyclerView;
 
     private Context mContext;
     private PostAdapter mAdapter;
@@ -66,6 +56,8 @@ public class ListSelectionPostFragment extends Fragment {
     private String token;
     private BottomSheet<CategoryFilter> mCategoryFilterBottomSheet;
     private List<CategoryFilter> mCategoryFilters;
+    private List<String> mCategoryFilterId = new ArrayList<>();
+    private CustomProgressDialog mProgressDialog;
 
     public ListSelectionPostFragment() {
     }
@@ -81,15 +73,34 @@ public class ListSelectionPostFragment extends Fragment {
     }
 
     public void chooseCategory() {
-        mCategoryFilterBottomSheet.show();
+        if (mCategoryFilterBottomSheet != null) {
+            mCategoryFilterBottomSheet.show();
+        }
     }
 
     private void init() {
+        initProgressDialog();
         getUser();
         initRefresh();
         initRecyclerView();
         initBottomSheet();
         getAllPost();
+    }
+
+    private void initProgressDialog() {
+        mProgressDialog = new CustomProgressDialog(mContext, "Loading...");
+    }
+
+    private void showLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.show();
+        }
+    }
+
+    private void hideLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.hide();
+        }
     }
 
     private void getUser() {
@@ -101,6 +112,7 @@ public class ListSelectionPostFragment extends Fragment {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mRefreshLayout.setRefreshing(false);
                 getAllPost();
             }
         });
@@ -111,22 +123,22 @@ public class ListSelectionPostFragment extends Fragment {
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if(mAdapter.getItem(position) == null) return;
-                if(view.getId() == R.id.llLike) {
+                if (mAdapter.getItem(position) == null) return;
+                if (view.getId() == R.id.llLike) {
                     doReaction(mAdapter.getItem(position), 1);
 
-                } else if(view.getId() == R.id.llDislike){
+                } else if (view.getId() == R.id.llDislike) {
                     doReaction(mAdapter.getItem(position), 2);
 
-                } else if(view.getId() == R.id.imgAvatar){
-                    Intent intent = new Intent(getActivity(),ProfileDetailActivity.class);
-                    intent.putExtra("UserID",mAdapter.getItem(position).getCreator().getId());
+                } else if (view.getId() == R.id.imgAvatar) {
+                    Intent intent = new Intent(getActivity(), ProfileDetailActivity.class);
+                    intent.putExtra("UserID", mAdapter.getItem(position).getCreator().getId());
                     startActivity(intent);
 
-                } else if(view.getId() == R.id.imgPostOptions) {
+                } else if (view.getId() == R.id.imgPostOptions) {
                     openOptionsPopup(mAdapter.getData().get(position), view);
 
-                } else if(view.getId() == R.id.llComments) {
+                } else if (view.getId() == R.id.llComments) {
                     ListCommentsActivity.start(mContext, mAdapter.getItem(position).getId());
                 }
             }
@@ -141,7 +153,7 @@ public class ListSelectionPostFragment extends Fragment {
         mCategoryFilterBottomSheet.initRecyclerView(R.layout.item_category_filter, new BottomSheet.RecyclerViewInterface<CategoryFilter>() {
             @Override
             public void onBind(BaseViewHolder helper, CategoryFilter item) {
-                if(item == null) return;
+                if (item == null) return;
                 helper.setText(R.id.tvCategoryFilter, item.mName);
                 helper.setBackgroundRes(R.id.tvCategoryFilter, item.isSelected() ? R.drawable.bg_corner_solid_blue : R.drawable.bg_corner_blue);
                 helper.setTextColor(R.id.tvCategoryFilter, item.isSelected() ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black));
@@ -149,9 +161,7 @@ public class ListSelectionPostFragment extends Fragment {
         });
 
         mCategoryFilters = new ArrayList<>();
-        mCategoryFilters.add(new CategoryFilter("4", "Kẹt xe cao", 3));
-        mCategoryFilters.add(new CategoryFilter("4", "Kẹt xe trung bình", 2));
-        mCategoryFilters.add(new CategoryFilter("4", "Kẹt xe nhẹ", 1));
+        mCategoryFilters.add(new CategoryFilter("4", "Kẹt xe", 0));
         mCategoryFilters.add(new CategoryFilter("5", "Công trình xây dựng", 0));
         mCategoryFilters.add(new CategoryFilter("6", "Tai nạn giao thông", 0));
 
@@ -160,45 +170,50 @@ public class ListSelectionPostFragment extends Fragment {
         mCategoryFilterBottomSheet.setOnActionButtonClicked(new BottomSheet.ActionButtonInterface<CategoryFilter>() {
             @Override
             public void onClicked(CategoryFilter selectedItem) {
-                if(mCategoryFilterBottomSheet.getSelectedItems().size() == 0) return;
+                if (mCategoryFilterBottomSheet.getSelectedItems().size() == 0) return;
+                mCategoryFilters = mCategoryFilterBottomSheet.getSelectedItems();
                 getListPostFilter(mCategoryFilterBottomSheet.getSelectedItems());
             }
         });
     }
 
     private void getListPostFilter(List<CategoryFilter> categoryFilters) {
-        List<String> categoryIds = new ArrayList<>();
-        for(CategoryFilter item : categoryFilters) {
-            categoryIds.add(item.mId);
+        showLoading();
+        mCategoryFilterId.clear();
+        for (CategoryFilter item : categoryFilters) {
+            mCategoryFilterId.add(item.mId);
         }
-        ApiManager.getInstance().getPostService().getPostFilter(new FilterPostRequest(categoryIds)).enqueue(new RestCallback<GetAllPostResponse>() {
+
+        ApiManager.getInstance().getPostService().getPostFilter(new FilterPostRequest(mCategoryFilterId)).enqueue(new RestCallback<GetAllPostResponse>() {
             @Override
-            public void success(GetAllPostResponse res) {
-                if(res.getPosts() != null) {
+            public void success(final GetAllPostResponse res) {
+                hideLoading();
+                if (res.getPosts() != null) {
                     mAdapter.setNewData(res.getPosts());
                 }
             }
 
             @Override
             public void failure(RestError error) {
-
+                hideLoading();
             }
         });
     }
 
     private void getAllPost() {
-        ApiManager.getInstance().getPostService().getAllPost().enqueue(new RestCallback<GetAllPostResponse>() {
+        showLoading();
+        ApiManager.getInstance().getPostService().getPostFilter(new FilterPostRequest(mCategoryFilterId)).enqueue(new RestCallback<GetAllPostResponse>() {
             @Override
-            public void success(GetAllPostResponse res) {
-                mRefreshLayout.setRefreshing(false);
-                if(res.getPosts() != null) {
+            public void success(final GetAllPostResponse res) {
+                hideLoading();
+                if (res.getPosts() != null) {
                     mAdapter.setNewData(res.getPosts());
                 }
             }
 
             @Override
             public void failure(RestError error) {
-                mRefreshLayout.setRefreshing(false);
+                hideLoading();
             }
         });
     }
@@ -206,7 +221,7 @@ public class ListSelectionPostFragment extends Fragment {
     private void openOptionsPopup(final Post post, View view) {
         PopupMenu popupMenu = new PopupMenu(mContext, view);
         popupMenu.getMenuInflater().inflate(R.menu.menu_post_action, popupMenu.getMenu());
-        if(TextUtils.isEmpty(token) || mUser == null || mUser.getId() != post.getCreator().getId()) {
+        if (TextUtils.isEmpty(token) || mUser == null || mUser.getId() != post.getCreator().getId()) {
             popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(false);
             popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(false);
         } else {
@@ -236,10 +251,12 @@ public class ListSelectionPostFragment extends Fragment {
     }
 
     private void deletePost(final Post post) {
+        showLoading();
         String token = PreferManager.getInstance(mContext).getToken();
         ApiManager.getInstance().getPostService().deletePost(token, post.getId()).enqueue(new RestCallback<BaseResponse>() {
             @Override
             public void success(BaseResponse res) {
+                hideLoading();
                 mAdapter.getData().remove(post);
                 mAdapter.setNewData(mAdapter.getData());
                 Toast.makeText(mContext, "Xóa bài viết thành công.", Toast.LENGTH_SHORT).show();
@@ -247,21 +264,24 @@ public class ListSelectionPostFragment extends Fragment {
 
             @Override
             public void failure(RestError error) {
+                hideLoading();
                 Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void doReaction(final Post post, int typeReaction) {
+        showLoading();
         ApiManager.getInstance().getPostService().doReaction(token, post.getId(), new DoReactionRequest(typeReaction)).enqueue(new RestCallback<PostResponse>() {
             @Override
             public void success(PostResponse res) {
+                hideLoading();
                 getAllPost();
             }
 
             @Override
             public void failure(RestError error) {
-
+                hideLoading();
             }
         });
     }

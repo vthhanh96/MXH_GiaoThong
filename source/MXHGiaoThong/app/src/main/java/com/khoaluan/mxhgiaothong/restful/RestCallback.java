@@ -7,6 +7,7 @@ import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.logging.Handler;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,9 +28,14 @@ public abstract class RestCallback<T extends BaseResponse> implements Callback<T
         Log.d("Response", response.message());
 
         if (response.isSuccessful()) {
-            T bodyResponse = response.body();
+            final T bodyResponse = response.body();
             if (bodyResponse.success) {
-                success(bodyResponse);
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        success(bodyResponse);
+                    }
+                }, 1000);
             } else {
                 RestError error = new RestError(0);
                 if (bodyResponse.message != null && !bodyResponse.message.equals("")) {

@@ -194,7 +194,7 @@ public class SearchDialogFragment extends DialogFragment {
                     listLagLngSearch.add(0, latLngStartPlace);
 
                     try {
-                        solutionMap = new SolutionMap(listLagLngSearch, Mapfragment.myMap);
+                        solutionMap = new SolutionMap(listLagLngSearch, MapFragment.myMap);
                         solutionMap.createListRoute();
                         // Tạo Progress Bar
                         MapActivity.myProgress = new ProgressDialog(getActivity());
