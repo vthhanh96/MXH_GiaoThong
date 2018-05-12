@@ -5,18 +5,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.design.widget.NavigationView;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -37,21 +33,28 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.map.adapter.ListPlaceResultAdapter;
 import com.khoaluan.mxhgiaothong.activities.map.algorithm.SolutionMap;
 import com.khoaluan.mxhgiaothong.activities.map.fragment.SearchDialogFragment;
-import com.khoaluan.mxhgiaothong.activities.map.fragment.mapfragment;
+import com.khoaluan.mxhgiaothong.activities.map.fragment.Mapfragment;
 import com.khoaluan.mxhgiaothong.activities.map.model.PlaceResult;
+import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.twotoasters.jazzylistview.JazzyListView;
 import com.twotoasters.jazzylistview.effects.TiltEffect;
 
 import java.util.ArrayList;
 
-import static com.khoaluan.mxhgiaothong.activities.map.fragment.SearchDialogFragment.voice;
-import static com.khoaluan.mxhgiaothong.activities.map.fragment.mapfragment.myMap;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
+import static com.khoaluan.mxhgiaothong.activities.map.fragment.SearchDialogFragment.voice;
+import static com.khoaluan.mxhgiaothong.activities.map.fragment.Mapfragment.myMap;
+
+public class MapActivity extends DrawerActivity {
 
     public static int index = -1;
     public static TextView tvChiTietCachDi;
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public static LinearLayout bottom_sheet;
     public static ImageButton btnUpDown;
     public static FloatingActionsMenu fabAdd;
+
     public static SearchDialogFragment searchDialogFragment;
     private FloatingActionButton fabSearchPlace;
     private boolean kt_Bottom = true;
@@ -74,20 +78,54 @@ public class MainActivity extends AppCompatActivity {
     private boolean pressLookup;
     public static ProgressDialog myProgress;
     public static AlertDialog.Builder builderFail;
+    @BindView(R.id.topBar)
+    TopBarView topBar;
 
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_map;
+    }
+
+    @Override
+    protected int getNavId() {
+        return AppConstants.NAV_DRAWER_MAP;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        mapfragment map_fragment = new mapfragment();
+        ButterKnife.bind(this);
+        Mapfragment map_fragment = new Mapfragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_main, map_fragment, map_fragment.getTag()).commit();
-
+        initTopbar();
         addControls();
         addEvents();
+    }
+
+    private void initTopbar() {
+        topBar.setImageViewLeft(LEFT_MENU);
+        topBar.setOnClickListener(new TopBarView.OnItemClickListener() {
+            @Override
+            public void onImvLeftClicked() {
+                openDrawer();
+            }
+
+            @Override
+            public void onImvRightClicked() {
+            }
+
+            @Override
+            public void onTvLeftClicked() {
+            }
+
+            @Override
+            public void onTvRightClicked() {
+
+            }
+        });
     }
 
     private void addEvents() {
@@ -97,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 searchDialogFragment = new SearchDialogFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 searchDialogFragment.show(fragmentManager, null);
+                fabAdd.collapse();
             }
         });
 
@@ -177,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
                 searchDialogFragment = new SearchDialogFragment();
                  fragmentManager = getSupportFragmentManager();
                 searchDialogFragment.show(fragmentManager, null);
+                fabAdd.collapse();
             }
         });
 
@@ -191,11 +231,12 @@ public class MainActivity extends AppCompatActivity {
                                     .setBoundsBias(new LatLngBounds(
                                             new LatLng(8.407168163601074, 104.1448974609375),
                                             new LatLng(10.7723923007117563, 106.6981029510498)))
-                                    .build(MainActivity.this);
+                                    .build(MapActivity.this);
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
                 } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
                     // TODO: Handle the error.
                 }
+                fabAdd.collapse();
             }
         });
     }
@@ -273,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                MainActivity.this.finish();
+                                MapActivity.this.finish();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -350,8 +391,8 @@ public class MainActivity extends AppCompatActivity {
                 String[] parts1 = parts[1].split("\\)");
                 String latLngSearch = parts1[0];
 
-                SearchDialogFragment.listPlaceSearch.set(MainActivity.index, placeNameSearch.toString());
-                SearchDialogFragment.listLagLngSearch.set(MainActivity.index, latLngSearch);
+                SearchDialogFragment.listPlaceSearch.set(MapActivity.index, placeNameSearch.toString());
+                SearchDialogFragment.listLagLngSearch.set(MapActivity.index, latLngSearch);
                 SearchDialogFragment.adapter.notifyDataSetChanged();
                 SearchDialogFragment.listViewSearch.setAdapter(SearchDialogFragment.adapter);
             }
@@ -414,7 +455,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             catch (Exception e) {
-//                Toast.makeText(MainActivity.this, "Không thể nhận dạng câu lệnh. Cú pháp: Đi từ ... đến ...", Toast.LENGTH_LONG).show();
+//                Toast.makeText(MapActivity.this, "Không thể nhận dạng câu lệnh. Cú pháp: Đi từ ... đến ...", Toast.LENGTH_LONG).show();
             }
         }
     }

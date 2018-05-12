@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
@@ -39,6 +40,8 @@ public class ListPostActivity extends DrawerActivity {
     ViewPager mViewPagerPost;
     @BindView(R.id.topBar)
     TopBarView topBar;
+    @BindView(R.id.fabAdd)
+    FloatingActionsMenu fabAdd;
 
     public static String token;
     public static int loginUserID;
@@ -157,6 +160,7 @@ public class ListPostActivity extends DrawerActivity {
     public void filterPost() {
         ListPostFragmentPagerAdapter adapter = (ListPostFragmentPagerAdapter) mViewPagerPost.getAdapter();
         ((ListSelectionPostFragment) adapter.getItem(mViewPagerPost.getCurrentItem())).chooseCategory();
+        fabAdd.collapse();
     }
 
 }

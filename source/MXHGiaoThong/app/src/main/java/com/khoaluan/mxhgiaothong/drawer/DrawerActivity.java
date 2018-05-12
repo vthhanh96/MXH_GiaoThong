@@ -14,6 +14,7 @@ import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
+import com.khoaluan.mxhgiaothong.activities.map.view.MapActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.EditProfileActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
@@ -181,6 +182,12 @@ abstract public class DrawerActivity extends AppCompatActivity {
                 finish();
                 break;
             }
+            case AppConstants.NAV_DRAWER_MAP: {
+                intent = new Intent(this, MapActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            }
         }
     }
 
@@ -203,7 +210,7 @@ abstract public class DrawerActivity extends AppCompatActivity {
         );
 
         mMenuList.add(new BodyDto(
-                AppConstants.NAV_DRAWER_PROFILE_DETAIL,
+                AppConstants.NAV_DRAWER_MAP,
                 R.drawable.ic_map,
                 "Chỉ đường",
                 getNavId())

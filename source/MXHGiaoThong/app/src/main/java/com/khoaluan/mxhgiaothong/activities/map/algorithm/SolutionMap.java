@@ -14,13 +14,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.map.fragment.SearchDialogFragment;
 import com.khoaluan.mxhgiaothong.activities.map.model.PlaceResult;
-import com.khoaluan.mxhgiaothong.activities.map.view.MainActivity;
+import com.khoaluan.mxhgiaothong.activities.map.view.MapActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.khoaluan.mxhgiaothong.activities.map.view.MainActivity.myProgress;
+import static com.khoaluan.mxhgiaothong.activities.map.view.MapActivity.myProgress;
 
 
 public class SolutionMap implements DirectionFinderListener{
@@ -64,7 +64,7 @@ public class SolutionMap implements DirectionFinderListener{
     public void onDirectionFinderSuccess(List<Route> listRouteToAddMatrix) {
         if (isFail) {
             myProgress.dismiss();
-            MainActivity.builderFail.show();
+            MapActivity.builderFail.show();
             return;
         }
 
@@ -96,26 +96,26 @@ public class SolutionMap implements DirectionFinderListener{
             drawBestPath();
 
             //--------------------------------------------------------------------- Hien thi Result
-            MainActivity.listPlaceResult.clear();
+            MapActivity.listPlaceResult.clear();
             bestPath.toString();
 
             for (Integer i = 1; i <= listPlaces.size(); i++) {
                 PlaceResult placeResult = new PlaceResult(i.toString(), SearchDialogFragment.listPlaceSearch.get(bestPath[i] - 1));
-                MainActivity.listPlaceResult.add(placeResult);
+                MapActivity.listPlaceResult.add(placeResult);
             }
 
 
-            MainActivity.listPlaceResult.size();
+            MapActivity.listPlaceResult.size();
 
-            MainActivity.adapterResult.notifyDataSetChanged();
-            MainActivity.listViewResult.setAdapter(MainActivity.adapterResult);
+            MapActivity.adapterResult.notifyDataSetChanged();
+            MapActivity.listViewResult.setAdapter(MapActivity.adapterResult);
 
-            MainActivity.tvBestDistance.setText(((Double)(FindBestPath.best/1000)).toString() + " km");
+            MapActivity.tvBestDistance.setText(((Double)(FindBestPath.best/1000)).toString() + " km");
 
             myProgress.dismiss();
 
-            MainActivity.fabAdd.setVisibility(View.GONE);
-            MainActivity.bottom_sheet.setVisibility(View.VISIBLE);
+            MapActivity.fabAdd.setVisibility(View.GONE);
+            MapActivity.bottom_sheet.setVisibility(View.VISIBLE);
         }
     }
 

@@ -55,7 +55,7 @@
         <activity android:name=".activities.profile.EditProfileActivity"/>
         <activity android:name=".activities.post.ChooseCategoryActivity"/>
         <activity android:name=".activities.post.ListCommentsActivity"/>
-        <activity android:name=".activities.map.view.MainActivity"/>
+        <activity android:name=".activities.map.view.MapActivity"/>
     </application>
 
 </manifest>

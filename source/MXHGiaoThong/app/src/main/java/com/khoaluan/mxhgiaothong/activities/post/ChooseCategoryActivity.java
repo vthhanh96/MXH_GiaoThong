@@ -40,7 +40,6 @@ public class ChooseCategoryActivity extends AppCompatActivity {
 
     private static final String ARG_KEY_CATEGORY = "ARG_KEY_CATEGORY";
     private static final String ARG_KEY_LEVEL = "ARG_KEY_LEVEL";
-
     @BindView(R.id.topBar)
     TopBarView mTopBar;
     @BindView(R.id.rcvCategory)

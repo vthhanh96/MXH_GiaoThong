@@ -24,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.facebook.share.internal.LikeButton;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -35,7 +34,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.map.adapter.ListPlaceAdapter;
 import com.khoaluan.mxhgiaothong.activities.map.algorithm.SolutionMap;
-import com.khoaluan.mxhgiaothong.activities.map.view.MainActivity;
+import com.khoaluan.mxhgiaothong.activities.map.view.MapActivity;
 import com.like.OnLikeListener;
 import com.twotoasters.jazzylistview.JazzyListView;
 import com.twotoasters.jazzylistview.effects.GrowEffect;
@@ -92,7 +91,7 @@ public class SearchDialogFragment extends DialogFragment {
         btnSave = (com.like.LikeButton) view.findViewById(R.id.btnSave);
         btnMyLocation = (ImageButton) view.findViewById(R.id.btnMyLocation);
 
-        if (MainActivity.isLoadHistory) {
+        if (MapActivity.isLoadHistory) {
             try {
                 String data="";
                 listPlaceSearch.clear();
@@ -184,8 +183,8 @@ public class SearchDialogFragment extends DialogFragment {
                         e.printStackTrace();
                     }
                 }
-                if (MainActivity.isLoadHistory)
-                    MainActivity.isLoadHistory = false;
+                if (MapActivity.isLoadHistory)
+                    MapActivity.isLoadHistory = false;
 
 
                 if (checkTimDuong()) {
@@ -195,16 +194,16 @@ public class SearchDialogFragment extends DialogFragment {
                     listLagLngSearch.add(0, latLngStartPlace);
 
                     try {
-                        solutionMap = new SolutionMap(listLagLngSearch, mapfragment.myMap);
+                        solutionMap = new SolutionMap(listLagLngSearch, Mapfragment.myMap);
                         solutionMap.createListRoute();
                         // Tạo Progress Bar
-                        MainActivity.myProgress = new ProgressDialog(getActivity());
-                        MainActivity.myProgress.setTitle("Map Loading ...");
-                        MainActivity.myProgress.setMessage("Please wait...");
-                        MainActivity.myProgress.setCancelable(true);
+                        MapActivity.myProgress = new ProgressDialog(getActivity());
+                        MapActivity.myProgress.setTitle("Map Loading ...");
+                        MapActivity.myProgress.setMessage("Please wait...");
+                        MapActivity.myProgress.setCancelable(true);
 
                         // Hiển thị Progress Bar
-                        MainActivity.myProgress.show();
+                        MapActivity.myProgress.show();
 
                     } catch (UnsupportedEncodingException e) {
                         Toast.makeText(getActivity(), "Không thể tìm được đường đi", Toast.LENGTH_LONG).show();
@@ -327,10 +326,10 @@ public class SearchDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 dismiss();
 
-                if (MainActivity.isLoadHistory) {
+                if (MapActivity.isLoadHistory) {
                     listPlaceSearch.clear();
                     listLagLngSearch.clear();
-                    MainActivity.isLoadHistory = false;
+                    MapActivity.isLoadHistory = false;
                 }
             }
         });
@@ -365,10 +364,10 @@ public class SearchDialogFragment extends DialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (MainActivity.isLoadHistory) {
+        if (MapActivity.isLoadHistory) {
             listPlaceSearch.clear();
             listLagLngSearch.clear();
-            MainActivity.isLoadHistory = false;
+            MapActivity.isLoadHistory = false;
         }
     }
 }
