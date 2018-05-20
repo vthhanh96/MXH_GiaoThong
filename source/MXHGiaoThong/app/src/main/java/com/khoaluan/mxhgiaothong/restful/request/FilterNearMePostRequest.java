@@ -7,10 +7,16 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Hong Hanh on 5/10/2018.
+ * Created by Hong Hanh on 5/20/2018.
  */
 
-public class FilterPostRequest implements Serializable {
+public class FilterNearMePostRequest implements Serializable {
+
+    @SerializedName("latitude")
+    @Expose Float latitude;
+
+    @SerializedName("longitude")
+    @Expose Float longitude;
 
     @SerializedName("category")
     @Expose
@@ -19,7 +25,9 @@ public class FilterPostRequest implements Serializable {
     @SerializedName("level")
     @Expose List<Integer> level;
 
-    public FilterPostRequest(List<Integer> category, List<Integer> level) {
+    public FilterNearMePostRequest(Float latitude, Float longitude, List<Integer> category, List<Integer> level) {
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.category = category;
         this.level = level;
     }

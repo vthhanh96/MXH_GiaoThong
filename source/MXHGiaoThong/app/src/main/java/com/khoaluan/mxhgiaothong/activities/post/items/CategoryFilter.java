@@ -8,11 +8,11 @@ import com.khoaluan.mxhgiaothong.view.ActionSheet.BottomSheet;
 
 public class CategoryFilter extends BottomSheet.BottomSheetItem {
 
-    public String mId;
+    public Integer mId;
     public String mName;
     public int mLevel;
 
-    public CategoryFilter(String id, String name, int level) {
+    public CategoryFilter(Integer id, String name, int level) {
         mId = id;
         mName = name;
         mLevel = level;

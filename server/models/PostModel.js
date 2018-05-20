@@ -27,13 +27,8 @@ var PostSchema = new Schema({
         type: Date,
         default: Date.now()
     },
-    latitude:{
-      type: Number,
-        required: true
-    },
-    longitude:{
-        type: Number,
-        required: true
+    location: {
+        coordinates: {type: [Number] , index: '2d', spherical: true}
     },
     place: {
       type: String,

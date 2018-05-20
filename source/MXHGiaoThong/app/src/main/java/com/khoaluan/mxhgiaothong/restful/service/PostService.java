@@ -3,7 +3,9 @@ package com.khoaluan.mxhgiaothong.restful.service;
 import com.khoaluan.mxhgiaothong.restful.request.CommentRequest;
 import com.khoaluan.mxhgiaothong.restful.request.CreatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
+import com.khoaluan.mxhgiaothong.restful.request.FilterNearMePostRequest;
 import com.khoaluan.mxhgiaothong.restful.request.FilterPostRequest;
+import com.khoaluan.mxhgiaothong.restful.request.GetNearMePostRequest;
 import com.khoaluan.mxhgiaothong.restful.request.ListPostByUserIdResquest;
 import com.khoaluan.mxhgiaothong.restful.request.UpdatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
@@ -11,6 +13,8 @@ import com.khoaluan.mxhgiaothong.restful.response.CommentResponse;
 import com.khoaluan.mxhgiaothong.restful.response.CreatePostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
+
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -90,5 +94,15 @@ public interface PostService {
     @POST("post/filter")
     Call<GetAllPostResponse> getPostFilter(
             @Body FilterPostRequest request
+    );
+
+    @POST("post/nearme")
+    Call<GetAllPostResponse> getPostNearMe(
+            @Body GetNearMePostRequest request
+    );
+
+    @POST("post/nearme/filter")
+    Call<GetAllPostResponse> getPostNearMeFilter(
+            @Body FilterNearMePostRequest request
     );
 }

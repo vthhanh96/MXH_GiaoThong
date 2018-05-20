@@ -56,7 +56,8 @@ public class ListSelectionPostFragment extends Fragment {
     private String token;
     private BottomSheet<CategoryFilter> mCategoryFilterBottomSheet;
     private List<CategoryFilter> mCategoryFilters;
-    private List<String> mCategoryFilterId = new ArrayList<>();
+    private List<Integer> mCategoryFilterId = new ArrayList<>();
+    private List<Integer> mLevelList = new ArrayList<>();
     private CustomProgressDialog mProgressDialog;
 
     public ListSelectionPostFragment() {
@@ -161,9 +162,11 @@ public class ListSelectionPostFragment extends Fragment {
         });
 
         mCategoryFilters = new ArrayList<>();
-        mCategoryFilters.add(new CategoryFilter("4", "Kẹt xe", 0));
-        mCategoryFilters.add(new CategoryFilter("5", "Công trình xây dựng", 0));
-        mCategoryFilters.add(new CategoryFilter("6", "Tai nạn giao thông", 0));
+        mCategoryFilters.add(new CategoryFilter(4, "Kẹt xe nhẹ", 1));
+        mCategoryFilters.add(new CategoryFilter(4, "Kẹt xe trung bình", 2));
+        mCategoryFilters.add(new CategoryFilter(4, "Kẹt xe cao", 3));
+        mCategoryFilters.add(new CategoryFilter(5, "Công trình xây dựng", 0));
+        mCategoryFilters.add(new CategoryFilter(6, "Tai nạn giao thông", 0));
 
         mCategoryFilterBottomSheet.addItems(mCategoryFilters);
 
@@ -180,11 +183,15 @@ public class ListSelectionPostFragment extends Fragment {
     private void getListPostFilter(List<CategoryFilter> categoryFilters) {
         showLoading();
         mCategoryFilterId.clear();
+        mLevelList.clear();
         for (CategoryFilter item : categoryFilters) {
             mCategoryFilterId.add(item.mId);
+            if(!mLevelList.contains(item.mLevel)) {
+                mLevelList.add(item.mLevel);
+            }
         }
 
-        ApiManager.getInstance().getPostService().getPostFilter(new FilterPostRequest(mCategoryFilterId)).enqueue(new RestCallback<GetAllPostResponse>() {
+        ApiManager.getInstance().getPostService().getPostFilter(new FilterPostRequest(mCategoryFilterId, mLevelList)).enqueue(new RestCallback<GetAllPostResponse>() {
             @Override
             public void success(final GetAllPostResponse res) {
                 hideLoading();
@@ -202,7 +209,7 @@ public class ListSelectionPostFragment extends Fragment {
 
     private void getAllPost() {
         showLoading();
-        ApiManager.getInstance().getPostService().getPostFilter(new FilterPostRequest(mCategoryFilterId)).enqueue(new RestCallback<GetAllPostResponse>() {
+        ApiManager.getInstance().getPostService().getPostFilter(new FilterPostRequest(mCategoryFilterId, mLevelList)).enqueue(new RestCallback<GetAllPostResponse>() {
             @Override
             public void success(final GetAllPostResponse res) {
                 hideLoading();

@@ -5,10 +5,12 @@ import com.google.gson.GsonBuilder;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.restful.deserialize.CategoryDeserialize;
 import com.khoaluan.mxhgiaothong.restful.deserialize.CommentDeserialize;
+import com.khoaluan.mxhgiaothong.restful.deserialize.LocationDeserialize;
 import com.khoaluan.mxhgiaothong.restful.deserialize.ReactionDeserialize;
 import com.khoaluan.mxhgiaothong.restful.deserialize.UserDeserialize;
 import com.khoaluan.mxhgiaothong.restful.model.Category;
 import com.khoaluan.mxhgiaothong.restful.model.Comment;
+import com.khoaluan.mxhgiaothong.restful.model.Location;
 import com.khoaluan.mxhgiaothong.restful.model.Reaction;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 
@@ -61,6 +63,9 @@ public class ApiGenerator {
         }
         if(classType != Category.class) {
             gsonBuilder.registerTypeAdapter(Category.class, new CategoryDeserialize());
+        }
+        if(classType != Location.class) {
+            gsonBuilder.registerTypeAdapter(Location.class, new LocationDeserialize());
         }
         gsonBuilder.setLenient();
         return gsonBuilder.create();

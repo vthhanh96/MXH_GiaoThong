@@ -17,6 +17,7 @@ import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
 import com.khoaluan.mxhgiaothong.activities.post.adapter.ListPostFragmentPagerAdapter;
+import com.khoaluan.mxhgiaothong.activities.post.fragments.ListNearMePostFragment;
 import com.khoaluan.mxhgiaothong.activities.post.fragments.ListSelectionPostFragment;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.QuestionDialog;
@@ -159,7 +160,11 @@ public class ListPostActivity extends DrawerActivity {
     @OnClick(R.id.btnFilterPost)
     public void filterPost() {
         ListPostFragmentPagerAdapter adapter = (ListPostFragmentPagerAdapter) mViewPagerPost.getAdapter();
-        ((ListSelectionPostFragment) adapter.getItem(mViewPagerPost.getCurrentItem())).chooseCategory();
+        if(mViewPagerPost.getCurrentItem() == 0) {
+            ((ListSelectionPostFragment) adapter.getItem(mViewPagerPost.getCurrentItem())).chooseCategory();
+        } else {
+            ((ListNearMePostFragment) adapter.getItem(mViewPagerPost.getCurrentItem())).chooseCategory();
+        }
         fabAdd.collapse();
     }
 

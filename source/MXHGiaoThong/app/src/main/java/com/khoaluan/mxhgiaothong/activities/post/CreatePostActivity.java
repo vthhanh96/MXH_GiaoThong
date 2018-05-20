@@ -272,8 +272,8 @@ public class CreatePostActivity extends AppCompatActivity {
         if(mPost == null) finish();
         UpdatePostRequest request = new UpdatePostRequest(
                 mEdtContent.getText().toString(),
-                mPost.getLatitude(),
-                mPost.getLongitude(),
+                mPost.getLocation().getCoordinates().get(0),
+                mPost.getLocation().getCoordinates().get(1),
                 mPost.getPlace(),
                 mCategory,
                 mLevel,

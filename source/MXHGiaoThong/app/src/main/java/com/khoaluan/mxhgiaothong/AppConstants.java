@@ -25,10 +25,10 @@ public class AppConstants {
     public static final String ARG_KEY_LEVEL = "ARG_KEY_LEVEL";
 
     // IP mạng phòng Hiếu
-    public static final String BASE_SERVER_URL = "http://192.168.43.165:3000/api/";
-    public static final String BASE_USER_URL = "http://192.168.43.165:3000/api/user/";
+//    public static final String BASE_SERVER_URL = "http://192.168.43.165:3000/api/";
+//    public static final String BASE_USER_URL = "http://192.168.43.165:3000/api/user/";
 
-//    public static final String BASE_SERVER_URL = "http://10.0.2.2:3000/api/";
-//    public static final String BASE_USER_URL = "http://10.0.2.2:3000/api/user/";
+    public static final String BASE_SERVER_URL = "http://10.0.2.2:3000/api/";
+    public static final String BASE_USER_URL = "http://10.0.2.2:3000/api/user/";
 
 }
