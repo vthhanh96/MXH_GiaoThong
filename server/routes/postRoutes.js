@@ -4,6 +4,7 @@ var Post = require('../models/PostModel');
 var User = require('../models/UserModel');
 var Category = require('../models/CategoryModel');
 var passport = require('passport');
+var geodist = require('geodist');
 
 /* POST new bài viết. */
 router.post('/', passport.authenticate('jwt', {
@@ -91,7 +92,48 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/filter', function (req, res, next) {
-    Post.find({'category': {$in: req.body.category}}).populate('creator').populate("category").populate("reaction").limit(100).sort({name: 1}).exec((err, posts) => {
+    if(req.body.category.length === 0) {
+        Post.find().populate('creator').populate("category").populate("reaction").limit(100).sort({created_date: -1}).exec((err, posts) => {
+            if (err) {
+                res.json({
+                    success: false,
+                    data: [],
+                    message: `Error is : ${err}`
+                });
+            } else {
+                res.json({
+                    success: true,
+                    data: posts,
+                    message: "success"
+                });
+            }
+        });
+    } else {
+        Post.find({'category': {$in: req.body.category}, 'level': {$in: req.body.level}}).populate('creator').populate("category").populate("reaction").limit(100).sort({name: 1}).exec((err, posts) => {
+            if (err) {
+                res.json({
+                    success: false,
+                    data: [],
+                    message: `Error is : ${err}`
+                });
+            } else {
+                res.json({
+                    success: true,
+                    data: posts,
+                    message: "success"
+                });
+            }
+        });
+    }
+});
+
+router.post('/nearme', function (req, res, next) {
+    Post.aggregate([
+        {$geoNear: {
+            near: [req.body.latitude, req.body.longitude],
+            distanceField: 'location'
+        }}
+    ]).exec(function (err, posts) {
         if (err) {
             res.json({
                 success: false,
@@ -99,13 +141,89 @@ router.post('/filter', function (req, res, next) {
                 message: `Error is : ${err}`
             });
         } else {
-            res.json({
-                success: true,
-                data: posts,
-                message: "success"
-            });
+            Post.populate(posts, [{path: 'creator'}, {path: 'category'}, {path: 'reaction'}], function (err, results) {
+                if (err) {
+                    res.json({
+                        success: false,
+                        data: [],
+                        message: `Error is : ${err}`
+                    });
+                } else {
+                    res.json({
+                        success: true,
+                        data: results,
+                        message: "success"
+                    });
+                }
+            })
         }
     });
+});
+
+router.post('/nearme/filter', function (req, res, next) {
+    if(req.body.category.length === 0) {
+        Post.aggregate([
+            {$geoNear: {
+                    near: [req.body.latitude, req.body.longitude],
+                    distanceField: 'location'
+                }}
+        ]).exec(function (err, posts) {
+            if (err) {
+                res.json({
+                    success: false,
+                    data: [],
+                    message: `Error is : ${err}`
+                });
+            } else {
+                Post.populate(posts, [{path: 'creator'}, {path: 'category'}, {path: 'reaction'}], function (err, results) {
+                    if (err) {
+                        res.json({
+                            success: false,
+                            data: [],
+                            message: `Error is : ${err}`
+                        });
+                    } else {
+                        res.json({
+                            success: true,
+                            data: results,
+                            message: "success"
+                        });
+                    }
+                })
+            }
+        });
+    } else {
+        Post.aggregate([
+            {$geoNear: {
+                    near: [req.body.latitude, req.body.longitude],
+                    distanceField: 'location'}},
+            {$match: {'category': {$in : req.body.category}, 'level': {$in: req.body.level}}}
+        ]).exec(function (err, posts) {
+            if (err) {
+                res.json({
+                    success: false,
+                    data: [],
+                    message: `Error is : ${err}`
+                });
+            } else {
+                Post.populate(posts, [{path: 'creator'}, {path: 'category'}, {path: 'reaction'}], function (err, results) {
+                    if (err) {
+                        res.json({
+                            success: false,
+                            data: [],
+                            message: `Error is : ${err}`
+                        });
+                    } else {
+                        res.json({
+                            success: true,
+                            data: results,
+                            message: "success"
+                        });
+                    }
+                })
+            }
+        });
+    }
 });
 
 router.use('/:postId', (req, res, next) => {

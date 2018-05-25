@@ -29,6 +29,7 @@ import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.UploadImageListener;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.ChooseActionGetImageDialog;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
@@ -90,6 +91,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private Post mPost;
     private File mFile;
     private Uri mImageUri;
+    private CustomProgressDialog mProgressDialog;
 
     public static void start(Context context, Post post) {
         Intent intent = new Intent(context, CreatePostActivity.class);
@@ -108,8 +110,25 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void init() {
         getExtras();
+        initProgressDialog();
         getToken();
         initTopBar();
+    }
+
+    private void initProgressDialog() {
+        mProgressDialog = new CustomProgressDialog(mContext, "Loading...");
+    }
+
+    private void showLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.show();
+        }
+    }
+
+    private void hideLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.hide();
+        }
     }
 
     private void getExtras() {
@@ -165,6 +184,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
             @Override
             public void onTvRightClicked() {
+                showLoading();
                 if(mImageUri == null) {
                     updatePost();
                 } else {
@@ -194,6 +214,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
     @OnClick(R.id.tvPostAction)
     public void createPost() {
+        showLoading();
         if(mImageUri == null) {
             saveNewPost();
         } else {
@@ -211,6 +232,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
             @Override
             public void uploadFailure(String err) {
+                hideLoading();
                 Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
             }
         });
@@ -231,12 +253,14 @@ public class CreatePostActivity extends AppCompatActivity {
         ApiManager.getInstance().getPostService().createPost(token, request).enqueue(new RestCallback<CreatePostResponse>() {
             @Override
             public void success(CreatePostResponse res) {
+                hideLoading();
                 Toast.makeText(CreatePostActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
             public void failure(RestError error) {
+                hideLoading();
                 ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
                 errorDialog.setError(error.message);
                 errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
@@ -248,8 +272,8 @@ public class CreatePostActivity extends AppCompatActivity {
         if(mPost == null) finish();
         UpdatePostRequest request = new UpdatePostRequest(
                 mEdtContent.getText().toString(),
-                mPost.getLatitude(),
-                mPost.getLongitude(),
+                mPost.getLocation().getCoordinates().get(0),
+                mPost.getLocation().getCoordinates().get(1),
                 mPost.getPlace(),
                 mCategory,
                 mLevel,
@@ -257,12 +281,14 @@ public class CreatePostActivity extends AppCompatActivity {
         ApiManager.getInstance().getPostService().updatePost(token, mPost.getId(), request).enqueue(new RestCallback<BaseResponse>() {
             @Override
             public void success(BaseResponse res) {
+                hideLoading();
                 Toast.makeText(mContext, "Chỉnh sửa bài viết thành công", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
             public void failure(RestError error) {
+                hideLoading();
                 ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
                 errorDialog.setError(error.message);
                 errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());

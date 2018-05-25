@@ -9,13 +9,13 @@
         android:id="@+id/vTop"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="5"
         android:clickable="true"/>
     <LinearLayout
         android:id="@+id/vBody"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
+        android:layout_weight="5"
         android:background="@color/white"
         android:orientation="vertical">
         <android.support.v7.widget.RecyclerView

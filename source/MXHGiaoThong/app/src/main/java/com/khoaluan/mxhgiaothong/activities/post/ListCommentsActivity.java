@@ -22,6 +22,7 @@ import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.InputDialog;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -54,6 +55,7 @@ public class ListCommentsActivity extends AppCompatActivity{
     private Context mContext;
     private String mPostId;
     private CommentAdapter mAdapter;
+    private CustomProgressDialog mProgressDialog;
 
     private String mToken;
     private User mUser;
@@ -76,9 +78,26 @@ public class ListCommentsActivity extends AppCompatActivity{
     private void init() {
         getExtras();
         getToken();
+        initProgressDialog();
         initTopBar();
         initRecyclerView();
         getPostInfo();
+    }
+
+    private void initProgressDialog() {
+        mProgressDialog = new CustomProgressDialog(mContext, "Loading...");
+    }
+
+    private void showLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.show();
+        }
+    }
+
+    private void hideLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.hide();
+        }
     }
 
     private void getExtras() {
@@ -132,15 +151,17 @@ public class ListCommentsActivity extends AppCompatActivity{
     }
 
     private void getPostInfo() {
+        showLoading();
         ApiManager.getInstance().getPostService().getPostInfo(mPostId).enqueue(new RestCallback<PostResponse>() {
             @Override
             public void success(PostResponse res) {
+                hideLoading();
                 mAdapter.setNewData(res.getPost().getComments());
             }
 
             @Override
             public void failure(RestError error) {
-
+                hideLoading();
             }
         });
     }
@@ -205,9 +226,11 @@ public class ListCommentsActivity extends AppCompatActivity{
     }
 
     private void editComment(String content, final Comment comment) {
+        showLoading();
         ApiManager.getInstance().getPostService().editComment(mToken, mPostId, comment.getId(), new CommentRequest(content)).enqueue(new RestCallback<CommentResponse>() {
             @Override
             public void success(CommentResponse res) {
+                hideLoading();
                 int position = mAdapter.getData().indexOf(comment);
                 mAdapter.getData().remove(comment);
                 mAdapter.getData().add(position, res.getComment());
@@ -216,7 +239,7 @@ public class ListCommentsActivity extends AppCompatActivity{
 
             @Override
             public void failure(RestError error) {
-
+                hideLoading();
             }
         });
     }
@@ -226,30 +249,35 @@ public class ListCommentsActivity extends AppCompatActivity{
             Toast.makeText(mContext, "Bạn không có quyền xóa bình luận này.", Toast.LENGTH_SHORT).show();
             return;
         }
+        showLoading();
         ApiManager.getInstance().getPostService().deleteComment(mToken, mPostId, comment.getId()).enqueue(new RestCallback<BaseResponse>() {
             @Override
             public void success(BaseResponse res) {
+                hideLoading();
                 mAdapter.getData().remove(comment);
                 mAdapter.setNewData(mAdapter.getData());
             }
 
             @Override
             public void failure(RestError error) {
-
+                hideLoading();
             }
         });
     }
 
     private void createComment(String content) {
+        showLoading();
         ApiManager.getInstance().getPostService().createComment(mToken, mPostId, new CommentRequest(content)).enqueue(new RestCallback<CommentResponse>() {
             @Override
             public void success(CommentResponse res) {
+                hideLoading();
                 mAdapter.getData().add(res.getComment());
                 mAdapter.setNewData(mAdapter.getData());
             }
 
             @Override
             public void failure(RestError error) {
+                hideLoading();
                 Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
             }
         });

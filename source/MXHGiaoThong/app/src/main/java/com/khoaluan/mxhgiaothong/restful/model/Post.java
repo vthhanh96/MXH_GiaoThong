@@ -49,13 +49,9 @@ public class Post implements Serializable {
     @Expose
     private String place;
 
-    @SerializedName("latitude")
+    @SerializedName("location")
     @Expose
-    private float latitude;
-
-    @SerializedName("longitude")
-    @Expose
-    private float longitude;
+    private Location location;
 
     @SerializedName("like_amount")
     @Expose
@@ -153,20 +149,12 @@ public class Post implements Serializable {
         this.place = place;
     }
 
-    public float getLatitude() {
-        return latitude;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
-
-    public float getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public int getLikeAmount() {

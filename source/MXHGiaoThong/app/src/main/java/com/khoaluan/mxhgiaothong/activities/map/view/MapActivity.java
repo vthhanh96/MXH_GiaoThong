@@ -38,7 +38,7 @@ import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.map.adapter.ListPlaceResultAdapter;
 import com.khoaluan.mxhgiaothong.activities.map.algorithm.SolutionMap;
 import com.khoaluan.mxhgiaothong.activities.map.fragment.SearchDialogFragment;
-import com.khoaluan.mxhgiaothong.activities.map.fragment.Mapfragment;
+import com.khoaluan.mxhgiaothong.activities.map.fragment.MapFragment;
 import com.khoaluan.mxhgiaothong.activities.map.model.PlaceResult;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
 import static com.khoaluan.mxhgiaothong.activities.map.fragment.SearchDialogFragment.voice;
-import static com.khoaluan.mxhgiaothong.activities.map.fragment.Mapfragment.myMap;
+import static com.khoaluan.mxhgiaothong.activities.map.fragment.MapFragment.myMap;
 
 public class MapActivity extends DrawerActivity {
 
@@ -97,7 +97,7 @@ public class MapActivity extends DrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        Mapfragment map_fragment = new Mapfragment();
+        MapFragment map_fragment = new MapFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_main, map_fragment, map_fragment.getTag()).commit();
         initTopbar();

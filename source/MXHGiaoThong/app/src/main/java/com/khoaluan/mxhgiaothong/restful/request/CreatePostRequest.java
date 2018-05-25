@@ -2,8 +2,11 @@ package com.khoaluan.mxhgiaothong.restful.request;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.khoaluan.mxhgiaothong.restful.model.Location;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreatePostRequest implements Serializable {
 
@@ -11,13 +14,9 @@ public class CreatePostRequest implements Serializable {
     @Expose
     private String mContent;
 
-    @SerializedName("latitude")
+    @SerializedName("location")
     @Expose
-    private Double latitude;
-
-    @SerializedName("longitude")
-    @Expose
-    private Double longitude;
+    private Location location;
 
     @SerializedName("place")
     @Expose
@@ -41,8 +40,10 @@ public class CreatePostRequest implements Serializable {
 
     public CreatePostRequest(String content, Double latitude, Double longitude, String place, String category, Integer level, Boolean isActive, String imageUrl) {
         mContent = content;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        List<Float> coordinates = new ArrayList<>();
+        coordinates.add(latitude.floatValue());
+        coordinates.add(longitude.floatValue());
+        this.location.setCoordinates(coordinates);
         this.place = place;
         this.category = category;
         this.level = level;

@@ -19,6 +19,7 @@ import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.items.LevelItem;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
@@ -53,6 +54,7 @@ public class ChooseCategoryActivity extends AppCompatActivity {
     private LevelAdapter mLevelAdapter;
     private Category mSelectedCategory;
     private int mSelectedLevel = 3;
+    private CustomProgressDialog mProgressDialog;
 
     public static void start(Activity activity, int requestCode, Category category, int level) {
         Intent starter = new Intent(activity, ChooseCategoryActivity.class);
@@ -72,8 +74,25 @@ public class ChooseCategoryActivity extends AppCompatActivity {
     private void init() {
         getExtras();
         initTopBar();
+        initProgressDialog();
         initRecyclerView();
         getListCategory();
+    }
+
+    private void initProgressDialog() {
+        mProgressDialog = new CustomProgressDialog(this, "Loading...");
+    }
+
+    private void showLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.show();
+        }
+    }
+
+    private void hideLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.hide();
+        }
     }
 
     private void getExtras() {
@@ -159,15 +178,18 @@ public class ChooseCategoryActivity extends AppCompatActivity {
     }
 
     private void getListCategory() {
+        showLoading();
         ApiManager.getInstance().getCategoryService().getAllCategory().enqueue(new RestCallback<GetAllCategoryResponse>() {
             @Override
             public void success(GetAllCategoryResponse res) {
+                hideLoading();
                 mCategoryAdapter.addData(res.getCategories());
                 updateData();
             }
 
             @Override
             public void failure(RestError error) {
+                hideLoading();
                 ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
                 errorDialog.setError(error.message);
                 errorDialog.show(getSupportFragmentManager(), ChooseCategoryActivity.class.getName());

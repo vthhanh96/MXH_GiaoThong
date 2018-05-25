@@ -31,11 +31,11 @@ import static android.content.Context.LOCATION_SERVICE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Mapfragment extends Fragment implements LocationListener, OnMapReadyCallback {
+public class MapFragment extends Fragment implements LocationListener, OnMapReadyCallback {
     public static GoogleMap myMap;
     public static final int REQUEST_ID_ACCESS_COURSE_FINE_LOCATION = 100;
 
-    public Mapfragment() {
+    public MapFragment() {
         // Required empty public constructor
     }
 

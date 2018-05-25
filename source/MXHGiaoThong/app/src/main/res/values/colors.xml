@@ -12,7 +12,7 @@
     <color name="yellow">#ffd700</color>
     <color name="orange">#ffa500</color>
     <color name="green">#02ce84</color>
-    <color name="transparent">#ffffff</color>
+    <color name="transparent">#00000000</color>
     <color name="black">#000</color>
     <color name="lightorange">#fdf2df</color>
     <color name="lightorangedark">#ebd6ab</color>
