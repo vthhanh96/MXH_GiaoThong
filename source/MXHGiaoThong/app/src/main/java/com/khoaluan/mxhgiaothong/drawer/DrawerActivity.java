@@ -170,18 +170,18 @@ abstract public class DrawerActivity extends AppCompatActivity {
                 finish();
                 break;
             }
-            case AppConstants.NAV_DRAWER_PROFILE_DETAIL: {
-                intent = new Intent(this, ProfileDetailActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-            }
-            case AppConstants.NAV_DRAWER_PROFILE_EDIT: {
-                intent = new Intent(this, EditProfileActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-            }
+//            case AppConstants.NAV_DRAWER_PROFILE_DETAIL: {
+//                intent = new Intent(this, ProfileDetailActivity.class);
+//                startActivity(intent);
+//                finish();
+//                break;
+//            }
+//            case AppConstants.NAV_DRAWER_PROFILE_EDIT: {
+//                intent = new Intent(this, EditProfileActivity.class);
+//                startActivity(intent);
+//                finish();
+//                break;
+//            }
             case AppConstants.NAV_DRAWER_MAP: {
                 intent = new Intent(this, MapActivity.class);
                 startActivity(intent);
@@ -227,13 +227,6 @@ abstract public class DrawerActivity extends AppCompatActivity {
                 AppConstants.NAV_DRAWER_PROFILE_DETAIL,
                 R.drawable.ic_search,
                 "Tìm kiếm",
-                getNavId())
-        );
-
-        mMenuList.add(new BodyDto(
-                AppConstants.NAV_DRAWER_PROFILE_DETAIL,
-                R.drawable.ic_chart,
-                "Thống kê",
                 getNavId())
         );
 

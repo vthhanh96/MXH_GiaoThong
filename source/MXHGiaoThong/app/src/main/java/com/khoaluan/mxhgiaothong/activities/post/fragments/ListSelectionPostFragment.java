@@ -38,6 +38,7 @@ import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.view.ActionSheet.BottomSheet;
+import com.khoaluan.mxhgiaothong.view.ListPostView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,18 +48,18 @@ import butterknife.ButterKnife;
 
 public class ListSelectionPostFragment extends Fragment {
 
-    @BindView(R.id.refreshLayout) SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.rcvSelectionPost) RecyclerView mSelectionPostRecyclerView;
+    @BindView(R.id.listPostView) ListPostView mListPostView;
+    @BindView(R.id.refreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     private Context mContext;
-    private PostAdapter mAdapter;
-    private User mUser;
-    private String token;
+
     private BottomSheet<CategoryFilter> mCategoryFilterBottomSheet;
-    private List<CategoryFilter> mCategoryFilters;
+
     private List<Integer> mCategoryFilterId = new ArrayList<>();
     private List<Integer> mLevelList = new ArrayList<>();
+    private List<CategoryFilter> mCategoryFilters;
     private CustomProgressDialog mProgressDialog;
+
 
     public ListSelectionPostFragment() {
     }
@@ -80,16 +81,14 @@ public class ListSelectionPostFragment extends Fragment {
     }
 
     private void init() {
-        initProgressDialog();
-        getUser();
-        initRefresh();
-        initRecyclerView();
         initBottomSheet();
+        initProgressDialog();
+        initRefresh();
         getAllPost();
     }
 
     private void initProgressDialog() {
-        mProgressDialog = new CustomProgressDialog(mContext, "Loading...");
+        mProgressDialog = new CustomProgressDialog(getContext(), "Loading...");
     }
 
     private void showLoading() {
@@ -104,48 +103,14 @@ public class ListSelectionPostFragment extends Fragment {
         }
     }
 
-    private void getUser() {
-        mUser = PreferManager.getInstance(mContext).getUser();
-        token = PreferManager.getInstance(mContext).getToken();
-    }
-
     private void initRefresh() {
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setRefreshing(false);
                 getAllPost();
             }
         });
-    }
-
-    private void initRecyclerView() {
-        mAdapter = new PostAdapter(mUser);
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mAdapter.getItem(position) == null) return;
-                if (view.getId() == R.id.llLike) {
-                    doReaction(mAdapter.getItem(position), 1);
-
-                } else if (view.getId() == R.id.llDislike) {
-                    doReaction(mAdapter.getItem(position), 2);
-
-                } else if (view.getId() == R.id.imgAvatar) {
-                    Intent intent = new Intent(getActivity(), ProfileDetailActivity.class);
-                    intent.putExtra("UserID", mAdapter.getItem(position).getCreator().getId());
-                    startActivity(intent);
-
-                } else if (view.getId() == R.id.imgPostOptions) {
-                    openOptionsPopup(mAdapter.getData().get(position), view);
-
-                } else if (view.getId() == R.id.llComments) {
-                    ListCommentsActivity.start(mContext, mAdapter.getItem(position).getId());
-                }
-            }
-        });
-        mSelectionPostRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        mSelectionPostRecyclerView.setAdapter(mAdapter);
     }
 
     private void initBottomSheet() {
@@ -196,7 +161,7 @@ public class ListSelectionPostFragment extends Fragment {
             public void success(final GetAllPostResponse res) {
                 hideLoading();
                 if (res.getPosts() != null) {
-                    mAdapter.setNewData(res.getPosts());
+                    mListPostView.setData(res.getPosts());
                 }
             }
 
@@ -214,76 +179,8 @@ public class ListSelectionPostFragment extends Fragment {
             public void success(final GetAllPostResponse res) {
                 hideLoading();
                 if (res.getPosts() != null) {
-                    mAdapter.setNewData(res.getPosts());
+                    mListPostView.setData(res.getPosts());
                 }
-            }
-
-            @Override
-            public void failure(RestError error) {
-                hideLoading();
-            }
-        });
-    }
-
-    private void openOptionsPopup(final Post post, View view) {
-        PopupMenu popupMenu = new PopupMenu(mContext, view);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_post_action, popupMenu.getMenu());
-        if (TextUtils.isEmpty(token) || mUser == null || mUser.getId() != post.getCreator().getId()) {
-            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(false);
-            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(false);
-        } else {
-            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(true);
-            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(true);
-        }
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.edit_post:
-                        CreatePostActivity.start(mContext, post);
-                        break;
-                    case R.id.delete_post:
-                        deletePost(post);
-                        break;
-                    case R.id.hide_post:
-                        mAdapter.getData().remove(post);
-                        mAdapter.setNewData(mAdapter.getData());
-                        break;
-                }
-                return true;
-            }
-        });
-        popupMenu.show();
-    }
-
-    private void deletePost(final Post post) {
-        showLoading();
-        String token = PreferManager.getInstance(mContext).getToken();
-        ApiManager.getInstance().getPostService().deletePost(token, post.getId()).enqueue(new RestCallback<BaseResponse>() {
-            @Override
-            public void success(BaseResponse res) {
-                hideLoading();
-                mAdapter.getData().remove(post);
-                mAdapter.setNewData(mAdapter.getData());
-                Toast.makeText(mContext, "Xóa bài viết thành công.", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void failure(RestError error) {
-                hideLoading();
-                Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void doReaction(final Post post, int typeReaction) {
-        showLoading();
-        ApiManager.getInstance().getPostService().doReaction(token, post.getId(), new DoReactionRequest(typeReaction)).enqueue(new RestCallback<PostResponse>() {
-            @Override
-            public void success(PostResponse res) {
-                hideLoading();
-                getAllPost();
             }
 
             @Override

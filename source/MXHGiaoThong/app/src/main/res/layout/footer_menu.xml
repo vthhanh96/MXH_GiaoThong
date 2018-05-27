@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/appColor">
 
     <View
         android:layout_marginEnd="@dimen/dp_10"
@@ -16,23 +17,22 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:layout_marginEnd="10dp"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:orientation="horizontal">
 
         <View
             android:id="@+id/view_select"
-            android:layout_width="3dp"
+            android:layout_width="5dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="30dp"
             android:background="@color/transparent" />
 
         <ImageView
             android:id="@+id/imv_icon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/margin_32dp"
+            android:layout_marginStart="@dimen/margin_32dp"
+            android:layout_marginBottom="@dimen/margin_8dp"
+            android:layout_marginTop="@dimen/margin_8dp"
             android:src="@drawable/ic_logout_menu" />
 
         <TextView

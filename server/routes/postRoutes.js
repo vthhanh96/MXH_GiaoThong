@@ -54,7 +54,7 @@ router.post('/listUserPost', passport.authenticate('jwt', {
     session: false,
     failureRedirect: '/unauthorized'
 }), function (req, res, next) {
-    Post.find({creator: req.body.creator}).populate("creator").exec((err, post) => {
+    Post.find({creator: req.body.creator}).populate("creator").populate("category").populate("reaction").exec((err, post) => {
         if (err) {
             res.json({
                 success: false,

@@ -34,6 +34,7 @@ import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.UserResponse;
+import com.khoaluan.mxhgiaothong.view.ListPostView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,20 +51,14 @@ import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.token;
 
 public class ProfileDetailActivity   extends DrawerActivity {
 
-    @BindView(R.id.topBar)
-    TopBarView topBar;
-    @BindView(R.id.rcvSelectionPost)
-    RecyclerView mSelectionPostRecyclerView;
-    @BindView(R.id.tvUserName)
-    TextView tvUserName;
-    @BindView(R.id.imvAvatar)
-    CircleImageView imvAvatar;
-    @BindView(R.id.tvAddress)
-    TextView tvAddress;
+    @BindView(R.id.topBar) TopBarView topBar;
+    @BindView(R.id.listPostView) ListPostView mListPostView;
+    @BindView(R.id.tvUserName) TextView tvUserName;
+    @BindView(R.id.imvAvatar) CircleImageView imvAvatar;
+    @BindView(R.id.tvAddress) TextView tvAddress;
 
     private int userID;
     private User user;
-    PostAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -80,8 +75,11 @@ public class ProfileDetailActivity   extends DrawerActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         userID = getIntent().getIntExtra("UserID",-1);
-        initTopbar();
         init();
+    }
+
+    private void init() {
+        initTopbar();
     }
 
     private void initTopbar() {
@@ -119,10 +117,6 @@ public class ProfileDetailActivity   extends DrawerActivity {
         getInforUser();
     }
 
-    private void init() {
-        initRecyclerView();
-    }
-
     private void getInforUser() {
         ApiManager.getInstance().getUserService().getUserById(token, userID).enqueue(new RestCallback<UserResponse>() {
             @Override
@@ -143,106 +137,12 @@ public class ProfileDetailActivity   extends DrawerActivity {
         });
     }
 
-    private void initRecyclerView() {
-        mAdapter = new PostAdapter(user);
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if(mAdapter.getItem(position) == null) return;
-                if(view.getId() == R.id.llLike) {
-                    doReaction(mAdapter.getItem(position), 1);
-
-                } else if(view.getId() == R.id.llDislike){
-                    doReaction(mAdapter.getItem(position), 2);
-
-                } else if(view.getId() == R.id.imgAvatar){
-                    Intent intent = new Intent(ProfileDetailActivity.this,ProfileDetailActivity.class);
-                    intent.putExtra("UserID",mAdapter.getItem(position).getCreator().getId());
-                    startActivity(intent);
-
-                } else if(view.getId() == R.id.imgPostOptions) {
-                    openOptionsPopup(mAdapter.getData().get(position), view);
-
-                } else if(view.getId() == R.id.llComments) {
-                    ListCommentsActivity.start(ProfileDetailActivity.this, mAdapter.getItem(position).getId());
-                }
-            }
-        });
-        mSelectionPostRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-        mSelectionPostRecyclerView.setAdapter(mAdapter);
-    }
-
-    private void openOptionsPopup(final Post post, View view) {
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_post_action, popupMenu.getMenu());
-        if(TextUtils.isEmpty(token) || user == null || user.getId() != post.getCreator().getId()) {
-            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(false);
-            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(false);
-        } else {
-            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(true);
-            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(true);
-            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(true);
-        }
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.edit_post:
-                        CreatePostActivity.start(ProfileDetailActivity.this, post);
-                        break;
-                    case R.id.delete_post:
-                        deletePost(post);
-                        break;
-                    case R.id.hide_post:
-                        mAdapter.getData().remove(post);
-                        mAdapter.setNewData(mAdapter.getData());
-                        break;
-                }
-                return true;
-            }
-        });
-        popupMenu.show();
-    }
-
-    private void deletePost(final Post post) {
-        String token = PreferManager.getInstance(this).getToken();
-        ApiManager.getInstance().getPostService().deletePost(token, post.getId()).enqueue(new RestCallback<BaseResponse>() {
-            @Override
-            public void success(BaseResponse res) {
-                mAdapter.getData().remove(post);
-                mAdapter.setNewData(mAdapter.getData());
-                Toast.makeText(ProfileDetailActivity.this, "Xóa bài viết thành công.", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void failure(RestError error) {
-                Toast.makeText(ProfileDetailActivity.this, error.message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void doReaction(final Post post, int typeReaction) {
-        ApiManager.getInstance().getPostService().doReaction(token, post.getId(), new DoReactionRequest(typeReaction)).enqueue(new RestCallback<PostResponse>() {
-            @Override
-            public void success(PostResponse res) {
-                getListPostUser(userID);
-            }
-
-            @Override
-            public void failure(RestError error) {
-
-            }
-        });
-    }
-
     private void getListPostUser(int id) {
         ApiManager.getInstance().getPostService().getPostByUserId(token, new ListPostByUserIdResquest(id)).enqueue(new RestCallback<GetAllPostResponse>() {
             @Override
             public void success(GetAllPostResponse res) {
                 if(res.getPosts() != null) {
-                    mAdapter.addData(res.getPosts());
-                    mAdapter.notifyDataSetChanged();
+                    mListPostView.setData(res.getPosts());
                 }
             }
             @Override

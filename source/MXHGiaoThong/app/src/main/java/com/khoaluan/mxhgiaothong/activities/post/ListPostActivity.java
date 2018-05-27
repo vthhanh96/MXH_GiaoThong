@@ -131,6 +131,7 @@ public class ListPostActivity extends DrawerActivity {
 
     private void initViewPager() {
         mViewPagerPost.setAdapter(new ListPostFragmentPagerAdapter(getSupportFragmentManager()));
+        mViewPagerPost.setOffscreenPageLimit(2);
     }
 
     private void initTabLayout() {
