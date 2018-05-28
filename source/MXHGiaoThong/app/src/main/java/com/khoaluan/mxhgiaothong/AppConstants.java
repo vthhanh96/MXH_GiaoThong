@@ -14,6 +14,8 @@ public class AppConstants {
     public static final int NAV_DRAWER_PROFILE_DETAIL = 8;
     public static final int NAV_DRAWER_PROFILE_EDIT = 9;
     public static final int NAV_DRAWER_MAP = 10;
+    public static final int NAV_DRAWER_NOTI = 11;
+    public static final int NAV_DRAWER_SEARCH = 12;
 
     // TopBar
     public static final int LEFT_MENU = 1;

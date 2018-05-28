@@ -40,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_BACK;
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_SETTING;
 import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.loginUserID;
@@ -83,14 +84,14 @@ public class ProfileDetailActivity   extends DrawerActivity {
     }
 
     private void initTopbar() {
-        topBar.setImageViewLeft(LEFT_MENU);
+        topBar.setImageViewLeft(LEFT_BACK);
         if(userID == loginUserID) {
             topBar.setImageViewRight(RIGHT_SETTING);
         }
         topBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
             public void onImvLeftClicked() {
-                openDrawer();
+                finish();
             }
 
             @Override
@@ -147,9 +148,14 @@ public class ProfileDetailActivity   extends DrawerActivity {
             }
             @Override
             public void failure(RestError error) {
-                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
-                errorDialog.setError(error.message);
-                errorDialog.show(getSupportFragmentManager(), ProfileDetailActivity.class.getName());
+                try{
+                    ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                    errorDialog.setError(error.message);
+                    errorDialog.show(getSupportFragmentManager(), ProfileDetailActivity.class.getName());
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
     }

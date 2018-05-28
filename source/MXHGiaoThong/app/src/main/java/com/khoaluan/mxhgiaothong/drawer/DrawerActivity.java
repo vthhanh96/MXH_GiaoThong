@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
@@ -114,7 +115,7 @@ abstract public class DrawerActivity extends AppCompatActivity {
                     Intent intent = new Intent(DrawerActivity.this, ProfileDetailActivity.class);
                     intent.putExtra("UserID",loginUserID);
                     startActivity(intent);
-                    finish();
+//                    finish();
                 }
             }
 
@@ -170,18 +171,14 @@ abstract public class DrawerActivity extends AppCompatActivity {
                 finish();
                 break;
             }
-//            case AppConstants.NAV_DRAWER_PROFILE_DETAIL: {
-//                intent = new Intent(this, ProfileDetailActivity.class);
-//                startActivity(intent);
-//                finish();
-//                break;
-//            }
-//            case AppConstants.NAV_DRAWER_PROFILE_EDIT: {
-//                intent = new Intent(this, EditProfileActivity.class);
-//                startActivity(intent);
-//                finish();
-//                break;
-//            }
+            case AppConstants.NAV_DRAWER_NOTI: {
+                Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case AppConstants.NAV_DRAWER_SEARCH: {
+                Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+                break;
+            }
             case AppConstants.NAV_DRAWER_MAP: {
                 intent = new Intent(this, MapActivity.class);
                 startActivity(intent);
@@ -217,14 +214,14 @@ abstract public class DrawerActivity extends AppCompatActivity {
         );
 
         mMenuList.add(new BodyDto(
-                AppConstants.NAV_DRAWER_PROFILE_DETAIL,
+                AppConstants.NAV_DRAWER_NOTI,
                 R.drawable.ic_alarm,
                 "Thông báo",
                 getNavId())
         );
 
         mMenuList.add(new BodyDto(
-                AppConstants.NAV_DRAWER_PROFILE_DETAIL,
+                AppConstants.NAV_DRAWER_SEARCH,
                 R.drawable.ic_search,
                 "Tìm kiếm",
                 getNavId())
