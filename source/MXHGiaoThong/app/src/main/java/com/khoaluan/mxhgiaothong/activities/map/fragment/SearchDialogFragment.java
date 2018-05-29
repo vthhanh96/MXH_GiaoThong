@@ -35,6 +35,7 @@ import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.map.adapter.ListPlaceAdapter;
 import com.khoaluan.mxhgiaothong.activities.map.algorithm.SolutionMap;
 import com.khoaluan.mxhgiaothong.activities.map.view.MapActivity;
+import com.khoaluan.mxhgiaothong.customView.dialog.BaseCustomDialogFragment;
 import com.like.OnLikeListener;
 import com.twotoasters.jazzylistview.JazzyListView;
 import com.twotoasters.jazzylistview.effects.GrowEffect;
@@ -53,7 +54,7 @@ import java.util.Scanner;
  * Created by Dell on 12/26/2016.
  */
 
-public class SearchDialogFragment extends DialogFragment {
+public class SearchDialogFragment extends BaseCustomDialogFragment {
 
     public static JazzyListView listViewSearch;
     public static ArrayList<String> listPlaceSearch = new ArrayList<>();

@@ -18,6 +18,7 @@ import com.khoaluan.mxhgiaothong.drawer.dto.BodyDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.FooterDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.HeaderDto;
 import com.khoaluan.mxhgiaothong.restful.model.User;
+import com.khoaluan.mxhgiaothong.utils.SingleClickListener;
 
 import java.util.List;
 
@@ -117,7 +118,7 @@ public class MenuAdapter extends RecyclerView.Adapter {
 
     class HeaderHolder
             extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+            {
 
         @BindView(R.id.menu_header_avatar)
         CircleImageView avatar;
@@ -129,15 +130,16 @@ public class MenuAdapter extends RecyclerView.Adapter {
         HeaderHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(onHeaderClick);
         }
-
-        @Override
-        public void onClick(View v) {
-            onItemClickListener.onHeaderClicked(
-                    ((HeaderDto) mItems.get(getAdapterPosition())).isSelected
-            );
-        }
+        SingleClickListener onHeaderClick = new SingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                onItemClickListener.onHeaderClicked(
+                        ((HeaderDto) mItems.get(getAdapterPosition())).isSelected
+                );
+            }
+        };
 
         public void bind() {
             User user = PreferManager.getInstance(mContext).getUser();
@@ -149,7 +151,7 @@ public class MenuAdapter extends RecyclerView.Adapter {
     }
 
     class BodyHolder
-            extends RecyclerView.ViewHolder implements View.OnClickListener {
+            extends RecyclerView.ViewHolder {
 
         @BindView(R.id.view_select)
         View viewSelect;
@@ -163,7 +165,7 @@ public class MenuAdapter extends RecyclerView.Adapter {
         BodyHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(onBodyClick);
         }
 
         public void bind(BodyDto bodyDto) {
@@ -176,26 +178,29 @@ public class MenuAdapter extends RecyclerView.Adapter {
             }
         }
 
-        @Override
-        public void onClick(View view) {
-            onItemClickListener.onBodyClick(getAdapterPosition());
-        }
+        SingleClickListener onBodyClick = new SingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                onItemClickListener.onBodyClick(getAdapterPosition());
+            }
+        };
     }
 
     class FooterHolder
             extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+           {
 
         FooterHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(footerClick);
         }
-
-        @Override
-        public void onClick(View v) {
-            onItemClickListener.onFooterClick();
-        }
+        SingleClickListener footerClick = new SingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                onItemClickListener.onFooterClick();
+            }
+        };
 
         public void bind(FooterDto footerDto) {
 

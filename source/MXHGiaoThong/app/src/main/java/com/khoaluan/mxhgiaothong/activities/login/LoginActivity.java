@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             public void success(UserLoginResponse res) {
                 PreferManager.getInstance(LoginActivity.this).saveToken(res.getToken());
                 PreferManager.getInstance(LoginActivity.this).saveUserId(res.getId());
+                PreferManager.getInstance(LoginActivity.this).clearValue();
                 getUserInfo(res.getToken());
             }
 

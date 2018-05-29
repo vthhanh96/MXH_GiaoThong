@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.utils.SingleClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,6 +74,7 @@ public class TopBarView extends LinearLayoutCompat {
         this.addView(view);
         imvLogoApp.setVisibility(VISIBLE);
         tv_title.setVisibility(GONE);
+        imv_right.setOnClickListener(clickImageRight);
     }
 
     public interface OnItemClickListener {
@@ -147,11 +149,13 @@ public class TopBarView extends LinearLayoutCompat {
         onItemClickListener.onImvLeftClicked();
     }
 
-    @OnClick(R.id.imv_right)
-    public void ClickImageRight(){
-        if(onItemClickListener == null) return;
-        onItemClickListener.onImvRightClicked();
-    }
+    SingleClickListener clickImageRight = new SingleClickListener() {
+        @Override
+        public void onSingleClick(View v) {
+            if(onItemClickListener == null) return;
+            onItemClickListener.onImvRightClicked();
+        }
+    };
 
     public void setTranpatentTopBar(){
         lnTopBar.setBackgroundColor(getResources().getColor(R.color.transparent));

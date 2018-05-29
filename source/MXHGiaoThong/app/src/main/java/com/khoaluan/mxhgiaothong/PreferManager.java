@@ -86,4 +86,9 @@ public class PreferManager {
         }
         return mUser;
     }
+
+    public void clearValue(){
+        mToken = null;
+        mUser = null;
+    }
 }

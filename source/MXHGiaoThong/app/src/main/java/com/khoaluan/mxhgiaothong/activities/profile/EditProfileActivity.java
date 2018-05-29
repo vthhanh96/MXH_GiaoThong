@@ -119,10 +119,14 @@ public class EditProfileActivity extends AppCompatActivity{
     }
 
     private void initView() {
-        Glide.with(this)
-                .load(userLogin.getAvatarUrl())
-                .apply(RequestOptions.circleCropTransform())
-                .into(imvAvatar);
+        try {
+            Glide.with(this)
+                    .load(userLogin.getAvatarUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imvAvatar);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         edtFullName.setText(userLogin.getFullName());
         tvDate.setText(userLogin.getBirthDate());
