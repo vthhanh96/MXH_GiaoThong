@@ -69,15 +69,6 @@
                 app:fab_icon="@drawable/ic_filter_post"
                 app:fab_title="Lọc bài viết"/>
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnSearchPlace"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:fab_colorNormal="@color/white"
-                app:fab_colorPressed="@color/white_pressed"
-                app:fab_icon="@drawable/ic_search_place"
-                app:fab_title="Tìm đường" />
-
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
     </FrameLayout>
 

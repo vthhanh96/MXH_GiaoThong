@@ -105,7 +105,7 @@ public class BaseCustomDialogFragment extends AppCompatDialogFragment {
         btnCancel = (ImageButton) view.findViewById(R.id.btnCancel);
         btnAction = (Button) view.findViewById(R.id.btnAction);
         btnAction.setText(actionName);
-        btnAction.setTypeface(FontHelper.getInstance().getTypeface(getContext(), FontHelper.FONT_HIRAKAKU_W3));
+        btnAction.setTypeface(FontHelper.getInstance().getTypeface(getContext(), FontHelper.FONT_QUICKSAND_BOLD));
 
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override

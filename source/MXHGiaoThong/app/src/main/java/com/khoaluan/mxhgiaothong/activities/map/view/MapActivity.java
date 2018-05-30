@@ -37,10 +37,11 @@ import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.map.adapter.ListPlaceResultAdapter;
 import com.khoaluan.mxhgiaothong.activities.map.algorithm.SolutionMap;
-import com.khoaluan.mxhgiaothong.activities.map.fragment.SearchDialogFragment;
 import com.khoaluan.mxhgiaothong.activities.map.fragment.MapFragment;
 import com.khoaluan.mxhgiaothong.activities.map.model.PlaceResult;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
+import com.khoaluan.mxhgiaothong.customView.dialog.map.SearchMapDialogFragment;
+import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionListener;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.twotoasters.jazzylistview.JazzyListView;
 import com.twotoasters.jazzylistview.effects.TiltEffect;
@@ -51,7 +52,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
-import static com.khoaluan.mxhgiaothong.activities.map.fragment.SearchDialogFragment.voice;
 import static com.khoaluan.mxhgiaothong.activities.map.fragment.MapFragment.myMap;
 
 public class MapActivity extends DrawerActivity {
@@ -63,7 +63,6 @@ public class MapActivity extends DrawerActivity {
     public static ImageButton btnUpDown;
     public static FloatingActionsMenu fabAdd;
 
-    public static SearchDialogFragment searchDialogFragment;
     private FloatingActionButton fabSearchPlace;
     private boolean kt_Bottom = true;
 
@@ -78,8 +77,10 @@ public class MapActivity extends DrawerActivity {
     private boolean pressLookup;
     public static ProgressDialog myProgress;
     public static AlertDialog.Builder builderFail;
+
     @BindView(R.id.topBar)
     TopBarView topBar;
+    private SearchMapDialogFragment searchMapDialogFragment;
 
 
     @Override
@@ -132,9 +133,19 @@ public class MapActivity extends DrawerActivity {
         fabSearchPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchDialogFragment = new SearchDialogFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                searchDialogFragment.show(fragmentManager, null);
+                searchMapDialogFragment = new SearchMapDialogFragment();
+                searchMapDialogFragment.show(getSupportFragmentManager(),"");
+                searchMapDialogFragment.setDialogActionListener(new CustomDialogActionListener() {
+                    @Override
+                    public void dialogCancel() {
+                        searchMapDialogFragment.clickThoat();
+                    }
+
+                    @Override
+                    public void dialogPerformAction() {
+                        searchMapDialogFragment.clickTimDuong();
+                    }
+                });
                 fabAdd.collapse();
             }
         });
@@ -203,7 +214,7 @@ public class MapActivity extends DrawerActivity {
                 }
                 else {
                     for (int j = 1; j < listViewResult.getChildCount(); j++) {
-                            SolutionMap.polylinePaths.get(j-1).setColor(Color.BLUE);
+                        SolutionMap.polylinePaths.get(j-1).setColor(Color.BLUE);
                     }
                 }
             }
@@ -213,9 +224,19 @@ public class MapActivity extends DrawerActivity {
             @Override
             public void onClick(View view) {
                 isLoadHistory = true;
-                searchDialogFragment = new SearchDialogFragment();
-                 fragmentManager = getSupportFragmentManager();
-                searchDialogFragment.show(fragmentManager, null);
+                searchMapDialogFragment.show(getSupportFragmentManager(),"");
+                searchMapDialogFragment.setDialogActionListener(new CustomDialogActionListener() {
+                    @Override
+                    public void dialogCancel() {
+                        searchMapDialogFragment.clickThoat();
+                    }
+
+                    @Override
+                    public void dialogPerformAction() {
+                        searchMapDialogFragment.clickTimDuong();
+                    }
+                });
+
                 fabAdd.collapse();
             }
         });
@@ -266,8 +287,8 @@ public class MapActivity extends DrawerActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         bottom_sheet.setVisibility(View.GONE);
                         fabAdd.setVisibility(View.VISIBLE);
-                        SearchDialogFragment.listPlaceSearch.clear();
-                        SearchDialogFragment.listLagLngSearch.clear();
+                        searchMapDialogFragment.getListPlaceSearch().clear();
+                        searchMapDialogFragment.getListLagLngSearch().clear();
                         index = -1;
                     }
                 })
@@ -294,8 +315,8 @@ public class MapActivity extends DrawerActivity {
                             public void onClick(DialogInterface dialog, int id) {
                                 bottom_sheet.setVisibility(View.GONE);
                                 fabAdd.setVisibility(View.VISIBLE);
-                                SearchDialogFragment.listPlaceSearch.clear();
-                                SearchDialogFragment.listLagLngSearch.clear();
+                                searchMapDialogFragment.getListPlaceSearch().clear();
+                                searchMapDialogFragment.getListLagLngSearch().clear();
                                 index = -1;
                             }
                         })
@@ -331,26 +352,26 @@ public class MapActivity extends DrawerActivity {
 
     //region Search DialogFragment
     public void clickChangeSearchItem(View view) {
-        int index = SearchDialogFragment.listViewSearch.getPositionForView(view);
+        int index = searchMapDialogFragment.getListViewSearch().getPositionForView(view);
 
         if (index > 0)
         {
-            SearchDialogFragment.listPlaceSearch.add(index - 1, SearchDialogFragment.listPlaceSearch.get(index));
-            SearchDialogFragment.listPlaceSearch.remove(index + 1);
-            SearchDialogFragment.listLagLngSearch.add(index - 1, SearchDialogFragment.listPlaceSearch.get(index));
-            SearchDialogFragment.listLagLngSearch.remove(index + 1);
-            SearchDialogFragment.adapter.notifyDataSetChanged();
-            SearchDialogFragment.listViewSearch.setAdapter(SearchDialogFragment.adapter);
+            searchMapDialogFragment.getListPlaceSearch().add(index - 1, searchMapDialogFragment.getListPlaceSearch().get(index));
+            searchMapDialogFragment.getListPlaceSearch().remove(index + 1);
+            searchMapDialogFragment.getListLagLngSearch().add(index - 1, searchMapDialogFragment.getListPlaceSearch().get(index));
+            searchMapDialogFragment.getListLagLngSearch().remove(index + 1);
+            searchMapDialogFragment.getAdapter().notifyDataSetChanged();
+            searchMapDialogFragment.getListViewSearch().setAdapter(searchMapDialogFragment.getAdapter());
         }
     }
 
     public void clickSubSearchItem(View view) {
-        if (SearchDialogFragment.listViewSearch.getChildCount() > 1) {
-            int index = SearchDialogFragment.listViewSearch.getPositionForView(view);
-            SearchDialogFragment.listPlaceSearch.remove(index);
-            SearchDialogFragment.listLagLngSearch.remove(index);
-            SearchDialogFragment.adapter.notifyDataSetChanged();
-            SearchDialogFragment.listViewSearch.setAdapter(SearchDialogFragment.adapter);
+        if (searchMapDialogFragment.getListViewSearch().getChildCount() > 1) {
+            int index = searchMapDialogFragment.getListViewSearch().getPositionForView(view);
+            searchMapDialogFragment.getListPlaceSearch().remove(index);
+            searchMapDialogFragment.getListLagLngSearch().remove(index);
+            searchMapDialogFragment.getAdapter().notifyDataSetChanged();
+            searchMapDialogFragment.getListViewSearch().setAdapter(searchMapDialogFragment.getAdapter());
         }
         else {
             Toast.makeText(getApplicationContext(), "Không thể xóa", Toast.LENGTH_LONG).show();
@@ -358,7 +379,7 @@ public class MapActivity extends DrawerActivity {
     }
 
     public void clickDestination(View view) {
-        index = SearchDialogFragment.listViewSearch.getPositionForView(view);
+        index = searchMapDialogFragment.getListViewSearch().getPositionForView(view);
 
         // gọi cái  Place autoComplete lên
         int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -391,10 +412,10 @@ public class MapActivity extends DrawerActivity {
                 String[] parts1 = parts[1].split("\\)");
                 String latLngSearch = parts1[0];
 
-                SearchDialogFragment.listPlaceSearch.set(MapActivity.index, placeNameSearch.toString());
-                SearchDialogFragment.listLagLngSearch.set(MapActivity.index, latLngSearch);
-                SearchDialogFragment.adapter.notifyDataSetChanged();
-                SearchDialogFragment.listViewSearch.setAdapter(SearchDialogFragment.adapter);
+                searchMapDialogFragment.getListPlaceSearch().set(MapActivity.index, placeNameSearch.toString());
+                searchMapDialogFragment.getListLagLngSearch().set(MapActivity.index, latLngSearch);
+                searchMapDialogFragment.getAdapter().notifyDataSetChanged();
+                searchMapDialogFragment.getListViewSearch().setAdapter(searchMapDialogFragment.getAdapter());
             }
         }
 
@@ -413,8 +434,8 @@ public class MapActivity extends DrawerActivity {
             pressLookup = false;
         }
 
-        if (resultCode == RESULT_OK && null != data && voice == true) {
-            voice = false;
+        if (resultCode == RESULT_OK && null != data && searchMapDialogFragment.isVoice()) {
+            searchMapDialogFragment.setVoice(false);
             ArrayList<String> result = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             try {
@@ -438,24 +459,24 @@ public class MapActivity extends DrawerActivity {
                 }
 
                 if (arrPlaceFromVoice.size() >= 2) {
-                    SearchDialogFragment.listLagLngSearch.clear();
+                    searchMapDialogFragment.getListLagLngSearch().clear();
 
-                    SearchDialogFragment.txtStartPlace.setText(arrPlaceFromVoice.get(0));
-                    SearchDialogFragment.latLngStartPlace = arrPlaceFromVoice.get(0);
+                    searchMapDialogFragment.getTxtStartPlace().setText(arrPlaceFromVoice.get(0));
+                    searchMapDialogFragment.setLatLngStartPlace(arrPlaceFromVoice.get(0));
 
-                    SearchDialogFragment.listPlaceSearch.clear();
+                    searchMapDialogFragment.getListPlaceSearch().clear();
                     for (int i = 1; i < arrPlaceFromVoice.size(); i++) {
-                        SearchDialogFragment.listPlaceSearch.add(arrPlaceFromVoice.get(i));
-                        SearchDialogFragment.listLagLngSearch.add(arrPlaceFromVoice.get(i));
+                        searchMapDialogFragment.getListPlaceSearch().add(arrPlaceFromVoice.get(i));
+                        searchMapDialogFragment.getListLagLngSearch().add(arrPlaceFromVoice.get(i));
                     }
-                    SearchDialogFragment.adapter.notifyDataSetChanged();
-                    SearchDialogFragment.listViewSearch.setAdapter(SearchDialogFragment.adapter);
+                    searchMapDialogFragment.getAdapter().notifyDataSetChanged();
+                    searchMapDialogFragment.getListViewSearch().setAdapter(searchMapDialogFragment.getAdapter());
                 }
 
 
             }
             catch (Exception e) {
-//                Toast.makeText(MapActivity.this, "Không thể nhận dạng câu lệnh. Cú pháp: Đi từ ... đến ...", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapActivity.this, "Không thể nhận dạng câu lệnh. Cú pháp: Đi từ ... đến ...", Toast.LENGTH_LONG).show();
             }
         }
     }
