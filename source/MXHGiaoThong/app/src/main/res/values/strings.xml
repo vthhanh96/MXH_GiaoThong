@@ -11,4 +11,5 @@
     <string name="fb_login_protocol_scheme">fb181007682541700</string>
     <string name="label_Speak">Bạn muốn đi đâu ?</string>
     <string name="speech_not_supported">Thiết bị của bạn không hỗ trợ chức năng này</string>
+    <string name="comment_amount">Bình luận (%d)</string>
 </resources>

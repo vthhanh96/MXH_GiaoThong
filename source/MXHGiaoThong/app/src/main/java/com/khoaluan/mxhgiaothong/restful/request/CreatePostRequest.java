@@ -43,6 +43,7 @@ public class CreatePostRequest implements Serializable {
         List<Float> coordinates = new ArrayList<>();
         coordinates.add(latitude.floatValue());
         coordinates.add(longitude.floatValue());
+        this.location = new Location();
         this.location.setCoordinates(coordinates);
         this.place = place;
         this.category = category;

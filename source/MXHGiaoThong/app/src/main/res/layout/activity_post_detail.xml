@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.khoaluan.mxhgiaothong.customView.TopBarView
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgAvatar"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_margin="@dimen/margin_8dp"
+                        android:contentDescription="@null" />
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            tools:text="ABC" />
+
+                        <LinearLayout
+                            android:id="@+id/llPlace"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvName"
+                            android:layout_marginTop="@dimen/margin_8dp">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginEnd="4dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_marker" />
+
+                            <TextView
+                                android:id="@+id/tvPlace"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:textSize="10sp"
+                                tools:text="Tân Sơn Nhất" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        android:layout_marginStart="@dimen/margin_16dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imgPostOptions"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="4dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_menu_post" />
+
+                        <TextView
+                            android:id="@+id/tvTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            tools:text="10 giờ" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_8dp"
+                    android:layout_marginStart="@dimen/margin_16dp"
+                    android:background="@drawable/bg_corner_solid_red"
+                    android:paddingBottom="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="Kẹt xe" />
+
+                <TextView
+                    android:id="@+id/tvContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_16dp"
+                    android:layout_marginEnd="@dimen/margin_16dp"
+                    android:layout_marginStart="@dimen/margin_16dp"
+                    android:layout_marginTop="@dimen/margin_8dp"
+                    android:textColor="@color/black"
+                    tools:text="Hàng nghìn ô tô và xe máy nối đuôi nhau đứng bánh hàng giờ trên đường Tân Sơn Nhất - Bình Lợi - Vành Đai Ngoài dẫn về đường Trường Sơn hướng vào sân bay Tân Sơn Nhất." />
+
+                <ImageView
+                    android:id="@+id/imgContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_8dp"
+                    android:layout_marginTop="@dimen/margin_8dp">
+
+                    <LinearLayout
+                        android:id="@+id/llLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        android:layout_marginStart="@dimen/margin_16dp">
+
+                        <ImageView
+                            android:id="@+id/imgLike"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="4dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_like" />
+
+                        <TextView
+                            android:id="@+id/tvLikeAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            tools:text="0" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/llDislike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imgDislike"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="4dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_dislike" />
+
+                        <TextView
+                            android:id="@+id/tvDislikeAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            tools:text="0" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="10dp"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:id="@+id/llComments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        android:layout_marginStart="@dimen/margin_16dp"
+                        android:gravity="end">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="4dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_comment" />
+
+                        <TextView
+                            android:id="@+id/txtCommentAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/comment_amount"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcvComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

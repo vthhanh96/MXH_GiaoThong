@@ -227,7 +227,7 @@ router.post('/nearme/filter', function (req, res, next) {
 });
 
 router.use('/:postId', (req, res, next) => {
-    Post.findById(req.params.postId).populate('creator').populate('category')
+    Post.findById(req.params.postId).populate('creator').populate('category').populate('reaction')
         .populate({
             path: 'comments',
             model: 'Comment',

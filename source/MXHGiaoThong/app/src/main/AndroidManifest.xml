@@ -56,6 +56,7 @@
         <activity android:name=".activities.post.ChooseCategoryActivity"/>
         <activity android:name=".activities.post.ListCommentsActivity"/>
         <activity android:name=".activities.map.view.MapActivity"/>
+        <activity android:name=".activities.post.PostDetailActivity"/>
     </application>
 
 </manifest>

@@ -4,7 +4,5 @@
         android:title="Chỉnh sửa bài viết" />
     <item android:id="@+id/delete_post"
         android:title="Xóa bài viết"/>
-    <item android:id="@+id/hide_post"
-        android:title="Ẩn bài viết"/>
     <item android:title="Hủy"/>
 </menu>

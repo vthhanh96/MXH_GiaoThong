@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -19,9 +20,12 @@ import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
+import com.khoaluan.mxhgiaothong.activities.post.PostDetailActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
+import com.khoaluan.mxhgiaothong.customView.dialog.QuestionDialog;
+import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionListener;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -46,6 +50,7 @@ public class ListPostView extends FrameLayout{
 
     @BindView(R.id.rcvPosts) RecyclerView mPostsRecycler;
 
+    private Context mContext;
     private PostAdapter mAdapter;
     private User mUser;
     private String token;
@@ -61,6 +66,7 @@ public class ListPostView extends FrameLayout{
 
     public ListPostView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mContext = context;
         init();
     }
 
@@ -122,6 +128,12 @@ public class ListPostView extends FrameLayout{
                 }
             }
         });
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                PostDetailActivity.start(mContext, mAdapter.getItem(position).getId());
+            }
+        });
         mPostsRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mPostsRecycler.setAdapter(mAdapter);
     }
@@ -145,11 +157,7 @@ public class ListPostView extends FrameLayout{
                         CreatePostActivity.start(getContext(), post);
                         break;
                     case R.id.delete_post:
-                        deletePost(post);
-                        break;
-                    case R.id.hide_post:
-                        mAdapter.getData().remove(post);
-                        mAdapter.setNewData(mAdapter.getData());
+                        showDialogConfirmDeletePost(post);
                         break;
                 }
                 return true;
@@ -169,6 +177,11 @@ public class ListPostView extends FrameLayout{
     }
 
     private void doReaction(int position, int typeReaction) {
+        if(mUser == null || token == null) {
+            Toast.makeText(mContext, "Bạn phải đăng nhập trước khi thực hiện hành động này", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Post post = mAdapter.getItem(position);
         Reaction reaction = getReaction(post.getReaction());
         if(reaction == null) {
@@ -216,6 +229,23 @@ public class ListPostView extends FrameLayout{
 
             }
         });
+    }
+
+    private void showDialogConfirmDeletePost(final Post post) {
+        final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn xóa bài viết này?");
+        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                questionDialog.dismissDialog();
+            }
+
+            @Override
+            public void dialogPerformAction() {
+                questionDialog.dismissDialog();
+                deletePost(post);
+            }
+        });
+        questionDialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), "");
     }
 
     private void deletePost(final Post post) {
