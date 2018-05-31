@@ -20,6 +20,7 @@ import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
+import com.khoaluan.mxhgiaothong.activities.post.PostDetailActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
@@ -127,6 +128,12 @@ public class ListPostView extends FrameLayout{
                 }
             }
         });
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                PostDetailActivity.start(mContext, mAdapter.getItem(position).getId());
+            }
+        });
         mPostsRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mPostsRecycler.setAdapter(mAdapter);
     }
@@ -151,10 +158,6 @@ public class ListPostView extends FrameLayout{
                         break;
                     case R.id.delete_post:
                         showDialogConfirmDeletePost(post);
-                        break;
-                    case R.id.hide_post:
-                        mAdapter.getData().remove(post);
-                        mAdapter.setNewData(mAdapter.getData());
                         break;
                 }
                 return true;

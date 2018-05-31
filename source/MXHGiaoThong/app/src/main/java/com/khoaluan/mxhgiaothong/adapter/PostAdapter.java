@@ -1,7 +1,5 @@
 package com.khoaluan.mxhgiaothong.adapter;
 
-import android.content.Context;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;

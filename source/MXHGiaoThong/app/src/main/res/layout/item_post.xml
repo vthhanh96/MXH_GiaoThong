@@ -175,7 +175,7 @@
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_dislike" />
+                        android:src="@drawable/ic_dislike_color" />
 
                     <TextView
                         android:id="@+id/tvDislikeAmount"

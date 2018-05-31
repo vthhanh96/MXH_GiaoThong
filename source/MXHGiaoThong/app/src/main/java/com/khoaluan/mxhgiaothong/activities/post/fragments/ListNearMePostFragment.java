@@ -29,6 +29,8 @@ import com.khoaluan.mxhgiaothong.activities.post.items.CategoryFilter;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
+import com.khoaluan.mxhgiaothong.eventbus.EventUpdateListPost;
+import com.khoaluan.mxhgiaothong.eventbus.EventUpdatePost;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -43,6 +45,10 @@ import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.view.ActionSheet.BottomSheet;
 import com.khoaluan.mxhgiaothong.view.ListPostView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +68,7 @@ public class ListNearMePostFragment extends Fragment {
     private List<Integer> mLevelList = new ArrayList<>();
     private CustomProgressDialog mProgressDialog;
     private boolean mIsLoaded = false;
+    private Location mLocation;
 
     public ListNearMePostFragment() {
     }
@@ -74,6 +81,17 @@ public class ListNearMePostFragment extends Fragment {
         mContext = getContext();
         init();
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateBalance(EventUpdateListPost eventUpdatePost) {
+        filterPost();
     }
 
     @Override
@@ -96,6 +114,7 @@ public class ListNearMePostFragment extends Fragment {
         initProgressDialog();
         initRefresh();
         initBottomSheet();
+        EventBus.getDefault().register(this);
     }
 
     private void initProgressDialog() {
@@ -157,8 +176,8 @@ public class ListNearMePostFragment extends Fragment {
 
     private void getListPostFilter(List<CategoryFilter> categoryFilters) {
         if(Application.getBackgroundService() == null) return;
-        Location location = Application.getBackgroundService().getCurrentLocation();
-        if(location == null) {
+        mLocation = Application.getBackgroundService().getCurrentLocation();
+        if(mLocation == null) {
             Toast.makeText(mContext, "Can not get current location", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -172,9 +191,12 @@ public class ListNearMePostFragment extends Fragment {
             }
         }
 
+    }
+
+    private void filterPost() {
         FilterNearMePostRequest request = new FilterNearMePostRequest(
-                (float) location.getLatitude(),
-                (float) location.getLongitude(),
+                (float) mLocation.getLatitude(),
+                (float) mLocation.getLongitude(),
                 mCategoryFilterId,
                 mLevelList);
         ApiManager.getInstance().getPostService().getPostNearMeFilter(request).enqueue(new RestCallback<GetAllPostResponse>() {
@@ -194,6 +216,7 @@ public class ListNearMePostFragment extends Fragment {
                 hideLoading();
             }
         });
+
     }
 
     private void getAllPost() {

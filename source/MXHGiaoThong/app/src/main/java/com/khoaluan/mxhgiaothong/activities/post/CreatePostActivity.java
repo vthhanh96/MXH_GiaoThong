@@ -31,6 +31,8 @@ import com.khoaluan.mxhgiaothong.activities.post.dialog.ChooseActionGetImageDial
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
+import com.khoaluan.mxhgiaothong.eventbus.EventUpdateListPost;
+import com.khoaluan.mxhgiaothong.eventbus.EventUpdatePost;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -45,6 +47,8 @@ import com.khoaluan.mxhgiaothong.utils.FileUtils;
 import com.khoaluan.mxhgiaothong.utils.GeoHelper;
 import com.khoaluan.mxhgiaothong.utils.PermissionUtils;
 import com.khoaluan.mxhgiaothong.utils.UploadImageUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
@@ -254,6 +258,7 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             public void success(CreatePostResponse res) {
                 hideLoading();
+                EventBus.getDefault().post(new EventUpdateListPost());
                 Toast.makeText(CreatePostActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -282,6 +287,8 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             public void success(BaseResponse res) {
                 hideLoading();
+                EventBus.getDefault().post(new EventUpdatePost());
+                EventBus.getDefault().post(new EventUpdateListPost());
                 Toast.makeText(mContext, "Chỉnh sửa bài viết thành công", Toast.LENGTH_SHORT).show();
                 finish();
             }

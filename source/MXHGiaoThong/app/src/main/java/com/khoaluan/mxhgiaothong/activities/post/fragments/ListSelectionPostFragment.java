@@ -27,6 +27,8 @@ import com.khoaluan.mxhgiaothong.activities.post.items.CategoryFilter;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
+import com.khoaluan.mxhgiaothong.eventbus.EventUpdateListPost;
+import com.khoaluan.mxhgiaothong.eventbus.EventUpdatePost;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
@@ -39,6 +41,10 @@ import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.view.ActionSheet.BottomSheet;
 import com.khoaluan.mxhgiaothong.view.ListPostView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +80,17 @@ public class ListSelectionPostFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateBalance(EventUpdateListPost eventUpdatePost) {
+        filterPost();
+    }
+
     public void chooseCategory() {
         if (mCategoryFilterBottomSheet != null) {
             mCategoryFilterBottomSheet.show();
@@ -85,6 +102,7 @@ public class ListSelectionPostFragment extends Fragment {
         initProgressDialog();
         initRefresh();
         getAllPost();
+        EventBus.getDefault().register(this);
     }
 
     private void initProgressDialog() {
@@ -154,7 +172,10 @@ public class ListSelectionPostFragment extends Fragment {
                 mLevelList.add(item.mLevel);
             }
         }
+        filterPost();
+    }
 
+    private void filterPost() {
         ApiManager.getInstance().getPostService().getPostFilter(new FilterPostRequest(mCategoryFilterId, mLevelList)).enqueue(new RestCallback<GetAllPostResponse>() {
             @Override
             public void success(final GetAllPostResponse res) {
