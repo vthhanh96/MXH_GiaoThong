@@ -210,10 +210,11 @@
                         android:src="@drawable/ic_comment" />
 
                     <TextView
+                        android:id="@+id/txtCommentAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="Bình luận"
+                        android:text="@string/comment_amount"
                         android:textColor="@color/black"
                         android:textSize="13sp" />
                 </LinearLayout>

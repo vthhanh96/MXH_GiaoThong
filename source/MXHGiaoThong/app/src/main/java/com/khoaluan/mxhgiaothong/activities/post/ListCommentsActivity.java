@@ -131,6 +131,10 @@ public class ListCommentsActivity extends AppCompatActivity{
 
             @Override
             public void onTvRightClicked() {
+                if(mUser == null || mToken == null) {
+                    Toast.makeText(mContext, "Bạn phải đăng nhập để thêm bình luận", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 openInputDialog();
             }
         });

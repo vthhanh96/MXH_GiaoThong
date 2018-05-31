@@ -38,6 +38,7 @@ public class PostAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         helper.setText(R.id.tvContent, item.getContent());
         helper.setText(R.id.tvLikeAmount, String.valueOf(item.getLikeAmount()));
         helper.setText(R.id.tvDislikeAmount, String.valueOf(item.getDislikeAmount()));
+        helper.setText(R.id.txtCommentAmount, mContext.getString(R.string.comment_amount, item.getComments().size()));
 
         int typeReaction = isReaction(item.getReaction());
 

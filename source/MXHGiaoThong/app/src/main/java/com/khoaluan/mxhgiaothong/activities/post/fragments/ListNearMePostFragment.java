@@ -149,7 +149,6 @@ public class ListNearMePostFragment extends Fragment {
         mCategoryFilterBottomSheet.setOnActionButtonClicked(new BottomSheet.ActionButtonInterface<CategoryFilter>() {
             @Override
             public void onClicked(CategoryFilter selectedItem) {
-                if (mCategoryFilterBottomSheet.getSelectedItems().size() == 0) return;
                 mCategoryFilters = mCategoryFilterBottomSheet.getSelectedItems();
                 getListPostFilter(mCategoryFilterBottomSheet.getSelectedItems());
             }
@@ -184,6 +183,9 @@ public class ListNearMePostFragment extends Fragment {
                 hideLoading();
                 if (res.getPosts() != null) {
                     mListPostView.setData(res.getPosts());
+                    if(res.getPosts().isEmpty()) {
+                        Toast.makeText(mContext, "Không tìm thấy bài viết thỏa điều kiện lọc", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
