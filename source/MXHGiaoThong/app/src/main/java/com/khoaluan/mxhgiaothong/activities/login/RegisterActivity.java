@@ -33,6 +33,7 @@ import com.khoaluan.mxhgiaothong.restful.model.Category;
 import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.utils.FileUtils;
+import com.khoaluan.mxhgiaothong.utils.FontHelper;
 import com.khoaluan.mxhgiaothong.utils.PermissionUtils;
 import com.khoaluan.mxhgiaothong.utils.UploadImageUtils;
 
@@ -82,6 +83,10 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+        edtPassword.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
+        edtEmail.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
+        edtConfirmPassword.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
+        edtFullName.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
         mContext = this;
     }
 

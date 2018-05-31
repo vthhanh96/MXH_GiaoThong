@@ -17,6 +17,7 @@ import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
+import com.khoaluan.mxhgiaothong.utils.FontHelper;
 
 import java.util.Objects;
 
@@ -110,5 +111,9 @@ public class ForgotPassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
         ButterKnife.bind(this);
+        edtEmail.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
+        edtCode.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
+        edtNewPass.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
+        edtConfirmNewPass.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
     }
 }

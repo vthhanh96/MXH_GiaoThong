@@ -34,6 +34,7 @@ import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.GetUserInfoResponse;
 import com.khoaluan.mxhgiaothong.restful.response.UserLoginResponse;
+import com.khoaluan.mxhgiaothong.utils.FontHelper;
 
 import org.json.JSONObject;
 
@@ -81,7 +82,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
+        tvForgotPass.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
+        tvRegister.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
+        edtUserName.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
+        edtPassWord.setTypeface(FontHelper.getInstance().getTypeface(this, FontHelper.FONT_QUICKSAND_BOLD));
         loginWithFacebook();
 
         loginWithGoogle();
