@@ -411,6 +411,8 @@ public class PostDetailActivity extends AppCompatActivity {
         });
         mCommentRecycler.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mCommentRecycler.setAdapter(mAdapter);
+        mCommentRecycler.setNestedScrollingEnabled(false);
+        mCommentRecycler.setHasFixedSize(true);
     }
 
     private void getPostInfo() {
