@@ -15,19 +15,17 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:elevation="4dp"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:background="@drawable/bg_circle" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
             android:id="@+id/menu_header_avatar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@color/colorPrimaryDark" />
-
-
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/ic_app_2" />
 
     </FrameLayout>
 
@@ -36,7 +34,7 @@
         android:textColor="@color/white"
         android:textSize="19sp"
         android:layout_marginTop="15dp"
-        android:text="Nguyễn Minh Hiếu"
+        android:text="NetFic"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -47,7 +45,7 @@
         android:layout_marginBottom="15dp"
         android:textSize="15sp"
         android:layout_marginTop="6dp"
-        android:text="hieuit275@gmail.com"
+        android:text="uit.edu.vn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

@@ -25,14 +25,13 @@ import com.khoaluan.mxhgiaothong.drawer.adapter.MenuAdapter;
 import com.khoaluan.mxhgiaothong.drawer.dto.BodyDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.FooterDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.HeaderDto;
+import com.khoaluan.mxhgiaothong.restful.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.loginUserID;
 
 /**
  * Created by HieuMinh on 4/7/2018.
@@ -47,7 +46,7 @@ abstract public class DrawerActivity extends AppCompatActivity {
     RecyclerView mRvMenu;
 
     MenuAdapter mMenuAdapter;
-
+    private User userLogin;
     private List<Object> mMenuList;
     private Handler mHandler;
 
@@ -64,10 +63,11 @@ abstract public class DrawerActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 //        MainApplication.getAppComponent().inject(this);
 //        mEventManager.register(this);
-
+        userLogin = PreferManager.getInstance(DrawerActivity.this).getUser();
         mMenuList = new ArrayList<>();
         setupListDrawer();
         setupNavDrawer();
+
     }
 
     private void setupNavDrawer() {
@@ -110,12 +110,14 @@ abstract public class DrawerActivity extends AppCompatActivity {
         mMenuAdapter.setOnItemClickListener(new MenuAdapter.OnItemClickListener() {
             @Override
             public void onHeaderClicked(boolean isSelected) {
-                if (!isSelected) {
+                if (!isSelected && userLogin != null) {
                     mDrawerLayout.closeDrawer(Gravity.START);
                     Intent intent = new Intent(DrawerActivity.this, ProfileDetailActivity.class);
-                    intent.putExtra("UserID",loginUserID);
+                    intent.putExtra("UserID",userLogin.getId());
                     startActivity(intent);
 //                    finish();
+                }else if(userLogin == null) {
+                    Toast.makeText(DrawerActivity.this, "Bạn chưa đăng nhập!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -139,24 +141,30 @@ abstract public class DrawerActivity extends AppCompatActivity {
 
             @Override
             public void onFooterClick() {
-                final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn đăng xuất?");
-                questionDialog.setDialogActionListener(new CustomDialogActionListener() {
-                    @Override
-                    public void dialogCancel() {
-                        questionDialog.dismissDialog();
-                    }
+                if (userLogin != null) {
+                    final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn đăng xuất?");
+                    questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+                        @Override
+                        public void dialogCancel() {
+                            questionDialog.dismissDialog();
+                        }
 
-                    @Override
-                    public void dialogPerformAction() {
-                        PreferManager.getInstance(DrawerActivity.this).saveUser(null);
-                        PreferManager.getInstance(DrawerActivity.this).saveToken(null);
-                        mDrawerLayout.closeDrawer(Gravity.START);
-                        Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-                questionDialog.show(getSupportFragmentManager(), ListPostActivity.class.getName());
+                        @Override
+                        public void dialogPerformAction() {
+                            PreferManager.getInstance(DrawerActivity.this).saveUser(null);
+                            PreferManager.getInstance(DrawerActivity.this).saveToken(null);
+                            mDrawerLayout.closeDrawer(Gravity.START);
+                            Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                    questionDialog.show(getSupportFragmentManager(), ListPostActivity.class.getName());
+                } else {
+                    Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
     }

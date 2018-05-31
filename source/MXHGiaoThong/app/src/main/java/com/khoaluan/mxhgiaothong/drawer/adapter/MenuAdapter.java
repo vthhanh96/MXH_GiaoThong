@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.khoaluan.mxhgiaothong.drawer.dto.BodyDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.FooterDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.HeaderDto;
@@ -32,7 +34,6 @@ public class MenuAdapter extends RecyclerView.Adapter {
 //    public static final String TAG = LogUtils.makeLogTag(MenuAdapter.class);
 
     private int currentPosition;
-
     public Context mContext;
     public List<Object> mItems;
 
@@ -190,6 +191,9 @@ public class MenuAdapter extends RecyclerView.Adapter {
             extends RecyclerView.ViewHolder
            {
 
+        @BindView(R.id.imvIconFooter) ImageView iconFooter;
+        @BindView(R.id.tvTitleFooter) TextView titleFooter;
+
         FooterHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -203,7 +207,14 @@ public class MenuAdapter extends RecyclerView.Adapter {
         };
 
         public void bind(FooterDto footerDto) {
-
+            User user = PreferManager.getInstance(mContext).getUser();
+            if (user == null) {
+                iconFooter.setImageResource(R.drawable.ic_login);
+                titleFooter.setText("Đăng nhập");
+            }else {
+                iconFooter.setImageResource(R.drawable.ic_logout);
+                titleFooter.setText("Đăng xuất");
+            }
         }
     }
 }

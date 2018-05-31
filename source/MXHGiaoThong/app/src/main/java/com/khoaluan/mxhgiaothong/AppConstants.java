@@ -22,6 +22,8 @@ public class AppConstants {
     public static final int LEFT_BACK = 2;
     public static final int RIGHT_SETTING = 3;
     public static final int RIGHT_LOGOUT = 4;
+    public static final int RIGHT_MESSAGE = 5;
+    public static final int RIGHT_LOGIN = 6;
 
     public static final String ARG_KEY_CATEGORY_ID = "ARG_KEY_CATEGORY_ID";
     public static final String ARG_KEY_LEVEL = "ARG_KEY_LEVEL";

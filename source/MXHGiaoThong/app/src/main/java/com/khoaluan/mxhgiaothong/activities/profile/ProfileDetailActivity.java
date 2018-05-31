@@ -42,8 +42,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_BACK;
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
+import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_MESSAGE;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_SETTING;
-import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.loginUserID;
 import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.token;
 
 /**
@@ -57,9 +57,12 @@ public class ProfileDetailActivity   extends DrawerActivity {
     @BindView(R.id.tvUserName) TextView tvUserName;
     @BindView(R.id.imvAvatar) CircleImageView imvAvatar;
     @BindView(R.id.tvAddress) TextView tvAddress;
+    @BindView(R.id.tvNumPost) TextView tvNumPost;
+    @BindView(R.id.tvAge) TextView tvAge;
 
     private int userID;
     private User user;
+    private User userLogin;
 
     @Override
     protected int getLayoutId() {
@@ -76,6 +79,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         userID = getIntent().getIntExtra("UserID",-1);
+        userLogin = PreferManager.getInstance(ProfileDetailActivity.this).getUser();
         init();
     }
 
@@ -85,8 +89,10 @@ public class ProfileDetailActivity   extends DrawerActivity {
 
     private void initTopbar() {
         topBar.setImageViewLeft(LEFT_BACK);
-        if(userID == loginUserID) {
+        if(userID == userLogin.getId()) {
             topBar.setImageViewRight(RIGHT_SETTING);
+        }else {
+            topBar.setImageViewRight(RIGHT_MESSAGE);
         }
         topBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
@@ -96,9 +102,13 @@ public class ProfileDetailActivity   extends DrawerActivity {
 
             @Override
             public void onImvRightClicked() {
-                Intent intent = new Intent(ProfileDetailActivity.this, EditProfileActivity.class);
-                intent.putExtra("userLogin",user);
-                startActivity(intent);
+                if(userID == userLogin.getId()) {
+                    Intent intent = new Intent(ProfileDetailActivity.this, EditProfileActivity.class);
+                    intent.putExtra("userLogin",user);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(ProfileDetailActivity.this, "Coming Soon", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -125,6 +135,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
                 tvUserName.setText(res.getUser().getFullName());
                 Glide.with(getApplicationContext()).load(res.getUser().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imvAvatar);
                 tvAddress.setText(res.getUser().getAddress());
+                tvAge.setText(res.getUser().getBirthDate());
                 getListPostUser(userID);
                 user = res.getUser();
             }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <ImageView
@@ -20,17 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/login_button_front"
-            style="@style/FacebookLoginButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            android:text="Login with Facebook"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button_back"
             android:layout_width="150dp"
@@ -38,6 +28,17 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp"
             android:layout_marginTop="10dp" />
+
+        <Button
+            android:id="@+id/login_button_front"
+            style="@style/FacebookLoginButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:text="Đăng nhập Facebook"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
     </FrameLayout>
 
@@ -54,7 +55,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginEnd="30dp"
             android:layout_marginStart="30dp"
-            android:text="Login with Google"
+            android:text="Đăng nhập Google"
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
@@ -67,43 +68,104 @@
 
     </FrameLayout>
 
-    <TextView
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/llSeparator"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="OR"
-        android:textColor="#000000" />
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp">
 
-    <EditText
-        android:singleLine="true"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:background="@drawable/bg_edt_login"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:id="@+id/edt_username"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="UserName"
-        android:textColor="#333"
-        android:textSize="15sp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="10dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_centerVertical="true"
+            android:background="@color/appColor" />
 
-    <EditText
-        android:singleLine="true"
-        android:inputType="textPassword"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:background="@drawable/bg_edt_login"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:id="@+id/edt_password"
+        <TextView
+            android:id="@+id/txvSeparatorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            android:gravity="center"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
+            android:text="Hoặc"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textColor="@color/appColor"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="Password"
-        android:textColor="#333"
-        android:textSize="15sp" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:singleLine="true"
+            android:paddingStart="55dp"
+            android:paddingEnd="10dp"
+            android:background="@drawable/bg_edt_login"
+            android:layout_height="50dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:id="@+id/edt_username"
+            android:layout_width="match_parent"
+            android:hint="Email"
+            android:textColor="#333"
+            android:textSize="15sp"
+            android:layout_marginTop="10dp"/>
+
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="35dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:paddingStart="55dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:singleLine="true"
+            android:inputType="textPassword"
+            android:paddingEnd="10dp"
+            android:background="@drawable/bg_edt_login"
+            android:id="@+id/edt_password"
+            android:layout_width="match_parent"
+            android:hint="Mật khẩu"
+            android:textColor="#333"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="35dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/btn_login"
@@ -113,7 +175,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="18dp"
-        android:text="LOGIN"
+        android:text="Đăng nhập"
         android:textColor="#FFFFFF"
         android:textStyle="bold" />
 
@@ -130,14 +192,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Create an Account"
+            android:text="Tạo tài khoản"
             android:textColor="@color/appColor" />
 
         <TextView
             android:id="@+id/tv_forgot_pass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Forgot Password"
+            android:text="Quên mật khẩu?"
             android:textColor="@color/appColor" />
 
     </LinearLayout>

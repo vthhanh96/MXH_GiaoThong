@@ -23,6 +23,7 @@ import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.QuestionDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionListener;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
+import com.khoaluan.mxhgiaothong.restful.model.User;
 
 import java.util.Objects;
 
@@ -31,6 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
+import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_LOGIN;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_LOGOUT;
 
 public class ListPostActivity extends DrawerActivity {
@@ -45,7 +47,7 @@ public class ListPostActivity extends DrawerActivity {
     FloatingActionsMenu fabAdd;
 
     public static String token;
-    public static int loginUserID;
+    public static User userLogin;
 
     @Override
     protected int getLayoutId() {
@@ -69,7 +71,7 @@ public class ListPostActivity extends DrawerActivity {
         ButterKnife.bind(this);
 
         token = PreferManager.getInstance(ListPostActivity.this).getToken();
-        loginUserID = PreferManager.getInstance(ListPostActivity.this).getUserId();
+        userLogin = PreferManager.getInstance(ListPostActivity.this).getUser();
 
 //        if(token == null || Objects.equals(token, "")){
 //            startActivity(new Intent(ListPostActivity.this, LoginActivity.class));
@@ -87,7 +89,11 @@ public class ListPostActivity extends DrawerActivity {
 
     private void initTopbar() {
         topBar.setImageViewLeft(LEFT_MENU);
-        topBar.setImageViewRight(RIGHT_LOGOUT);
+        if(userLogin != null){
+            topBar.setImageViewRight(RIGHT_LOGOUT);
+        }else {
+            topBar.setImageViewRight(RIGHT_LOGIN);
+        }
         topBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
             public void onImvLeftClicked() {
@@ -96,25 +102,29 @@ public class ListPostActivity extends DrawerActivity {
 
             @Override
             public void onImvRightClicked() {
+                if(userLogin != null){
+                    final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn đăng xuất?");
+                    questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+                        @Override
+                        public void dialogCancel() {
+                            questionDialog.dismissDialog();
+                        }
 
-                final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn đăng xuất?");
-                questionDialog.setDialogActionListener(new CustomDialogActionListener() {
-                    @Override
-                    public void dialogCancel() {
-                        questionDialog.dismissDialog();
-                    }
+                        @Override
+                        public void dialogPerformAction() {
+                            PreferManager.getInstance(ListPostActivity.this).saveToken(null);
+                            PreferManager.getInstance(ListPostActivity.this).saveUser(null);
 
-                    @Override
-                    public void dialogPerformAction() {
-                        PreferManager.getInstance(ListPostActivity.this).saveToken(null);
-                        PreferManager.getInstance(ListPostActivity.this).saveUser(null);
-
-                        Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-                questionDialog.show(getSupportFragmentManager(), ListPostActivity.class.getName());
+                            Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                    questionDialog.show(getSupportFragmentManager(), ListPostActivity.class.getName());
+                } else {
+                    Intent intent = new Intent(ListPostActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
             }
 
             @Override
