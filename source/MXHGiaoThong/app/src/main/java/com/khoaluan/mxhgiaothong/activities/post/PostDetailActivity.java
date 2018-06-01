@@ -162,7 +162,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private void initTopBar() {
         mTopBar.setImageViewLeft(AppConstants.LEFT_BACK);
-        mTopBar.setTextViewRight("Thêm bình luận");
+        mTopBar.setImageViewRight(AppConstants.RIGHT_COMMENT);
         mTopBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
             public void onImvLeftClicked() {
@@ -171,7 +171,11 @@ public class PostDetailActivity extends AppCompatActivity {
 
             @Override
             public void onImvRightClicked() {
-
+                if(mUser == null || mToken == null) {
+                    Toast.makeText(mContext, "Bạn phải đăng nhập để thêm bình luận", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                openInputDialog();
             }
 
             @Override
@@ -181,11 +185,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
             @Override
             public void onTvRightClicked() {
-                if(mUser == null || mToken == null) {
-                    Toast.makeText(mContext, "Bạn phải đăng nhập để thêm bình luận", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                openInputDialog();
             }
         });
     }

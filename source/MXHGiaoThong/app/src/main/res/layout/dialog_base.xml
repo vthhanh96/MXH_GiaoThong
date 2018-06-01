@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/contentContainer"
         android:layout_width="match_parent"
@@ -13,40 +14,47 @@
         android:layout_marginRight="15dp"
         android:background="#FFFFFF"
         android:orientation="vertical">
+
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"/>
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal">
+
             <ImageButton
+                android:scaleType="fitCenter"
                 android:id="@+id/btnCancel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:background="@color/appColor"
-                android:padding="25dp"
+                android:padding="18dp"
                 android:src="@drawable/ic_cancel" />
 
             <View
-                android:background="@color/white"
+                android:visibility="gone"
+                android:id="@+id/view_line_center"
                 android:layout_width="2dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:background="@color/white" />
 
             <Button
-                android:textStyle="bold"
-                android:textColor="#ffffff"
                 android:id="@+id/btnAction"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:background="@color/appColor"
+                android:text="Action"
                 android:textAllCaps="false"
+                android:textColor="#ffffff"
                 android:textSize="16sp"
-                android:text="Action" />
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

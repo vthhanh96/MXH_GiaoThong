@@ -4,6 +4,7 @@ package com.khoaluan.mxhgiaothong.activities;
 import com.daimajia.androidanimations.library.Techniques;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
+import com.khoaluan.mxhgiaothong.utils.FontHelper;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
 import com.viksaa.sssplash.lib.cnst.Flags;
 import com.viksaa.sssplash.lib.model.ConfigSplash;
@@ -21,7 +22,6 @@ public class LoadingActivity extends AwesomeSplash {
         configSplash.setLogoSplash(R.drawable.ic_netfic_small);
         configSplash.setAnimLogoSplashDuration(2000);
         configSplash.setAnimLogoSplashTechnique(Techniques.FadeIn); //choose one form Techniques (ref: https://github.com/daimajia/AndroidViewAnimations)
-
         configSplash.setTitleSplash("");
     }
 

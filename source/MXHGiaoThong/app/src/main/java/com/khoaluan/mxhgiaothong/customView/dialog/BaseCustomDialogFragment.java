@@ -40,6 +40,7 @@ public class BaseCustomDialogFragment extends AppCompatDialogFragment {
     private Button btnAction;
     private CustomDialogActionListener baseDialogActionListener;
     private CustomDialogAnimationListener baseDialogAnimationListener;
+    private View viewLineCenter;
     private int subLayout;
     private String actionName;
 
@@ -105,6 +106,7 @@ public class BaseCustomDialogFragment extends AppCompatDialogFragment {
         btnCancel = (ImageButton) view.findViewById(R.id.btnCancel);
         btnAction = (Button) view.findViewById(R.id.btnAction);
         btnAction.setText(actionName);
+        viewLineCenter = view.findViewById(R.id.view_line_center);
         btnAction.setTypeface(FontHelper.getInstance().getTypeface(getContext(), FontHelper.FONT_QUICKSAND_BOLD));
 
         view.setOnTouchListener(new View.OnTouchListener() {
@@ -268,7 +270,9 @@ public class BaseCustomDialogFragment extends AppCompatDialogFragment {
                 btnCancel.setBackground(cancelBackground);
             }
             btnAction.setVisibility(View.GONE);
+            viewLineCenter.setVisibility(View.GONE);
         } else {
+            viewLineCenter.setVisibility(View.VISIBLE);
             if (btnCancel.getBackground() instanceof ColorDrawable) {
                 GradientDrawable cancelBackground = new GradientDrawable();
                 cancelBackground.setColor(((ColorDrawable) btnCancel.getBackground()).getColor());

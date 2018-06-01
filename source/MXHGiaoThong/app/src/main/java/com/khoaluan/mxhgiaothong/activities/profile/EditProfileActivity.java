@@ -27,19 +27,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.UploadImageListener;
-import com.khoaluan.mxhgiaothong.activities.login.RegisterActivity;
-import com.khoaluan.mxhgiaothong.activities.post.dialog.ChooseActionGetImageDialog;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
+import com.khoaluan.mxhgiaothong.customView.dialog.SelectModeImageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.model.User;
-import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.utils.FileUtils;
 import com.khoaluan.mxhgiaothong.utils.PermissionUtils;
@@ -56,7 +53,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_BACK;
 import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.token;
@@ -302,19 +298,19 @@ public class EditProfileActivity extends AppCompatActivity{
     }
 
     private void openDialog() {
-        ChooseActionGetImageDialog dialog = new ChooseActionGetImageDialog(mContext);
-        dialog.setOnIChooseActionListener(new ChooseActionGetImageDialog.IChooseActionListener() {
+        SelectModeImageDialogFragment selectModeImageDialogFragment = new SelectModeImageDialogFragment();
+        selectModeImageDialogFragment.setPostArticleEditListener(new SelectModeImageDialogFragment.SelectModeImageListener() {
             @Override
-            public void onCameraClick() {
+            public void callCamera() {
                 openCamera();
             }
 
             @Override
-            public void onLibraryClick() {
+            public void callGallery() {
                 openLibrary();
             }
         });
-        dialog.show();
+        selectModeImageDialogFragment.show(getSupportFragmentManager(),EditProfileActivity.this.getClass().getName());
     }
 
     private void openCamera() {

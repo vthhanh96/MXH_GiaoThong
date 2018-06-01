@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
+import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_COMMENT;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_LOGIN;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_LOGOUT;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_MESSAGE;
@@ -133,6 +134,8 @@ public class TopBarView extends LinearLayoutCompat {
             imv_right.setImageResource(R.drawable.ic_message);
         }else if(type == RIGHT_LOGIN){
             imv_right.setImageResource(R.drawable.ic_login);
+        }else if(type == RIGHT_COMMENT){
+            imv_right.setImageResource(R.drawable.ic_comment_topbar);
         }
         //Todo: Can bo sung
     }

@@ -34,10 +34,10 @@ import com.khoaluan.mxhgiaothong.Application;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.UploadImageListener;
-import com.khoaluan.mxhgiaothong.activities.post.dialog.ChooseActionGetImageDialog;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
+import com.khoaluan.mxhgiaothong.customView.dialog.SelectModeImageDialogFragment;
 import com.khoaluan.mxhgiaothong.eventbus.EventUpdateListPost;
 import com.khoaluan.mxhgiaothong.eventbus.EventUpdatePost;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
@@ -350,19 +350,19 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     private void openDialog() {
-        ChooseActionGetImageDialog dialog = new ChooseActionGetImageDialog(mContext);
-        dialog.setOnIChooseActionListener(new ChooseActionGetImageDialog.IChooseActionListener() {
+        SelectModeImageDialogFragment selectModeImageDialogFragment = new SelectModeImageDialogFragment();
+        selectModeImageDialogFragment.setPostArticleEditListener(new SelectModeImageDialogFragment.SelectModeImageListener() {
             @Override
-            public void onCameraClick() {
+            public void callCamera() {
                 openCamera();
             }
 
             @Override
-            public void onLibraryClick() {
+            public void callGallery() {
                 openLibrary();
             }
         });
-        dialog.show();
+        selectModeImageDialogFragment.show(getSupportFragmentManager(),CreatePostActivity.this.getClass().getName());
     }
 
     private void openCamera() {

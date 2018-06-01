@@ -14,22 +14,18 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.UploadImageListener;
-import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
-import com.khoaluan.mxhgiaothong.activities.post.dialog.ChooseActionGetImageDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
+import com.khoaluan.mxhgiaothong.customView.dialog.SelectModeImageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
-import com.khoaluan.mxhgiaothong.restful.model.Category;
 import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.utils.FileUtils;
@@ -155,19 +151,19 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void openDialog() {
-        ChooseActionGetImageDialog dialog = new ChooseActionGetImageDialog(mContext);
-        dialog.setOnIChooseActionListener(new ChooseActionGetImageDialog.IChooseActionListener() {
+        SelectModeImageDialogFragment selectModeImageDialogFragment = new SelectModeImageDialogFragment();
+        selectModeImageDialogFragment.setPostArticleEditListener(new SelectModeImageDialogFragment.SelectModeImageListener() {
             @Override
-            public void onCameraClick() {
+            public void callCamera() {
                 openCamera();
             }
 
             @Override
-            public void onLibraryClick() {
+            public void callGallery() {
                 openLibrary();
             }
         });
-        dialog.show();
+        selectModeImageDialogFragment.show(getSupportFragmentManager(),RegisterActivity.this.getClass().getName());
     }
 
     private void openCamera() {
