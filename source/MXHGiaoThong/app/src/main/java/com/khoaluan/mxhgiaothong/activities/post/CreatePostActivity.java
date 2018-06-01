@@ -22,6 +22,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.Application;
 import com.khoaluan.mxhgiaothong.PreferManager;
@@ -68,6 +75,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_TAKE_PICTURE = 11;
     private static final int REQUEST_CODE_CAMERA = 12;
     private static final int REQUEST_CODE_GET_IMAGE = 13;
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 14;
 
     @BindView(R.id.topBar)
     TopBarView mTopBar;
@@ -336,6 +344,11 @@ public class CreatePostActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.imgMarker)
+    public void searchLocation() {
+        openSearchActivity();
+    }
+
     private void openDialog() {
         ChooseActionGetImageDialog dialog = new ChooseActionGetImageDialog(mContext);
         dialog.setOnIChooseActionListener(new ChooseActionGetImageDialog.IChooseActionListener() {
@@ -371,6 +384,21 @@ public class CreatePostActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE_GET_IMAGE);
     }
 
+    private void openSearchActivity() {
+        try {
+            Intent intent =
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                            .setBoundsBias(new LatLngBounds(
+                                    new LatLng(8.407168163601074, 104.1448974609375),
+                                    new LatLng(10.7723923007117563, 106.6981029510498)))
+                            .build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -400,6 +428,17 @@ public class CreatePostActivity extends AppCompatActivity {
             Glide.with(mContext.getApplicationContext()).load(data.getData()).into(mImgPost);
             mFile = new File(FileUtils.getPath(mContext, data.getData()));
             mImageUri = FileProvider.getUriForFile(mContext, mContext.getApplicationContext().getPackageName() + ".provider", mFile);
+        } else if(requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            final Place place = PlacePicker.getPlace(data, this);
+
+            if (place != null) {
+                mTvPlace.setText(place.getName().toString());
+                String[] parts = place.getLatLng().toString().split("\\(");
+                String[] parts1 = parts[1].split("\\)");
+//                latLngStartPlace = parts1[0];
+                mLocation.setLatitude(place.getLatLng().latitude);
+                mLocation.setLongitude(place.getLatLng().longitude);
+            }
         }
     }
 }

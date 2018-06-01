@@ -15,13 +15,11 @@ import com.khoaluan.mxhgiaothong.R;
 
 public class WelcomeActivity extends AppCompatActivity {
     LinearLayout l1,l2;
-    Button btnsub;
     Animation uptodown,downtoup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        btnsub = (Button)findViewById(R.id.buttonsub);
         l1 = (LinearLayout) findViewById(R.id.l1);
         l2 = (LinearLayout) findViewById(R.id.l2);
         uptodown = AnimationUtils.loadAnimation(this,R.anim.uptodown);

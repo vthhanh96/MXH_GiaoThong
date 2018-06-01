@@ -12,25 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="320dp"
         android:orientation="vertical">
-        <TextView
-            android:textColor="@color/lightorange"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="36,520"
+            android:src="@drawable/ic_netfic"
             android:layout_gravity="center"
-            android:layout_marginTop="150dp"
-            android:textSize="60sp"
-            android:textStyle="bold"/>
-        <TextView
-            android:textColor="@color/lightorangedark"
-            android:layout_width="398dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="CLIENTS SUBSCRIBED
-RIGHT NOW"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="@dimen/margin_32dp"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/l2"
@@ -40,14 +27,17 @@ RIGHT NOW"
         android:orientation="vertical"
         android:background="@drawable/spaceullustration">
 
-        <Button
-
-            android:id="@+id/buttonsub"
+        <com.wang.avi.AVLoadingIndicatorView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/buttonstyle"
-            android:text="SUBSCRIBE NOW" />
+            android:layout_marginBottom="16dp"
+            app:indicatorName="BallPulseIndicator"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:indicatorColor="@color/white"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 

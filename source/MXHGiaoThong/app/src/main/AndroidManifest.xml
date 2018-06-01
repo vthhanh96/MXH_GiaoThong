@@ -41,13 +41,14 @@
         <meta-data
             android:name="CLOUDINARY_URL"
             android:value="cloudinary://644779138511211:ELDLC1yakqdT3O13lHFhElY4bGA@netficcloud"/>
-        <activity android:name=".activities.post.ListPostActivity">
+        <activity android:name=".activities.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.post.ListPostActivity"/>
         <activity android:name=".activities.post.CreatePostActivity"/>
         <activity android:name=".activities.profile.ProfileDetailActivity"/>
         <service android:name=".backgroundService.BackgroundService"/>

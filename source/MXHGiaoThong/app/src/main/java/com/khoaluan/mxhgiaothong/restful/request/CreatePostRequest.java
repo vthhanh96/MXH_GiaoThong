@@ -41,8 +41,8 @@ public class CreatePostRequest implements Serializable {
     public CreatePostRequest(String content, Double latitude, Double longitude, String place, String category, Integer level, Boolean isActive, String imageUrl) {
         mContent = content;
         List<Float> coordinates = new ArrayList<>();
-        coordinates.add(latitude.floatValue());
         coordinates.add(longitude.floatValue());
+        coordinates.add(latitude.floatValue());
         this.location = new Location();
         this.location.setCoordinates(coordinates);
         this.place = place;
