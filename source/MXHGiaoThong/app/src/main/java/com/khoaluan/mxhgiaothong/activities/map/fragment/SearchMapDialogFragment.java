@@ -1,4 +1,4 @@
-package com.khoaluan.mxhgiaothong.customView.dialog.map;
+package com.khoaluan.mxhgiaothong.activities.map.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -248,6 +248,7 @@ public class SearchMapDialogFragment extends BaseCustomDialogFragment {
             try {
                 solutionMap = new SolutionMap(listLagLngSearch, MapFragment.myMap);
                 solutionMap.createListRoute();
+                solutionMap.setListPlaceSearch(getListPlaceSearch());
                 // Tạo Progress Bar
                 MapActivity.myProgress = new ProgressDialog(getActivity());
                 MapActivity.myProgress.setTitle("Map Loading ...");

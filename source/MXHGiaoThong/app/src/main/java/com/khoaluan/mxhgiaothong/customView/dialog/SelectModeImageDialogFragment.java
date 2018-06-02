@@ -35,7 +35,7 @@ public class SelectModeImageDialogFragment extends BaseCustomDialogFragment{
         final String[] array = getResources().getStringArray(R.array.dialog_select_iamge);
 //        String[] redLines = new String[]{array[(array.length - 1)]};
 //        StringListViewAdapter adapter = new StringListViewAdapter(getContext(), array, FontHelper.FONT_QUICKSAND_BOLD, redLines);
-        StringListViewAdapter adapter = new StringListViewAdapter(getContext(), array, FontHelper.FONT_QUICKSAND_BOLD );
+        StringListViewAdapter adapter = new StringListViewAdapter(getContext(), array, FontHelper.FONT_QUICKSAND_BOLD);
         lsvEditPost = mainView.findViewById(R.id.lsvDialogList);
         lsvEditPost.setAdapter(adapter);
 

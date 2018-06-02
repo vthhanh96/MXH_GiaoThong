@@ -40,7 +40,7 @@ import com.khoaluan.mxhgiaothong.activities.map.algorithm.SolutionMap;
 import com.khoaluan.mxhgiaothong.activities.map.fragment.MapFragment;
 import com.khoaluan.mxhgiaothong.activities.map.model.PlaceResult;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
-import com.khoaluan.mxhgiaothong.customView.dialog.map.SearchMapDialogFragment;
+import com.khoaluan.mxhgiaothong.activities.map.fragment.SearchMapDialogFragment;
 import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionListener;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.twotoasters.jazzylistview.JazzyListView;
@@ -52,6 +52,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
+import static com.khoaluan.mxhgiaothong.activities.map.algorithm.SolutionMap.bestPath;
+import static com.khoaluan.mxhgiaothong.activities.map.algorithm.SolutionMap.matrixRoutes;
 import static com.khoaluan.mxhgiaothong.activities.map.fragment.MapFragment.myMap;
 
 public class MapActivity extends DrawerActivity {
@@ -71,7 +73,6 @@ public class MapActivity extends DrawerActivity {
     public static ListPlaceResultAdapter adapterResult;
     public static TextView tvBestDistance;
     public static FragmentManager fragmentManager;
-    private FloatingActionButton fabHistorySearch;
     public static boolean isLoadHistory = false;
     private FloatingActionButton fabLookup;
     private boolean pressLookup;
@@ -191,7 +192,7 @@ public class MapActivity extends DrawerActivity {
                 tvResultDes.setTextColor(Color.RED);
 
                 CameraUpdate moveCamera = CameraUpdateFactory.newLatLngZoom(
-                        SolutionMap.matrixRoutes[SolutionMap.bestPath[i+1]][SolutionMap.bestPath[i+1]].startLocation, 15);
+                        matrixRoutes[bestPath[i+1]][bestPath[i+1]].startLocation, 15);
                 myMap.animateCamera(moveCamera);
 
 //                myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(matrixRoutes[bestPath[i]][bestPath[i+1]].startLocation, 16));
@@ -217,27 +218,6 @@ public class MapActivity extends DrawerActivity {
                         SolutionMap.polylinePaths.get(j-1).setColor(Color.BLUE);
                     }
                 }
-            }
-        });
-
-        fabHistorySearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isLoadHistory = true;
-                searchMapDialogFragment.show(getSupportFragmentManager(),"");
-                searchMapDialogFragment.setDialogActionListener(new CustomDialogActionListener() {
-                    @Override
-                    public void dialogCancel() {
-                        searchMapDialogFragment.clickThoat();
-                    }
-
-                    @Override
-                    public void dialogPerformAction() {
-                        searchMapDialogFragment.clickTimDuong();
-                    }
-                });
-
-                fabAdd.collapse();
             }
         });
 
@@ -276,7 +256,6 @@ public class MapActivity extends DrawerActivity {
 
         tvBestDistance = (TextView) findViewById(R.id.tvBestDistance);
 
-        fabHistorySearch = (FloatingActionButton) findViewById(R.id.fabHistorySearch);
         fabLookup = (FloatingActionButton) findViewById(R.id.fabLookup);
 
         builderFail = new AlertDialog.Builder(this);

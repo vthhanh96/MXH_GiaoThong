@@ -12,7 +12,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.activities.map.fragment.SearchDialogFragment;
 import com.khoaluan.mxhgiaothong.activities.map.model.PlaceResult;
 import com.khoaluan.mxhgiaothong.activities.map.view.MapActivity;
 
@@ -23,8 +22,9 @@ import java.util.List;
 import static com.khoaluan.mxhgiaothong.activities.map.view.MapActivity.myProgress;
 
 
-public class SolutionMap implements DirectionFinderListener{
+public class SolutionMap implements DirectionFinderListener {
     private GoogleMap mMap;
+    private ArrayList<String> listPlaceSearch = new ArrayList<>();
     public static Route[][] matrixRoutes;
     private static List<String> listPlaces = new ArrayList<String>();
     private List<Route> listRouteToMatrix = new ArrayList<Route>();
@@ -34,7 +34,7 @@ public class SolutionMap implements DirectionFinderListener{
     public static List<Polyline> polylinePaths = new ArrayList<>();
     private int[] images = new int[11];
     public static boolean isFail = false;
-
+    private String TAG = "test";
     public SolutionMap(List<String> listPlaces, GoogleMap mMap) {
         matrixRoutes = new Route[100][100];
         this.listPlaces = listPlaces;
@@ -42,16 +42,23 @@ public class SolutionMap implements DirectionFinderListener{
         isFail = false;
     }
 
+    public ArrayList<String> getListPlaceSearch() {
+        return listPlaceSearch;
+    }
+
+    public void setListPlaceSearch(ArrayList<String> listPlaceSearch) {
+        this.listPlaceSearch = listPlaceSearch;
+    }
+
     public static int getSizeListPlaces() {
-        return  listPlaces.size();
+        return listPlaces.size();
     }
 
     public void createListRoute() throws UnsupportedEncodingException {
-        for (int i=0; i < listPlaces.size(); i++)
-        {
-            Log.d("Test list", listPlaces.get(i).toString());
-            for (int j = 0; j <listPlaces.size(); j++)
-                new CustomDirectionFinder(this, listPlaces.get(i).toString(), listPlaces.get(j).toString()).execute();
+        for (int i = 0; i < listPlaces.size(); i++) {
+            Log.d("Test list", listPlaces.get(i));
+            for (int j = 0; j < listPlaces.size(); j++)
+                new CustomDirectionFinder(this, listPlaces.get(i), listPlaces.get(j)).execute();
         }
     }
 
@@ -67,20 +74,20 @@ public class SolutionMap implements DirectionFinderListener{
             MapActivity.builderFail.show();
             return;
         }
-
+        Log.d(TAG, "onDirectionFinderSuccess: "+ listRouteToAddMatrix.size());
+        Log.d(TAG, "onDirectionFinderSuccess: "+ listPlaces.size());
         if (listRouteToAddMatrix.size() == (listPlaces.size() * listPlaces.size())) {
 
             int k = 0;
 
             for (int i = 1; i <= listPlaces.size(); i++)
-                for (int j = 1; j<=listPlaces.size(); j++) {
+                for (int j = 1; j <= listPlaces.size(); j++) {
                     matrixRoutes[i][j] = listRouteToAddMatrix.get(k);
 
                     if (i == j) {
                         matrixRoutes[i][j].distance.value = 0;
                         matrixRoutes[i][j].distance.text = "0";
-                    }
-                    else if (i > j) {
+                    } else if (i > j) {
                         matrixRoutes[i][j] = matrixRoutes[j][i];
                     }
 
@@ -100,18 +107,13 @@ public class SolutionMap implements DirectionFinderListener{
             bestPath.toString();
 
             for (Integer i = 1; i <= listPlaces.size(); i++) {
-                PlaceResult placeResult = new PlaceResult(i.toString(), SearchDialogFragment.listPlaceSearch.get(bestPath[i] - 1));
+                PlaceResult placeResult = new PlaceResult(i.toString(), getListPlaceSearch().get(bestPath[i] - 1));
                 MapActivity.listPlaceResult.add(placeResult);
             }
-
-
             MapActivity.listPlaceResult.size();
-
             MapActivity.adapterResult.notifyDataSetChanged();
             MapActivity.listViewResult.setAdapter(MapActivity.adapterResult);
-
-            MapActivity.tvBestDistance.setText(((Double)(FindBestPath.best/1000)).toString() + " km");
-
+            MapActivity.tvBestDistance.setText(((Double) (FindBestPath.best / 1000)).toString() + " km");
             myProgress.dismiss();
 
             MapActivity.fabAdd.setVisibility(View.GONE);
@@ -154,34 +156,33 @@ public class SolutionMap implements DirectionFinderListener{
         images[10] = R.drawable.img10;
 
         for (int i = 1; i < listPlaces.size(); i++) {
-            if  (i == 1) {
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(matrixRoutes[bestPath[i]][bestPath[i+1]].startLocation, 10));
+            if (i == 1) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(matrixRoutes[bestPath[i]][bestPath[i + 1]].startLocation, 10));
 
                 originMarkers.add(mMap.addMarker(new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.img0))
-                        .title(matrixRoutes[bestPath[i]][bestPath[i+1]].startAddress)
-                        .position(matrixRoutes[bestPath[i]][bestPath[i+1]].startLocation)));
-            }
-            else {
+                        .title(matrixRoutes[bestPath[i]][bestPath[i + 1]].startAddress)
+                        .position(matrixRoutes[bestPath[i]][bestPath[i + 1]].startLocation)));
+            } else {
                 originMarkers.add(mMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromResource(images[i-1]))
+                        .icon(BitmapDescriptorFactory.fromResource(images[i - 1]))
                         .title(matrixRoutes[bestPath[i]][bestPath[i]].startAddress)
                         .position(matrixRoutes[bestPath[i]][bestPath[i]].startLocation)));
             }
 
             if (i == listPlaces.size() - 1)
                 destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(images[i]))
-                    .title(matrixRoutes[bestPath[i+1]][bestPath[i+1]].startAddress)
-                    .position(matrixRoutes[bestPath[i+1]][bestPath[i+1]].startLocation)));
+                        .icon(BitmapDescriptorFactory.fromResource(images[i]))
+                        .title(matrixRoutes[bestPath[i + 1]][bestPath[i + 1]].startAddress)
+                        .position(matrixRoutes[bestPath[i + 1]][bestPath[i + 1]].startLocation)));
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
                     color(Color.BLUE).
                     width(7);
 
-            for (int j = 0; j < matrixRoutes[bestPath[i]][bestPath[i+1]].points.size(); j++)
-                polylineOptions.add(matrixRoutes[bestPath[i]][bestPath[i+1]].points.get(j));
+            for (int j = 0; j < matrixRoutes[bestPath[i]][bestPath[i + 1]].points.size(); j++)
+                polylineOptions.add(matrixRoutes[bestPath[i]][bestPath[i + 1]].points.get(j));
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
         }
