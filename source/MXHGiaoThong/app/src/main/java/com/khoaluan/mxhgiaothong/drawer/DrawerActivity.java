@@ -112,9 +112,7 @@ abstract public class DrawerActivity extends AppCompatActivity {
             public void onHeaderClicked(boolean isSelected) {
                 if (!isSelected && userLogin != null) {
                     mDrawerLayout.closeDrawer(Gravity.START);
-                    Intent intent = new Intent(DrawerActivity.this, ProfileDetailActivity.class);
-                    intent.putExtra("UserID",userLogin.getId());
-                    startActivity(intent);
+                    ProfileDetailActivity.start(DrawerActivity.this, userLogin.getId());
 //                    finish();
                 }else if(userLogin == null) {
                     Toast.makeText(DrawerActivity.this, "Bạn chưa đăng nhập!", Toast.LENGTH_SHORT).show();

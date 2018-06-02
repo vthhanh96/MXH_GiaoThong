@@ -17,7 +17,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.items.LevelItem;
-import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;

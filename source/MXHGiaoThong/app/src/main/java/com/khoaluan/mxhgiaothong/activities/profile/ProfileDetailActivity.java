@@ -1,5 +1,6 @@
 package com.khoaluan.mxhgiaothong.activities.profile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,6 +53,14 @@ import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.token;
 
 public class ProfileDetailActivity   extends DrawerActivity {
 
+    private static final String ARG_KEY_USER_ID = "ARG_KEY_USER_ID";
+
+    public static void start(Context context, Integer userId) {
+        Intent starter = new Intent(context, ProfileDetailActivity.class);
+        starter.putExtra(ARG_KEY_USER_ID, userId);
+        context.startActivity(starter);
+    }
+
     @BindView(R.id.topBar) TopBarView topBar;
     @BindView(R.id.listPostView) ListPostView mListPostView;
     @BindView(R.id.tvUserName) TextView tvUserName;
@@ -78,7 +87,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        userID = getIntent().getIntExtra("UserID",-1);
+        userID = getIntent().getIntExtra(ARG_KEY_USER_ID,-1);
         userLogin = PreferManager.getInstance(ProfileDetailActivity.this).getUser();
         init();
     }

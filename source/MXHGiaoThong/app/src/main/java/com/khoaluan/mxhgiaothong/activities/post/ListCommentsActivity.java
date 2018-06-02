@@ -21,6 +21,8 @@ import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.InputDialog;
+import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectCommentOptionsDialogFragment;
+import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
@@ -150,6 +152,14 @@ public class ListCommentsActivity extends AppCompatActivity{
                 return false;
             }
         });
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if(view.getId() == R.id.imgAvatar) {
+                    ProfileDetailActivity.start(mContext, mAdapter.getData().get(position).getCreator().getId());
+                }
+            }
+        });
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mCommentsRecyclerView.setAdapter(mAdapter);
     }
@@ -187,25 +197,21 @@ public class ListCommentsActivity extends AppCompatActivity{
     }
 
     private void showCommentActionPopup(View view, final Comment comment) {
-        PopupMenu popupMenu = new PopupMenu(mContext, view);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_comment_action, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.edit_comment:
-                        showEditCommentDialog(comment);
-                        break;
-                    case R.id.delete_comment:
-                        deleteComment(comment);
-                        break;
-                    case R.id.cancel:
-                        break;
+        if(mUser != null && mUser.getId() == comment.getCreator().getId()) {
+            SelectCommentOptionsDialogFragment dialogFragment = new SelectCommentOptionsDialogFragment();
+            dialogFragment.setCommentOptionsListener(new SelectCommentOptionsDialogFragment.SelectCommentOptionsListener() {
+                @Override
+                public void editComment() {
+                    showEditCommentDialog(comment);
                 }
-                return true;
-            }
-        });
-        popupMenu.show();
+
+                @Override
+                public void deleteComment() {
+                    onDeleteComment(comment);
+                }
+            });
+            dialogFragment.show(getSupportFragmentManager(), ListCommentsActivity.class.getName());
+        }
     }
 
     private void showEditCommentDialog(final Comment comment) {
@@ -248,7 +254,7 @@ public class ListCommentsActivity extends AppCompatActivity{
         });
     }
 
-    private void deleteComment(final Comment comment) {
+    private void onDeleteComment(final Comment comment) {
         if(mUser == null || mUser.getId() != comment.getCreator().getId()) {
             Toast.makeText(mContext, "Bạn không có quyền xóa bình luận này.", Toast.LENGTH_SHORT).show();
             return;
@@ -301,6 +307,8 @@ public class ListCommentsActivity extends AppCompatActivity{
 
             ImageView imgAvatar = helper.getView(R.id.imgAvatar);
             Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
+
+            helper.addOnClickListener(R.id.imgAvatar);
         }
     }
 }

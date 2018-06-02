@@ -16,10 +16,12 @@ var UserSchema = new Schema({
         type: String,
         lowercase: true,
         unique: true,
-        required: true
+        required: true,
+        match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     },
     password: {
         type: String,
+        match: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
     },
     avatar_url: {
         type: String,

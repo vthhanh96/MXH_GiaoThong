@@ -8,10 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +21,8 @@ import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.InputDialog;
+import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectCommentOptionsDialogFragment;
+import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectPostOptionsDialogFragment;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
@@ -39,7 +39,6 @@ import com.khoaluan.mxhgiaothong.restful.model.Reaction;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.CommentRequest;
 import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
-import com.khoaluan.mxhgiaothong.restful.request.UpdatePostRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.CommentResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
@@ -121,9 +120,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.imgAvatar)
     public void openProfile() {
-        Intent intent = new Intent(this, ProfileDetailActivity.class);
-        intent.putExtra("UserID", mPost.getCreator().getId());
-        startActivity(intent);
+        ProfileDetailActivity.start(this, mPost.getCreator().getId());
     }
 
     @OnClick(R.id.imgPostOptions)
@@ -272,31 +269,30 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     public void openOptionsPopup(final Post post, View view) {
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_post_action, popupMenu.getMenu());
-        if (TextUtils.isEmpty(mToken) || mUser == null || mUser.getId() != post.getCreator().getId()) {
-            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(false);
-            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(false);
-        } else {
-            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(true);
-            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(true);
-        }
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        boolean isCreator = !(TextUtils.isEmpty(mToken) || mUser == null || mUser.getId() != post.getCreator().getId());
+        SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
+        dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.edit_post:
-                        CreatePostActivity.start(PostDetailActivity.this, post);
-                        break;
-                    case R.id.delete_post:
-                        showDialogConfirmDeletePost(post);
-                        break;
-                }
-                return true;
+            public void editPost() {
+                CreatePostActivity.start(mContext, post);
+            }
+
+            @Override
+            public void deletePost() {
+                showDialogConfirmDeletePost(post);
+            }
+
+            @Override
+            public void judgePost() {
+
+            }
+
+            @Override
+            public void reportPost() {
+
             }
         });
-        popupMenu.show();
+        dialogFragment.show(getSupportFragmentManager(), PostDetailActivity.class.getName());
     }
 
     private Reaction getReaction(List<Reaction> reactions) {
@@ -408,6 +404,14 @@ public class PostDetailActivity extends AppCompatActivity {
                 return false;
             }
         });
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if(view.getId() == R.id.imgAvatar) {
+                    ProfileDetailActivity.start(mContext, mAdapter.getData().get(position).getCreator().getId());
+                }
+            }
+        });
         mCommentRecycler.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mCommentRecycler.setAdapter(mAdapter);
         mCommentRecycler.setNestedScrollingEnabled(false);
@@ -449,32 +453,24 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void showCommentActionPopup(View view, final Comment comment) {
-        PopupMenu popupMenu = new PopupMenu(mContext, view);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_comment_action, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.edit_comment:
-                        showEditCommentDialog(comment);
-                        break;
-                    case R.id.delete_comment:
-                        deleteComment(comment);
-                        break;
-                    case R.id.cancel:
-                        break;
+        if(mUser != null && mUser.getId() == comment.getCreator().getId()) {
+            SelectCommentOptionsDialogFragment dialogFragment = new SelectCommentOptionsDialogFragment();
+            dialogFragment.setCommentOptionsListener(new SelectCommentOptionsDialogFragment.SelectCommentOptionsListener() {
+                @Override
+                public void editComment() {
+                    showEditCommentDialog(comment);
                 }
-                return true;
-            }
-        });
-        popupMenu.show();
+
+                @Override
+                public void deleteComment() {
+                    onDeleteComment(comment);
+                }
+            });
+            dialogFragment.show(getSupportFragmentManager(), ListCommentsActivity.class.getName());
+        }
     }
 
     private void showEditCommentDialog(final Comment comment) {
-        if (mUser == null || mUser.getId() != comment.getCreator().getId()) {
-            Toast.makeText(mContext, "Bạn không có quyền chỉnh sửa bình luận này.", Toast.LENGTH_SHORT).show();
-            return;
-        }
         InputDialog inputDialog = new InputDialog(mContext);
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
@@ -510,11 +506,7 @@ public class PostDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void deleteComment(final Comment comment) {
-        if (mUser == null || mUser.getId() != comment.getCreator().getId()) {
-            Toast.makeText(mContext, "Bạn không có quyền xóa bình luận này.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    private void onDeleteComment(final Comment comment) {
         showLoading();
         ApiManager.getInstance().getPostService().deleteComment(mToken, mPostId, comment.getId()).enqueue(new RestCallback<BaseResponse>() {
             @Override
@@ -565,6 +557,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
             ImageView imgAvatar = helper.getView(R.id.imgAvatar);
             Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
+
+            helper.addOnClickListener(R.id.imgAvatar);
         }
     }
 

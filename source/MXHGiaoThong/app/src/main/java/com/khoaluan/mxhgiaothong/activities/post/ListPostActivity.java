@@ -61,6 +61,8 @@ public class ListPostActivity extends DrawerActivity {
 
     public static void start(Context context) {
         Intent intent = new Intent(context, ListPostActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -179,4 +181,20 @@ public class ListPostActivity extends DrawerActivity {
         fabAdd.collapse();
     }
 
+    @Override
+    public void onBackPressed() {
+        final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn thoát ứng dụng?");
+        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                questionDialog.dismissDialog();
+            }
+
+            @Override
+            public void dialogPerformAction() {
+                finish();
+            }
+        });
+        questionDialog.show(getSupportFragmentManager(), ListPostActivity.class.getName());
+    }
 }

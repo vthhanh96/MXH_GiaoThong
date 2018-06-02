@@ -1,44 +1,26 @@
 package com.khoaluan.mxhgiaothong.activities.post.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
-import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
 import com.khoaluan.mxhgiaothong.activities.post.items.CategoryFilter;
-import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
-import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.eventbus.EventUpdateListPost;
-import com.khoaluan.mxhgiaothong.eventbus.EventUpdatePost;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
-import com.khoaluan.mxhgiaothong.restful.model.Post;
-import com.khoaluan.mxhgiaothong.restful.model.User;
-import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
 import com.khoaluan.mxhgiaothong.restful.request.FilterPostRequest;
-import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
-import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.view.ActionSheet.BottomSheet;
 import com.khoaluan.mxhgiaothong.view.ListPostView;
 
@@ -54,8 +36,10 @@ import butterknife.ButterKnife;
 
 public class ListSelectionPostFragment extends Fragment {
 
-    @BindView(R.id.listPostView) ListPostView mListPostView;
-    @BindView(R.id.refreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.listPostView)
+    ListPostView mListPostView;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private Context mContext;
 
@@ -117,7 +101,7 @@ public class ListSelectionPostFragment extends Fragment {
 
     private void hideLoading() {
         if (mProgressDialog != null) {
-            mProgressDialog.hide();
+            mProgressDialog.dismiss();
         }
     }
 
@@ -168,7 +152,7 @@ public class ListSelectionPostFragment extends Fragment {
         mLevelList.clear();
         for (CategoryFilter item : categoryFilters) {
             mCategoryFilterId.add(item.mId);
-            if(!mLevelList.contains(item.mLevel)) {
+            if (!mLevelList.contains(item.mLevel)) {
                 mLevelList.add(item.mLevel);
             }
         }
@@ -182,7 +166,7 @@ public class ListSelectionPostFragment extends Fragment {
                 hideLoading();
                 if (res.getPosts() != null) {
                     mListPostView.setData(res.getPosts());
-                    if(res.getPosts().isEmpty()) {
+                    if (res.getPosts().isEmpty()) {
                         Toast.makeText(mContext, "Không tìm thấy bài viết thỏa điều kiện lọc", Toast.LENGTH_SHORT).show();
                     }
                 }

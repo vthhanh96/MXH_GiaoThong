@@ -21,6 +21,7 @@ import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
 import com.khoaluan.mxhgiaothong.activities.post.PostDetailActivity;
+import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectPostOptionsDialogFragment;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
@@ -116,9 +117,7 @@ public class ListPostView extends FrameLayout{
                     doReaction(position, 2);
 
                 } else if (view.getId() == R.id.imgAvatar) {
-                    Intent intent = new Intent(getContext(), ProfileDetailActivity.class);
-                    intent.putExtra("UserID", mAdapter.getItem(position).getCreator().getId());
-                    getContext().startActivity(intent);
+                    ProfileDetailActivity.start(getContext(), mAdapter.getItem(position).getCreator().getId());
 
                 } else if (view.getId() == R.id.imgPostOptions) {
                     openOptionsPopup(mAdapter.getData().get(position), view);
@@ -139,31 +138,30 @@ public class ListPostView extends FrameLayout{
     }
 
     private void openOptionsPopup(final Post post, View view) {
-        PopupMenu popupMenu = new PopupMenu(getContext(), view);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_post_action, popupMenu.getMenu());
-        if (TextUtils.isEmpty(token) || mUser == null || mUser.getId() != post.getCreator().getId()) {
-            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(false);
-            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(false);
-        } else {
-            popupMenu.getMenu().findItem(R.id.edit_post).setEnabled(true);
-            popupMenu.getMenu().findItem(R.id.delete_post).setEnabled(true);
-        }
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        boolean isCreator = !(TextUtils.isEmpty(token) || mUser == null || mUser.getId() != post.getCreator().getId());
+        SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
+        dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.edit_post:
-                        CreatePostActivity.start(getContext(), post);
-                        break;
-                    case R.id.delete_post:
-                        showDialogConfirmDeletePost(post);
-                        break;
-                }
-                return true;
+            public void editPost() {
+                CreatePostActivity.start(getContext(), post);
+            }
+
+            @Override
+            public void deletePost() {
+                showDialogConfirmDeletePost(post);
+            }
+
+            @Override
+            public void judgePost() {
+
+            }
+
+            @Override
+            public void reportPost() {
+
             }
         });
-        popupMenu.show();
+        dialogFragment.show(((FragmentActivity)mContext).getSupportFragmentManager(), "");
     }
 
     private Reaction getReaction(List<Reaction> reactions) {

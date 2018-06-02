@@ -5,4 +5,18 @@
         <item>"Thư viện"</item>
     </string-array>
 
+    <string-array name="post_options_creator">
+        <item>"Chỉnh sửa bài viết"</item>
+        <item>"Xóa bài viết"</item>
+    </string-array>
+
+    <string-array name="post_options_not_creator">
+        <item>"Đánh giá bài viết"</item>
+        <item>"Báo cáo bài viết"</item>
+    </string-array>
+
+    <string-array name="dialog_select_comment_options">
+        <item>"Chỉnh sửa bình luận"</item>
+        <item>"Xóa bình luận"</item>
+    </string-array>
 </resources>
