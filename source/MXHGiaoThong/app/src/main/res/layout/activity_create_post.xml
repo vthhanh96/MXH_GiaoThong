@@ -92,14 +92,30 @@
         android:paddingStart="@dimen/margin_16dp"
         android:paddingEnd="@dimen/margin_16dp"/>
 
-    <ImageView
-        android:id="@+id/imgPost"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16dp"
         android:layout_marginTop="@dimen/margin_8dp"
-        android:layout_marginBottom="@dimen/margin_8dp"
-        android:scaleType="centerCrop"
-        android:visibility="gone"/>
+        android:layout_marginBottom="@dimen/margin_8dp">
+
+        <ImageView
+            android:id="@+id/imgPost"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imgDeleteImagePost"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_delete"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_marginEnd="@dimen/margin_8dp"
+            android:visibility="gone"/>
+    </FrameLayout>
 
     <View
         android:layout_width="match_parent"

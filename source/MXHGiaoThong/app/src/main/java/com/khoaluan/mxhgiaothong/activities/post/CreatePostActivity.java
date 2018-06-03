@@ -95,6 +95,8 @@ public class CreatePostActivity extends AppCompatActivity {
     ImageView mImgPost;
     @BindView(R.id.tvPostAction)
     TextView mTvPostAction;
+    @BindView(R.id.imgDeleteImagePost)
+    ImageView mImgDeleteImagePost;
 
     private Context mContext;
     private String token;
@@ -162,6 +164,7 @@ public class CreatePostActivity extends AppCompatActivity {
         mTvName.setText(mPost.getCreator().getFullName());
         if(!TextUtils.isEmpty(mPost.getImageUrl())) {
             mImgPost.setVisibility(View.VISIBLE);
+            mImgDeleteImagePost.setVisibility(View.VISIBLE);
             Glide.with(mContext).load(mPost.getImageUrl()).into(mImgPost);
         }
         mTvPlace.setText(mPost.getPlace());
@@ -171,6 +174,7 @@ public class CreatePostActivity extends AppCompatActivity {
         mLocation = new Location("");
         mLocation.setLatitude(mPost.getLocation().getCoordinates().get(1));
         mLocation.setLongitude(mPost.getLocation().getCoordinates().get(0));
+        mImageUrl = mPost.getImageUrl();
     }
 
     private void getToken() {
@@ -238,6 +242,14 @@ public class CreatePostActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.imgDeleteImagePost)
+    public void deleteImagePost() {
+        mImgPost.setVisibility(View.GONE);
+        mImgDeleteImagePost.setVisibility(View.GONE);
+        mImageUri = null;
+        mImageUrl = "";
+    }
+
     private void uploadImage() {
         UploadImageUtils.uploadImage(mImageUri, new UploadImageListener() {
             @Override
@@ -294,7 +306,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 mTvPlace.getText().toString(),
                 mCategory,
                 mLevel,
-                TextUtils.isEmpty(mImageUrl) ? mPost.getImageUrl() : mImageUrl);
+                TextUtils.isEmpty(mImageUrl) ? "" : mImageUrl);
         ApiManager.getInstance().getPostService().updatePost(token, mPost.getId(), request).enqueue(new RestCallback<BaseResponse>() {
             @Override
             public void success(BaseResponse res) {
@@ -440,11 +452,13 @@ public class CreatePostActivity extends AppCompatActivity {
         } else if(requestCode == REQUEST_CODE_TAKE_PICTURE) {
             if(mFile == null) return;
             mImgPost.setVisibility(View.VISIBLE);
+            mImgDeleteImagePost.setVisibility(View.VISIBLE);
             Glide.with(mContext.getApplicationContext()).load(mFile).into(mImgPost);
         } else if(requestCode == REQUEST_CODE_GET_IMAGE) {
             if (data == null || data.getData() == null)
                 return;
             mImgPost.setVisibility(View.VISIBLE);
+            mImgDeleteImagePost.setVisibility(View.VISIBLE);
             Glide.with(mContext.getApplicationContext()).load(data.getData()).into(mImgPost);
             mFile = new File(FileUtils.getPath(mContext, data.getData()));
             mImageUri = FileProvider.getUriForFile(mContext, mContext.getApplicationContext().getPackageName() + ".provider", mFile);
