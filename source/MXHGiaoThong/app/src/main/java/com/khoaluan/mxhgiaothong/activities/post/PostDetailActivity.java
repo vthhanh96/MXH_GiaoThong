@@ -515,6 +515,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 EventBus.getDefault().post(new EventUpdateListPost());
                 mAdapter.getData().remove(comment);
                 mAdapter.setNewData(mAdapter.getData());
+                mCommentTextView.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
             }
 
             @Override
@@ -533,6 +534,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 EventBus.getDefault().post(new EventUpdateListPost());
                 mAdapter.getData().add(res.getComment());
                 mAdapter.setNewData(mAdapter.getData());
+                mCommentTextView.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
             }
 
             @Override

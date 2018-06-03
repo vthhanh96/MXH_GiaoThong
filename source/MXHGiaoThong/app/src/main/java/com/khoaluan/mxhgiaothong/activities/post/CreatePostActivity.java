@@ -34,6 +34,8 @@ import com.khoaluan.mxhgiaothong.Application;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.UploadImageListener;
+import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectCommentOptionsDialogFragment;
+import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectLocationOptionsDialog;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
@@ -166,6 +168,9 @@ public class CreatePostActivity extends AppCompatActivity {
         mCategory = mPost.getCategory();
         mLevel = mPost.getLevel();
         updateUICategory();
+        mLocation = new Location("");
+        mLocation.setLatitude(mPost.getLocation().getCoordinates().get(1));
+        mLocation.setLongitude(mPost.getLocation().getCoordinates().get(0));
     }
 
     private void getToken() {
@@ -217,10 +222,9 @@ public class CreatePostActivity extends AppCompatActivity {
         mLocation = Application.getBackgroundService().getCurrentLocation();
         if (mLocation != null) {
             mTvPlace.setText(GeoHelper.getAddress(mLocation));
-            Toast.makeText(mContext, mLocation.getLatitude() + ";" + mLocation.getLongitude(), Toast.LENGTH_SHORT).show();
         } else {
             mTvPlace.setText("Chưa xác định");
-            Toast.makeText(mContext, "Can not get current location", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Không thể xác định được vị trí hiện tại của bạn.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -285,9 +289,9 @@ public class CreatePostActivity extends AppCompatActivity {
         if(mPost == null) finish();
         UpdatePostRequest request = new UpdatePostRequest(
                 mEdtContent.getText().toString(),
-                mPost.getLocation().getCoordinates().get(0),
-                mPost.getLocation().getCoordinates().get(1),
-                mPost.getPlace(),
+                mLocation.getLatitude(),
+                mLocation.getLongitude(),
+                mTvPlace.getText().toString(),
                 mCategory,
                 mLevel,
                 TextUtils.isEmpty(mImageUrl) ? mPost.getImageUrl() : mImageUrl);
@@ -346,7 +350,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
     @OnClick(R.id.imgMarker)
     public void searchLocation() {
-        openSearchActivity();
+        openLocationOptionsDialog();
     }
 
     private void openDialog() {
@@ -382,6 +386,22 @@ public class CreatePostActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE_GET_IMAGE);
+    }
+
+    private void openLocationOptionsDialog() {
+        SelectLocationOptionsDialog dialogFragment = new SelectLocationOptionsDialog();
+        dialogFragment.setLocationOptionsListener(new SelectLocationOptionsDialog.SelectLocationOptionsListener() {
+            @Override
+            public void setCurrentLocation() {
+                getCurrentLocation();
+            }
+
+            @Override
+            public void openSearchLocation() {
+                openSearchActivity();
+            }
+        });
+        dialogFragment.show(getSupportFragmentManager(), PostDetailActivity.class.getName());
     }
 
     private void openSearchActivity() {
@@ -436,6 +456,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 String[] parts = place.getLatLng().toString().split("\\(");
                 String[] parts1 = parts[1].split("\\)");
 //                latLngStartPlace = parts1[0];
+                mLocation = new Location("");
                 mLocation.setLatitude(place.getLatLng().latitude);
                 mLocation.setLongitude(place.getLatLng().longitude);
             }

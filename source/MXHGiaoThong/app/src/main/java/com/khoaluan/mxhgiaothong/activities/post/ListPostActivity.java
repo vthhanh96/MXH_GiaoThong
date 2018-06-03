@@ -168,6 +168,7 @@ public class ListPostActivity extends DrawerActivity {
         } else {
             CreatePostActivity.start(ListPostActivity.this, null);
         }
+        fabAdd.collapse();
     }
 
     @OnClick(R.id.btnFilterPost)

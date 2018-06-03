@@ -19,4 +19,9 @@
         <item>"Chỉnh sửa bình luận"</item>
         <item>"Xóa bình luận"</item>
     </string-array>
+
+    <string-array name="dialog_select_location_options">
+        <item>"Vị trí hiện tại"</item>
+        <item>"Tìm kiếm vị trí khác"</item>
+    </string-array>
 </resources>

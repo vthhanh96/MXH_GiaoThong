@@ -39,7 +39,7 @@ public class UpdatePostRequest implements Serializable {
     @Expose
     private String imageUrl;
 
-    public UpdatePostRequest(String content, Float latitude, Float longitude, String place, Category category, int level, String imageUrl) {
+    public UpdatePostRequest(String content, Double latitude, Double longitude, String place, Category category, int level, String imageUrl) {
         this.content = content;
         List<Float> coordinates = new ArrayList<>();
         coordinates.add(longitude.floatValue());

@@ -31,7 +31,10 @@ router.post('/register', function (req, res) {
         // Attempt to save the user
         newUser.save(function (err,user) {
             if (err) {
-                return res.json({success: false, message: err});
+                return res.json({
+                    success: false,
+                    message: err
+                }).status(301);
             }
             res.json({success: true, data:user, message: 'Successfully created new user.'});
         });
