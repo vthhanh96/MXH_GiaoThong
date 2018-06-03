@@ -4,262 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-
-    <FrameLayout
+    <com.khoaluan.mxhgiaothong.customView.TopBarView
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="260dp">
+        android:layout_height="wrap_content"/>
 
-        <ImageView
-            android:scaleType="center"
-            android:src="@drawable/background"
-            android:id="@+id/imvAvatarBlur"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:paddingBottom="20dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.khoaluan.mxhgiaothong.customView.TopBarView
-                android:id="@+id/topBar"
+            <FrameLayout
+                android:background="@drawable/bg_gradient"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imvAvatar"
-                android:layout_marginTop="10dp"
-                android:layout_width="110dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@color/borderColor"
-                android:layout_height="110dp" />
-
-            <EditText
-                android:id="@+id/edtFullName_edit"
-                android:textColor="@color/white"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="50dp"
-                android:layout_marginStart="50dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-    </FrameLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:textStyle="bold"
-                android:textColor="@color/com_facebook_blue"
-                android:textSize="16sp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="15dp"
-                android:text="E-mail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/tvEmail_edit"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/small_10dp"
-                android:text="hieuit275@gmail.com"
-                android:background="@drawable/bg_edt_login"
-                android:layout_marginTop="@dimen/small_10dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="40dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="200dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:paddingBottom="20dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <TextView
-                        android:textStyle="bold"
-                        android:textColor="@color/com_facebook_blue"                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Ngày sinh"
-                        android:textSize="16sp" />
 
-                    <LinearLayout
-                        android:paddingStart="@dimen/margin_8dp"
-                        android:paddingEnd="@dimen/margin_8dp"
-                        android:layout_marginTop="@dimen/small_10dp"
-                        android:layout_marginStart="30dp"
-                        android:background="@drawable/bg_edt_login"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imvAvatar"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="110dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@color/borderColor"
+                        android:layout_height="110dp" />
 
-                        <TextView
-                            android:id="@+id/tvDate_edit"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:gravity="center_vertical"
-                            android:paddingEnd="15dp"
-                            android:paddingStart="@dimen/small_10dp"
-                            android:text="27/05/1996"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
-
-                        <ImageView
-                            android:id="@+id/btn_choise_date"
-                            android:layout_marginEnd="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_arrow_down" />
-
-                    </LinearLayout>
-
+                    <EditText
+                        android:id="@+id/edtFullName_edit"
+                        android:textColor="@color/white"
+                        android:gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="50dp"
+                        android:layout_marginStart="50dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_marginEnd="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:textStyle="bold"
-                        android:textColor="@color/com_facebook_blue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Giới tính"
-                        android:textSize="16sp" />
-
-                    <LinearLayout
-                        android:paddingStart="@dimen/margin_8dp"
-                        android:paddingEnd="@dimen/margin_8dp"
-                        android:layout_marginTop="@dimen/small_10dp"
-                        android:layout_marginStart="35dp"
-                        android:background="@drawable/bg_edt_login"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/tvGender_edit"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:gravity="center_vertical"
-                            android:paddingStart="@dimen/small_10dp"
-                            android:text="Nam"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
-
-                        <Spinner
-                            android:layout_marginStart="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="5dp"
-                            android:background="@drawable/ic_arrow_down"
-                            android:id="@+id/spiner_gender"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"/>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
-
-            </LinearLayout>
-
-            <TextView
-                android:textStyle="bold"
-                android:textColor="@color/com_facebook_blue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="20dp"
-                android:text="Địa chỉ"
-                android:textSize="16sp" />
-            <EditText
-                android:id="@+id/edtAddress_edit"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/small_10dp"
-                android:text="Thủ Đức, Hồ Chí Minh"
-                android:background="@drawable/bg_edt_login"
-                android:layout_marginTop="@dimen/small_10dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="40dp" />
+            </FrameLayout>
 
             <LinearLayout
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/com_facebook_blue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginStart="40dp"
-                    android:text="Mật khẩu"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/btnEditPassWord"
-                    android:src="@drawable/ic_setting_black"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp" />
-            </LinearLayout>
-
-
-
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/lnNewPass"
+                android:background="@color/white"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:hint="Nhập mật khẩu hiện tại"
-                    android:id="@+id/edtPassword_edit"
-                    android:inputType="textPassword"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical"
-                    android:paddingStart="@dimen/small_10dp"
-                    android:background="@drawable/bg_edt_login"
-                    android:layout_marginTop="@dimen/small_10dp"
-                    android:layout_marginEnd="35dp"
-                    android:layout_marginStart="35dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp" />
+                android:layout_height="match_parent">
 
                 <TextView
                     android:textStyle="bold"
@@ -267,45 +67,18 @@
                     android:textSize="16sp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Mật khẩu mới"
+                    android:layout_marginTop="15dp"
+                    android:text="E-mail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-
-                <EditText
-                    android:hint="Nhập mật khẩu mới"
-                    android:id="@+id/edtNewPass_edit"
-                    android:inputType="textPassword"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical"
-                    android:paddingStart="@dimen/small_10dp"
-                    android:background="@drawable/bg_edt_login"
-                    android:layout_marginTop="@dimen/small_10dp"
-                    android:layout_marginEnd="35dp"
-                    android:layout_marginStart="35dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp" />
 
                 <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/com_facebook_blue"
-                    android:textSize="16sp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Xác nhận mật khẩu mới"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <EditText
-                    android:hint="Xác nhận mật khẩu mới"
-                    android:id="@+id/edtConfirmNewPass_edit"
-                    android:inputType="textPassword"
+                    android:id="@+id/tvEmail_edit"
                     android:textSize="16sp"
                     android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:paddingStart="@dimen/small_10dp"
+                    android:text="hieuit275@gmail.com"
                     android:background="@drawable/bg_edt_login"
                     android:layout_marginTop="@dimen/small_10dp"
                     android:layout_marginEnd="30dp"
@@ -313,20 +86,250 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp" />
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnEditUser"
-                style="@style/btnLogin"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginEnd="50dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp"
-                android:text="Cập nhật"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:textStyle="bold"
+                            android:textColor="@color/com_facebook_blue"                        android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="30dp"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginTop="20dp"
+                            android:text="Ngày sinh"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:paddingStart="@dimen/margin_8dp"
+                            android:paddingEnd="@dimen/margin_8dp"
+                            android:layout_marginTop="@dimen/small_10dp"
+                            android:layout_marginStart="30dp"
+                            android:background="@drawable/bg_edt_login"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tvDate_edit"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:gravity="center_vertical"
+                                android:paddingEnd="15dp"
+                                android:paddingStart="@dimen/small_10dp"
+                                android:text="27/05/1996"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/btn_choise_date"
+                                android:layout_marginEnd="5dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/ic_arrow_down" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginEnd="30dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:textStyle="bold"
+                            android:textColor="@color/com_facebook_blue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginTop="20dp"
+                            android:text="Giới tính"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:paddingStart="@dimen/margin_8dp"
+                            android:paddingEnd="@dimen/margin_8dp"
+                            android:layout_marginTop="@dimen/small_10dp"
+                            android:layout_marginStart="35dp"
+                            android:background="@drawable/bg_edt_login"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tvGender_edit"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:gravity="center_vertical"
+                                android:paddingStart="@dimen/small_10dp"
+                                android:text="Nam"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <Spinner
+                                android:layout_marginStart="5dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="5dp"
+                                android:background="@drawable/ic_arrow_down"
+                                android:id="@+id/spiner_gender"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textColor="@color/com_facebook_blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Địa chỉ"
+                    android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/edtAddress_edit"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/small_10dp"
+                    android:text="Thủ Đức, Hồ Chí Minh"
+                    android:background="@drawable/bg_edt_login"
+                    android:layout_marginTop="@dimen/small_10dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+                <LinearLayout
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/com_facebook_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="40dp"
+                        android:text="Mật khẩu"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/btnEditPassWord"
+                        android:src="@drawable/ic_setting_black"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp" />
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/lnNewPass"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:hint="Nhập mật khẩu hiện tại"
+                        android:id="@+id/edtPassword_edit"
+                        android:inputType="textPassword"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/small_10dp"
+                        android:background="@drawable/bg_edt_login"
+                        android:layout_marginTop="@dimen/small_10dp"
+                        android:layout_marginEnd="35dp"
+                        android:layout_marginStart="35dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp" />
+
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/com_facebook_blue"
+                        android:textSize="16sp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Mật khẩu mới"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:hint="Nhập mật khẩu mới"
+                        android:id="@+id/edtNewPass_edit"
+                        android:inputType="textPassword"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/small_10dp"
+                        android:background="@drawable/bg_edt_login"
+                        android:layout_marginTop="@dimen/small_10dp"
+                        android:layout_marginEnd="35dp"
+                        android:layout_marginStart="35dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp" />
+
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/com_facebook_blue"
+                        android:textSize="16sp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Xác nhận mật khẩu mới"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:hint="Xác nhận mật khẩu mới"
+                        android:id="@+id/edtConfirmNewPass_edit"
+                        android:inputType="textPassword"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/small_10dp"
+                        android:background="@drawable/bg_edt_login"
+                        android:layout_marginTop="@dimen/small_10dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnEditUser"
+                    style="@style/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:text="Cập nhật"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

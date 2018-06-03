@@ -87,6 +87,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+        lockDrawer();
         userID = getIntent().getIntExtra(ARG_KEY_USER_ID,-1);
         userLogin = PreferManager.getInstance(ProfileDetailActivity.this).getUser();
         init();
@@ -164,6 +165,7 @@ public class ProfileDetailActivity   extends DrawerActivity {
             public void success(GetAllPostResponse res) {
                 if(res.getPosts() != null) {
                     mListPostView.setData(res.getPosts());
+                    tvNumPost.setText(String.valueOf(res.getPosts().size()));
                 }
             }
             @Override

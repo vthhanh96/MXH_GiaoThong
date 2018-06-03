@@ -67,8 +67,6 @@ public class EditProfileActivity extends AppCompatActivity{
     TopBarView topBar;
     @BindView(R.id.imvAvatar)
     CircleImageView imvAvatar;
-    @BindView(R.id.imvAvatarBlur)
-    ImageView imvAvatarBlur;
     @BindView(R.id.edtFullName_edit)
     EditText edtFullName;
     @BindView(R.id.tvDate_edit)
@@ -155,7 +153,7 @@ public class EditProfileActivity extends AppCompatActivity{
     private void initTopBar() {
         topBar.setTextTitle("Chỉnh sửa thông tin");
         topBar.setImageViewLeft(LEFT_BACK);
-        topBar.setTranpatentTopBar();
+//        topBar.setTranpatentTopBar();
         topBar.setOnClickListener(new TopBarView.OnItemClickListener() {
             @Override
             public void onImvLeftClicked() {

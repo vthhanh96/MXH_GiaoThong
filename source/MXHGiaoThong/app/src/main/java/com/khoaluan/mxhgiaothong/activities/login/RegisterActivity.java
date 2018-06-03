@@ -133,6 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void failure(RestError error) {
                         ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+
                         errorDialog.setError(error.message);
                         errorDialog.show(getSupportFragmentManager(), RegisterActivity.class.getName());
                     }
