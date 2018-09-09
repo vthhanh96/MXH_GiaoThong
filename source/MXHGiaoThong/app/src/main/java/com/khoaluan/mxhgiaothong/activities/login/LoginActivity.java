@@ -199,9 +199,9 @@ public class LoginActivity extends AppCompatActivity {
                                     String image_url = "http://graph.facebook.com/" + id + "/picture?type=large";
 
                                     User user = new User.Builder()
-                                            .setAvatarUrl(image_url)
-                                            .setBirthDate(birthday)
-                                            .setEmail(email)
+                                            .setAvatar(image_url)
+                                            .setBirthday(birthday)
+                                            .set(email)
                                             .setFullName(fullname)
                                             .setGender(gender)
                                             .setId_fb_gg(id)

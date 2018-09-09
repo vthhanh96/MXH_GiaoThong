@@ -15,21 +15,25 @@ public class User implements Serializable {
     @Expose
     private int id;
 
-    @SerializedName("email")
+    @SerializedName("phone")
     @Expose
-    private String email;
+    private String phone;
+
+    @SerializedName("fullName")
+    @Expose
+    private String fullName;
 
     @SerializedName("password")
     @Expose
     private String password;
 
-    @SerializedName("avatar_url")
+    @SerializedName("avatar")
     @Expose
-    private String avatarUrl;
+    private String avatar;
 
-    @SerializedName("fullName")
+    @SerializedName("birthday")
     @Expose
-    private String fullName;
+    private String birthday;
 
     @SerializedName("gender")
     @Expose
@@ -39,29 +43,29 @@ public class User implements Serializable {
     @Expose
     private String address;
 
-    @SerializedName("birthDate")
+    @SerializedName("latlngAdress")
     @Expose
-    private String birthDate;
+    private String latlngAdress;
 
-    @SerializedName("id_fb_gg")
+    @SerializedName("myCharacter")
     @Expose
-    private String id_fb_gg;
+    private String myCharacter;
 
-    public String getId_fb_gg() {
-        return id_fb_gg;
-    }
+    @SerializedName("myStyle")
+    @Expose
+    private String myStyle;
 
-    public void setId_fb_gg(String id_fb_gg) {
-        this.id_fb_gg = id_fb_gg;
-    }
+    @SerializedName("targetCharacter")
+    @Expose
+    private String targetCharacter;
 
-    public String getBirthDate() {
-        return birthDate;
-    }
+    @SerializedName("targetStyle")
+    @Expose
+    private String targetStyle;
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
-    }
+    @SerializedName("targetFood")
+    @Expose
+    private String targetFood;
 
     public int getId() {
         return id;
@@ -71,12 +75,20 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getPassword() {
@@ -87,20 +99,20 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public String getGender() {
@@ -119,50 +131,105 @@ public class User implements Serializable {
         this.address = address;
     }
 
+    public String getLatlngAdress() {
+        return latlngAdress;
+    }
+
+    public void setLatlngAdress(String latlngAdress) {
+        this.latlngAdress = latlngAdress;
+    }
+
+    public String getMyCharacter() {
+        return myCharacter;
+    }
+
+    public void setMyCharacter(String myCharacter) {
+        this.myCharacter = myCharacter;
+    }
+
+    public String getMyStyle() {
+        return myStyle;
+    }
+
+    public void setMyStyle(String myStyle) {
+        this.myStyle = myStyle;
+    }
+
+    public String getTargetCharacter() {
+        return targetCharacter;
+    }
+
+    public void setTargetCharacter(String targetCharacter) {
+        this.targetCharacter = targetCharacter;
+    }
+
+    public String getTargetStyle() {
+        return targetStyle;
+    }
+
+    public void setTargetStyle(String targetStyle) {
+        this.targetStyle = targetStyle;
+    }
+
+    public String getTargetFood() {
+        return targetFood;
+    }
+
+    public void setTargetFood(String targetFood) {
+        this.targetFood = targetFood;
+    }
+
     public User() {
     }
 
     public User(Builder builder) {
         this.id = builder.id;
-        this.email = builder.email;
-        this.password = builder.password;
-        this.avatarUrl = builder.avatarUrl;
+        this.phone = builder.phone;
         this.fullName = builder.fullName;
+        this.password = builder.password;
+        this.avatar = builder.avatar;
+        this.birthday = builder.birthday;
         this.gender = builder.gender;
         this.address = builder.address;
-        this.birthDate = builder.birthDate;
-        this.id_fb_gg = builder.id_fb_gg;
+        this.latlngAdress = builder.latlngAdress;
+        this.myCharacter = builder.myCharacter;
+        this.myStyle = builder.myStyle;
+        this.targetCharacter = builder.targetCharacter;
+        this.targetStyle = builder.targetStyle;
+        this.targetFood = builder.targetFood;
     }
 
     public static class Builder {
         private int id;
-        private String email;
-        private String password;
-        private String avatarUrl;
+        private String phone;
         private String fullName;
+        private String password;
+        private String avatar;
+        private String birthday;
         private String gender;
         private String address;
-        private String birthDate;
-        private String id_fb_gg;
+        private String latlngAdress;
+        private String myCharacter;
+        private String myStyle;
+        private String targetCharacter;
+        private String targetStyle;
+        private String targetFood;
 
-        public String getId_fb_gg() {
-            return id_fb_gg;
-        }
-
-        public Builder setId_fb_gg(String id_fb_gg) {
-            this.id_fb_gg = id_fb_gg;
-            return this;
-        }
 
         public Builder() {
-            this.email = null;
-            this.password = null;
-            this.avatarUrl = null;
+            this.phone = null;
             this.fullName = null;
+            this.password = null;
+            this.avatar = null;
+            this.birthday = null;
             this.gender = null;
             this.address = null;
-            this.birthDate = null;
-            this.id_fb_gg = null;
+            this.latlngAdress = null;
+            this.myCharacter = null;
+            this.myStyle = null;
+            this.targetCharacter = null;
+            this.targetStyle = null;
+            this.targetFood = null;
         }
         public User build(){
             return  new User(this);
@@ -177,12 +244,21 @@ public class User implements Serializable {
             return this;
         }
 
-        public String getEmail() {
-            return email;
+        public String getPhone() {
+            return phone;
         }
 
-        public Builder setEmail(String email) {
-            this.email = email;
+        public Builder setPhone(String phone) {
+            this.phone = phone;
+            return this;
+        }
+
+        public String getFullName() {
+            return fullName;
+        }
+
+        public Builder setFullName(String fullName) {
+            this.fullName = fullName;
             return this;
         }
 
@@ -195,21 +271,21 @@ public class User implements Serializable {
             return this;
         }
 
-        public String getAvatarUrl() {
-            return avatarUrl;
+        public String getAvatar() {
+            return avatar;
         }
 
-        public Builder setAvatarUrl(String avatarUrl) {
-            this.avatarUrl = avatarUrl;
+        public Builder setAvatar(String avatar) {
+            this.avatar = avatar;
             return this;
         }
 
-        public String getFullName() {
-            return fullName;
+        public String getBirthday() {
+            return birthday;
         }
 
-        public Builder setFullName(String fullName) {
-            this.fullName = fullName;
+        public Builder setBirthday(String birthday) {
+            this.birthday = birthday;
             return this;
         }
 
@@ -231,12 +307,57 @@ public class User implements Serializable {
             return this;
         }
 
-        public String getBirthDate() {
-            return birthDate;
+        public String getLatlngAdress() {
+            return latlngAdress;
         }
 
-        public Builder setBirthDate(String birthDate) {
-            this.birthDate = birthDate;
+        public Builder setLatlngAdress(String latlngAdress) {
+            this.latlngAdress = latlngAdress;
+            return this;
+        }
+
+        public String getMyCharacter() {
+            return myCharacter;
+        }
+
+        public Builder setMyCharacter(String myCharacter) {
+            this.myCharacter = myCharacter;
+            return this;
+        }
+
+        public String getMyStyle() {
+            return myStyle;
+        }
+
+        public Builder setMyStyle(String myStyle) {
+            this.myStyle = myStyle;
+            return this;
+        }
+
+        public String getTargetCharacter() {
+            return targetCharacter;
+        }
+
+        public Builder setTargetCharacter(String targetCharacter) {
+            this.targetCharacter = targetCharacter;
+            return this;
+        }
+
+        public String getTargetStyle() {
+            return targetStyle;
+        }
+
+        public Builder setTargetStyle(String targetStyle) {
+            this.targetStyle = targetStyle;
+            return this;
+        }
+
+        public String getTargetFood() {
+            return targetFood;
+        }
+
+        public Builder setTargetFood(String targetFood) {
+            this.targetFood = targetFood;
             return this;
         }
     }
