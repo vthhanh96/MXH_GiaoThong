@@ -34,7 +34,6 @@ import com.khoaluan.mxhgiaothong.Application;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.UploadImageListener;
-import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectCommentOptionsDialogFragment;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectLocationOptionsDialog;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
@@ -160,7 +159,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private void fillData() {
         mTvPostAction.setVisibility(View.GONE);
         mEdtContent.setText(mPost.getContent());
-        Glide.with(mContext).load(mPost.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        Glide.with(mContext).load(mPost.getCreator().getAvatar()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
         mTvName.setText(mPost.getCreator().getFullName());
         if(!TextUtils.isEmpty(mPost.getImageUrl())) {
             mImgPost.setVisibility(View.VISIBLE);
@@ -218,7 +217,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private void getUserInfo() {
         User user = PreferManager.getInstance(mContext).getUser();
         if (user == null) return;
-        Glide.with(mContext).load(user.getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        Glide.with(mContext).load(user.getAvatar()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
         mTvName.setText(user.getFullName());
     }
 

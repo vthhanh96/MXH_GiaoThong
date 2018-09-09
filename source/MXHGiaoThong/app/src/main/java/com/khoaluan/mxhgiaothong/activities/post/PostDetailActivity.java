@@ -235,7 +235,7 @@ public class PostDetailActivity extends AppCompatActivity {
             mImgLike.setImageResource(R.drawable.ic_like);
         }
 
-        Glide.with(this.getApplicationContext()).load(mPost.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        Glide.with(this.getApplicationContext()).load(mPost.getCreator().getAvatar()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
         Glide.with(this.getApplicationContext()).load(mPost.getImageUrl()).into(mImgContent);
 
         mCategoryTextView.setText(mPost.getCategory().getName());
@@ -558,7 +558,7 @@ public class PostDetailActivity extends AppCompatActivity {
             helper.setText(R.id.tvContent, item.getContent());
 
             ImageView imgAvatar = helper.getView(R.id.imgAvatar);
-            Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
+            Glide.with(mContext).load(item.getCreator().getAvatar()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
 
             helper.addOnClickListener(R.id.imgAvatar);
         }

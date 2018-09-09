@@ -67,6 +67,19 @@ public class User implements Serializable {
     @Expose
     private String targetFood;
 
+    @SerializedName("email")
+    @Expose
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public User setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
     public int getId() {
         return id;
     }
@@ -197,6 +210,7 @@ public class User implements Serializable {
         this.targetCharacter = builder.targetCharacter;
         this.targetStyle = builder.targetStyle;
         this.targetFood = builder.targetFood;
+        this.email = builder.email;
     }
 
     public static class Builder {
@@ -214,6 +228,7 @@ public class User implements Serializable {
         private String targetCharacter;
         private String targetStyle;
         private String targetFood;
+        private String email;
 
 
         public Builder() {
@@ -230,6 +245,7 @@ public class User implements Serializable {
             this.targetCharacter = null;
             this.targetStyle = null;
             this.targetFood = null;
+            this.email = null;
         }
         public User build(){
             return  new User(this);
@@ -241,6 +257,15 @@ public class User implements Serializable {
 
         public Builder setId(int id) {
             this.id = id;
+            return this;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public Builder setEmail(String email) {
+            this.email = email;
             return this;
         }
 

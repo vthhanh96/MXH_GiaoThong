@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,7 +14,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.khoaluan.mxhgiaothong.drawer.dto.BodyDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.FooterDto;
 import com.khoaluan.mxhgiaothong.drawer.dto.HeaderDto;
@@ -145,7 +143,7 @@ public class MenuAdapter extends RecyclerView.Adapter {
         public void bind() {
             User user = PreferManager.getInstance(mContext).getUser();
             if (user == null) return;
-            Glide.with(mContext).load(user.getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(avatar);
+            Glide.with(mContext).load(user.getAvatar()).apply(RequestOptions.circleCropTransform()).into(avatar);
             fullName.setText(user.getFullName());
             email.setText(user.getEmail());
         }

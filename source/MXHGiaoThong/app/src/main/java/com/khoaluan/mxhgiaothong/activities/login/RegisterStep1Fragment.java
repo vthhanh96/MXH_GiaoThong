@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.activities.LoadingActivity;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.utils.AppUtils;
 
@@ -77,7 +76,6 @@ public class RegisterStep1Fragment extends Fragment {
 
         user = new User();
 
-        progressDialog = new LoadingActivity();
     }
 
     public void changeDataEdtPhone() {

@@ -115,7 +115,7 @@ public class EditProfileActivity extends AppCompatActivity{
     private void initView() {
         try {
             Glide.with(this)
-                    .load(userLogin.getAvatarUrl())
+                    .load(userLogin.getAvatar())
                     .apply(RequestOptions.circleCropTransform())
                     .into(imvAvatar);
         } catch (Exception e){
@@ -123,7 +123,7 @@ public class EditProfileActivity extends AppCompatActivity{
         }
 
         edtFullName.setText(userLogin.getFullName());
-        tvDate.setText(userLogin.getBirthDate());
+        tvDate.setText(userLogin.getBirthday());
         tvGender.setText(userLogin.getGender());
         edtPassword.setText(userLogin.getPassword());
         edtAddress.setText(userLogin.getAddress());
@@ -217,7 +217,7 @@ public class EditProfileActivity extends AppCompatActivity{
             @Override
             public void uploadSuccess(String url) {
                 mImageUrl = url;
-                userLogin.setAvatarUrl(mImageUrl);
+                userLogin.setAvatar(mImageUrl);
                 ApiManager.getInstance().getUserService().editUser(token, userLogin).enqueue(new RestCallback<BaseResponse>() {
                     @Override
                     public void success(BaseResponse res) {
@@ -247,7 +247,7 @@ public class EditProfileActivity extends AppCompatActivity{
     public void editUserClick(){
         userLogin.setFullName(edtFullName.getText().toString());
         userLogin.setAddress(edtAddress.getText().toString());
-        userLogin.setBirthDate(tvDate.getText().toString());
+        userLogin.setBirthday(tvDate.getText().toString());
         userLogin.setGender(tvGender.getText().toString());
         boolean isWrongPass = false;
         if(lnNewPass.getVisibility() == View.VISIBLE){

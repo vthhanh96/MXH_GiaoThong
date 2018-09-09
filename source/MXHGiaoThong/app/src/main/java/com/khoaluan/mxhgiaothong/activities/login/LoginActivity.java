@@ -201,10 +201,8 @@ public class LoginActivity extends AppCompatActivity {
                                     User user = new User.Builder()
                                             .setAvatar(image_url)
                                             .setBirthday(birthday)
-                                            .set(email)
                                             .setFullName(fullname)
                                             .setGender(gender)
-                                            .setId_fb_gg(id)
                                             .setAddress(address)
                                             .build();
 

@@ -7,10 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -306,7 +304,7 @@ public class ListCommentsActivity extends AppCompatActivity{
             helper.setText(R.id.tvContent, item.getContent());
 
             ImageView imgAvatar = helper.getView(R.id.imgAvatar);
-            Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
+            Glide.with(mContext).load(item.getCreator().getAvatar()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
 
             helper.addOnClickListener(R.id.imgAvatar);
         }

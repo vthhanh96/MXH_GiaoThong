@@ -54,7 +54,7 @@ public class PostAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         ImageView imgAvatar = helper.getView(R.id.imgAvatar);
         ImageView imgContent = helper.getView(R.id.imgContent);
 
-        Glide.with(mContext).load(item.getCreator().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
+        Glide.with(mContext).load(item.getCreator().getAvatar()).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
         Glide.with(mContext).load(item.getImageUrl()).into(imgContent);
 
         helper.setText(R.id.tvCategory, item.getCategory().getName());

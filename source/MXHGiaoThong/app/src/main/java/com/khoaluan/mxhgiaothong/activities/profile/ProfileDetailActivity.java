@@ -3,37 +3,23 @@ package com.khoaluan.mxhgiaothong.activities.profile;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.activities.post.CreatePostActivity;
-import com.khoaluan.mxhgiaothong.activities.post.ListCommentsActivity;
-import com.khoaluan.mxhgiaothong.adapter.PostAdapter;
 import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
-import com.khoaluan.mxhgiaothong.restful.model.Post;
 import com.khoaluan.mxhgiaothong.restful.model.User;
-import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
 import com.khoaluan.mxhgiaothong.restful.request.ListPostByUserIdResquest;
-import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.GetAllPostResponse;
-import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.restful.response.UserResponse;
 import com.khoaluan.mxhgiaothong.view.ListPostView;
 
@@ -42,7 +28,6 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_BACK;
-import static com.khoaluan.mxhgiaothong.AppConstants.LEFT_MENU;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_MESSAGE;
 import static com.khoaluan.mxhgiaothong.AppConstants.RIGHT_SETTING;
 import static com.khoaluan.mxhgiaothong.activities.post.ListPostActivity.token;
@@ -143,9 +128,9 @@ public class ProfileDetailActivity   extends DrawerActivity {
             @Override
             public void success(UserResponse res) {
                 tvUserName.setText(res.getUser().getFullName());
-                Glide.with(getApplicationContext()).load(res.getUser().getAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(imvAvatar);
+                Glide.with(getApplicationContext()).load(res.getUser().getAvatar()).apply(RequestOptions.circleCropTransform()).into(imvAvatar);
                 tvAddress.setText(res.getUser().getAddress());
-                tvAge.setText(res.getUser().getBirthDate());
+                tvAge.setText(res.getUser().getBirthday());
                 getListPostUser(userID);
                 user = res.getUser();
             }
