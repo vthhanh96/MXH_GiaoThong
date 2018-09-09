@@ -15,12 +15,6 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.R;
-import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
-import com.khoaluan.mxhgiaothong.restful.ApiManager;
-import com.khoaluan.mxhgiaothong.restful.RestCallback;
-import com.khoaluan.mxhgiaothong.restful.RestError;
-import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
-import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.utils.AppUtils;
 
 
@@ -61,7 +55,7 @@ public class RegisterStep7Fragment extends Fragment {
     }
 
     private void setActvHobby() {
-        ArrayAdapter hobbyAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(character));
+        ArrayAdapter hobbyAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.character));
         mactvCharacter.setAdapter(hobbyAdapter);
         mactvCharacter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
