@@ -96,8 +96,8 @@ public class RegisterStep6Fragment extends Fragment {
                 if (stringStyle.trim().endsWith(",")) {
                     mactvStyle.setText(stringStyle.substring(0, stringStyle.lastIndexOf(",")));
                 }
-                RegisterStep1Fragment.user.setMyCharacter(mactvCharacter.getText().toString());
-                RegisterStep1Fragment.user.setMyStyle(mactvStyle.getText().toString());
+//                RegisterStep1Fragment.user.setMyCharacter(mactvCharacter.getText().toString());
+//                RegisterStep1Fragment.user.setMyStyle(mactvStyle.getText().toString());
                 _mViewPager.setCurrentItem(6, true);
             }
         });

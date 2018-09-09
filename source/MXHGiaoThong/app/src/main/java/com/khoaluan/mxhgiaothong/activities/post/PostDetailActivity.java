@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.main.EditPostActivity;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.InputDialog;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectCommentOptionsDialogFragment;
 import com.khoaluan.mxhgiaothong.activities.post.dialog.SelectPostOptionsDialogFragment;
@@ -28,25 +30,19 @@ import com.khoaluan.mxhgiaothong.customView.TopBarView;
 import com.khoaluan.mxhgiaothong.customView.dialog.CustomProgressDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.QuestionDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionListener;
-import com.khoaluan.mxhgiaothong.eventbus.EventUpdateListPost;
-import com.khoaluan.mxhgiaothong.eventbus.EventUpdatePost;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
 import com.khoaluan.mxhgiaothong.restful.RestCallback;
 import com.khoaluan.mxhgiaothong.restful.RestError;
+import com.khoaluan.mxhgiaothong.restful.model.Category;
 import com.khoaluan.mxhgiaothong.restful.model.Comment;
 import com.khoaluan.mxhgiaothong.restful.model.Post;
-import com.khoaluan.mxhgiaothong.restful.model.Reaction;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 import com.khoaluan.mxhgiaothong.restful.request.CommentRequest;
-import com.khoaluan.mxhgiaothong.restful.request.DoReactionRequest;
 import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.restful.response.CommentResponse;
 import com.khoaluan.mxhgiaothong.restful.response.PostResponse;
 import com.khoaluan.mxhgiaothong.utils.DateUtils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +50,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * Created by Hong Hanh on 5/31/2018.
@@ -63,74 +62,42 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private static final String ARG_KEY_POST_ID = "ARG_KEY_POST_ID";
 
-    public static void start(Context context, String postId) {
+    public static void start(Context context, Integer postId) {
         Intent starter = new Intent(context, PostDetailActivity.class);
         starter.putExtra(ARG_KEY_POST_ID, postId);
         context.startActivity(starter);
     }
 
-    @BindView(R.id.topBar)
-    TopBarView mTopBar;
-    @BindView(R.id.imgAvatar)
-    ImageView mImgAvatar;
-    @BindView(R.id.tvName)
-    TextView mNameTextView;
-    @BindView(R.id.tvPlace)
-    TextView mPlaceTextView;
-    @BindView(R.id.tvTime)
-    TextView mTimeTextView;
-    @BindView(R.id.tvCategory)
-    TextView mCategoryTextView;
-    @BindView(R.id.tvContent)
-    TextView mContentTextView;
-    @BindView(R.id.imgContent)
-    ImageView mImgContent;
-    @BindView(R.id.imgLike)
-    ImageView mImgLike;
-    @BindView(R.id.tvLikeAmount)
-    TextView mLikeAmountTextView;
-    @BindView(R.id.imgDislike)
-    ImageView mImgDislike;
-    @BindView(R.id.tvDislikeAmount)
-    TextView mDislikeAmount;
-    @BindView(R.id.txtCommentAmount)
-    TextView mCommentTextView;
-    @BindView(R.id.rcvComments)
-    RecyclerView mCommentRecycler;
-    @BindView(R.id.imgPostOptions)
-    ImageView mImgPostOptions;
+    @BindView(R.id.topBar) TopBarView mTopBar;
+    @BindView(R.id.rcvComments) RecyclerView mCommentRecycler;
+    @BindView(R.id.imgAvatar) ImageView mImgAvatar;
+    @BindView(R.id.tvTime) TextView mTvTime;
+    @BindView(R.id.tvTimeCreated) TextView mTvTimeCreated;
+    @BindView(R.id.tvName) TextView mTvName;
+    @BindView(R.id.rcvCategories) RecyclerView mCategoryRecycler;
+    @BindView(R.id.tvAmount) TextView mTvAmount;
+    @BindView(R.id.tvPlace) TextView mTvPlace;
+    @BindView(R.id.tvContent) TextView mTvContent;
+    @BindView(R.id.imgInterested) ImageView mImgInterested;
+    @BindView(R.id.txtInterested) TextView mTvInterested;
+    @BindView(R.id.txtComment) TextView mTvComment;
 
     private Post mPost;
     private String mToken;
     private User mUser;
     private Context mContext;
     private CommentAdapter mAdapter;
-    private String mPostId;
+    private Integer mPostId;
     private CustomProgressDialog mProgressDialog;
 
-    @OnClick(R.id.llLike)
-    public void like() {
-        doReaction(1);
+    @OnClick(R.id.btnMenuPost)
+    public void onMenuButtonClicked() {
+        openOptionsPopup(mPost);
     }
 
-    @OnClick(R.id.llDislike)
-    public void dislike() {
-        doReaction(2);
-    }
-
-    @OnClick(R.id.imgAvatar)
-    public void openProfile() {
-        ProfileDetailActivity.start(this, mPost.getCreator().getId());
-    }
-
-    @OnClick(R.id.imgPostOptions)
-    public void openOptions() {
-        openOptionsPopup(mPost, mImgPostOptions);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateBalance(EventUpdatePost eventUpdatePost) {
-        getPostInfo();
+    @OnClick(R.id.loInterest)
+    public void onInterestedLayoutClicked() {
+        interested();
     }
 
     @Override
@@ -148,13 +115,6 @@ public class PostDetailActivity extends AppCompatActivity {
         getUser();
         getExtras();
         initRecyclerView();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     private void initTopBar() {
@@ -208,73 +168,109 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void getExtras() {
-        mPostId = getIntent().getStringExtra(ARG_KEY_POST_ID);
+        mPostId = getIntent().getIntExtra(ARG_KEY_POST_ID, -1);
         getPostInfo();
     }
 
-    private void initData() {
-        if (mPost == null) return;
-        mNameTextView.setText(mPost.getCreator().getFullName());
-        mPlaceTextView.setText(mPost.getPlace());
-        mTimeTextView.setText(DateUtils.getTimeAgo(this, mPost.getCreatedDate()));
-        mContentTextView.setText(mPost.getContent());
-        mLikeAmountTextView.setText(String.valueOf(mPost.getLikeAmount()));
-        mDislikeAmount.setText(String.valueOf(mPost.getDislikeAmount()));
-        mCommentTextView.setText(getString(R.string.comment_amount, mPost.getComments().size()));
-
-        int typeReaction = isReaction(mPost.getReaction());
-
-        if (typeReaction == 1) {
-            mImgLike.setImageResource(R.drawable.ic_like_color);
-            mImgDislike.setImageResource(R.drawable.ic_dislike);
-        } else if (typeReaction == 2) {
-            mImgDislike.setImageResource(R.drawable.ic_dislike_color);
-            mImgLike.setImageResource(R.drawable.ic_like);
-        } else {
-            mImgDislike.setImageResource(R.drawable.ic_dislike);
-            mImgLike.setImageResource(R.drawable.ic_like);
-        }
-
-        Glide.with(this.getApplicationContext()).load(mPost.getCreator().getAvatar()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
-        Glide.with(this.getApplicationContext()).load(mPost.getImageUrl()).into(mImgContent);
-
-        mCategoryTextView.setText(mPost.getCategory().getName());
-
-        switch (mPost.getLevel()) {
-            case 0:
-                mCategoryTextView.setBackgroundResource(R.drawable.bg_corner_solid_green);
-                break;
-            case 1:
-                mCategoryTextView.setBackgroundResource(R.drawable.bg_corner_solid_yellow);
-                break;
-            case 2:
-                mCategoryTextView.setBackgroundResource(R.drawable.bg_corner_solid_orange);
-                break;
-            case 3:
-                mCategoryTextView.setBackgroundResource(R.drawable.bg_corner_solid_red);
-                break;
-
-
-        }
+    private void initRecyclerView() {
+        mAdapter = new CommentAdapter();
+        mAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                if (mAdapter.getData().get(position) == null) return false;
+                showCommentActionPopup(mAdapter.getData().get(position));
+                return false;
+            }
+        });
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if(view.getId() == R.id.imgAvatar) {
+                    ProfileDetailActivity.start(mContext, mAdapter.getData().get(position).getCreator().getId());
+                }
+            }
+        });
+        mCommentRecycler.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        mCommentRecycler.setAdapter(mAdapter);
+        mCommentRecycler.setNestedScrollingEnabled(false);
     }
 
-    private int isReaction(List<Reaction> reactions) {
-        if (reactions == null || mUser == null) return 0;
-        for (Reaction reaction : reactions) {
-            if (reaction.getCreator().getId() == mUser.getId()) {
-                return reaction.getStatus_reaction();
+    private void getPostInfo() {
+        ApiManager.getInstance().getPostService().getPostInfo(mToken, mPostId).enqueue(new RestCallback<PostResponse>() {
+            @Override
+            public void success(PostResponse res) {
+                if(res.getPost() == null) return;
+                mPost = res.getPost();
+                onGetPostSuccess();
+            }
+
+            @Override
+            public void failure(RestError error) {
+                Toast.makeText(PostDetailActivity.this, error.message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void onGetPostSuccess() {
+        if(mPost.getCreator() != null) {
+            Glide.with(mContext.getApplicationContext()).load(mPost.getCreator().getAvatar()).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+            mTvName.setText(mPost.getCreator().getFullName());
+        }
+        mTvTimeCreated.setText(DateUtils.getTimeAgo(mContext, mPost.getCreatedDate()));
+
+        if(mPost.getCategories() != null && !mPost.getCategories().isEmpty()) {
+            FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
+            flowLayoutManager.setAutoMeasureEnabled(true);
+
+            mCategoryRecycler.setVisibility(VISIBLE);
+            mCategoryRecycler.setAdapter(new CategoryAdapter(mPost.getCategories()));
+            mCategoryRecycler.setLayoutManager(flowLayoutManager);
+        } else {
+            mCategoryRecycler.setVisibility(GONE);
+        }
+
+        mTvAmount.setText(String.valueOf(mPost.getAmount()));
+        mTvPlace.setText(mPost.getPlace());
+        mTvContent.setText(mPost.getContent());
+
+        mImgInterested.setImageResource(isInterested(mPost.getInterestedPeople()) ? R.drawable.ic_interested_color : R.drawable.ic_interested);
+
+        if(mPost.getInterestedPeople() != null) {
+            mTvInterested.setText(mContext.getString(R.string.interested, mPost.getInterestedPeople().size()));
+        } else {
+            mTvInterested.setText(mContext.getString(R.string.interested, 0));
+        }
+
+        if(mPost.getComments() != null) {
+            mTvComment.setText(mContext.getString(R.string.comment_amount, mPost.getComments().size()));
+        } else {
+            mTvComment.setText(mContext.getString(R.string.comment_amount, 0));
+        }
+
+        if(mPost.getTime() != null) {
+            mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm", mPost.getTime()));
+        }
+
+        mAdapter.setNewData(mPost.getComments());
+    }
+
+    private boolean isInterested(List<User> users) {
+        if(mUser == null || users == null || users.isEmpty()) return false;
+        for (User user : users) {
+            if(user.getId() == mUser.getId()) {
+                return true;
             }
         }
-        return 0;
+        return false;
     }
 
-    public void openOptionsPopup(final Post post, View view) {
+    private void openOptionsPopup(final Post post) {
         boolean isCreator = !(TextUtils.isEmpty(mToken) || mUser == null || mUser.getId() != post.getCreator().getId());
         SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
         dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
             @Override
             public void editPost() {
-                CreatePostActivity.start(mContext, post);
+                EditPostActivity.start(PostDetailActivity.this, post);
             }
 
             @Override
@@ -292,70 +288,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
             }
         });
-        dialogFragment.show(getSupportFragmentManager(), PostDetailActivity.class.getName());
-    }
-
-    private Reaction getReaction(List<Reaction> reactions) {
-        if (reactions == null || mUser == null) return null;
-        for (Reaction reaction : reactions) {
-            if (reaction.getCreator().getId() == mUser.getId()) {
-                return reaction;
-            }
-        }
-        return null;
-    }
-
-    private void doReaction(int typeReaction) {
-        if (mUser == null || mToken == null) {
-            Toast.makeText(this, "Bạn phải đăng nhập trước khi thực hiện hành động này", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Reaction reaction = getReaction(mPost.getReaction());
-        if (reaction == null) {
-            reaction = new Reaction();
-            reaction.setCreator(mUser);
-            reaction.setStatus_reaction(typeReaction);
-            mPost.getReaction().add(reaction);
-            if (typeReaction == 1) {
-                mPost.setLikeAmount(mPost.getLikeAmount() + 1);
-            } else {
-                mPost.setDislikeAmount(mPost.getDislikeAmount() + 1);
-            }
-        } else {
-            if (reaction.getStatus_reaction() == typeReaction) {
-                mPost.getReaction().remove(reaction);
-                if (typeReaction == 1) {
-                    mPost.setLikeAmount(mPost.getLikeAmount() - 1);
-                } else {
-                    mPost.setDislikeAmount(mPost.getDislikeAmount() - 1);
-                }
-            } else {
-                int reactionPosition = mPost.getReaction().indexOf(reaction);
-                reaction.setStatus_reaction(typeReaction);
-                if (typeReaction == 1) {
-                    mPost.setLikeAmount(mPost.getLikeAmount() + 1);
-                    mPost.setDislikeAmount(mPost.getDislikeAmount() - 1);
-                } else {
-                    mPost.setLikeAmount(mPost.getLikeAmount() - 1);
-                    mPost.setDislikeAmount(mPost.getDislikeAmount() + 1);
-                }
-                mPost.getReaction().set(reactionPosition, reaction);
-            }
-        }
-        initData();
-
-        ApiManager.getInstance().getPostService().doReaction(mToken, mPost.getId(), new DoReactionRequest(typeReaction)).enqueue(new RestCallback<PostResponse>() {
-            @Override
-            public void success(PostResponse res) {
-                EventBus.getDefault().post(new EventUpdateListPost());
-            }
-
-            @Override
-            public void failure(RestError error) {
-
-            }
-        });
+        dialogFragment.show(getSupportFragmentManager(), "");
     }
 
     private void showDialogConfirmDeletePost(final Post post) {
@@ -369,69 +302,45 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void dialogPerformAction() {
                 questionDialog.dismissDialog();
-                deletePost(post);
+                deletePost();
             }
         });
         questionDialog.show(getSupportFragmentManager(), "");
     }
 
-    private void deletePost(final Post post) {
+    private void deletePost() {
         showLoading();
-        ApiManager.getInstance().getPostService().deletePost(mToken, post.getId()).enqueue(new RestCallback<BaseResponse>() {
+        ApiManager.getInstance().getPostService().deletePost(mToken, mPost.getId()).enqueue(new RestCallback<BaseResponse>() {
             @Override
             public void success(BaseResponse res) {
                 hideLoading();
                 finish();
-                EventBus.getDefault().post(new EventUpdateListPost());
-                Toast.makeText(PostDetailActivity.this, "Xóa bài viết thành công.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Xóa bài viết thành công.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void failure(RestError error) {
                 hideLoading();
-                Toast.makeText(PostDetailActivity.this, error.message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void initRecyclerView() {
-        mAdapter = new CommentAdapter();
-        mAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mAdapter.getData().get(position) == null) return false;
-                showCommentActionPopup(view, mAdapter.getData().get(position));
-                return false;
-            }
-        });
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if(view.getId() == R.id.imgAvatar) {
-                    ProfileDetailActivity.start(mContext, mAdapter.getData().get(position).getCreator().getId());
-                }
-            }
-        });
-        mCommentRecycler.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        mCommentRecycler.setAdapter(mAdapter);
-        mCommentRecycler.setNestedScrollingEnabled(false);
-        mCommentRecycler.setHasFixedSize(true);
-    }
-
-    private void getPostInfo() {
-        showLoading();
-        ApiManager.getInstance().getPostService().getPostInfo(mPostId).enqueue(new RestCallback<PostResponse>() {
+    private void interested() {
+        ApiManager.getInstance().getPostService().interested(mToken, mPost.getId()).enqueue(new RestCallback<PostResponse>() {
             @Override
             public void success(PostResponse res) {
-                hideLoading();
-                mPost = res.getPost();
-                initData();
-                mAdapter.setNewData(res.getPost().getComments());
+                mImgInterested.setImageResource(isInterested(res.getPost().getInterestedPeople()) ? R.drawable.ic_interested_color : R.drawable.ic_interested);
+                if(res.getPost().getInterestedPeople() != null) {
+                    mTvInterested.setText(mContext.getString(R.string.interested, res.getPost().getInterestedPeople().size()));
+                } else {
+                    mTvInterested.setText(mContext.getString(R.string.interested, 0));
+                }
             }
 
             @Override
             public void failure(RestError error) {
-                hideLoading();
+
             }
         });
     }
@@ -452,7 +361,7 @@ public class PostDetailActivity extends AppCompatActivity {
         inputDialog.show();
     }
 
-    private void showCommentActionPopup(View view, final Comment comment) {
+    private void showCommentActionPopup(final Comment comment) {
         if(mUser != null && mUser.getId() == comment.getCreator().getId()) {
             SelectCommentOptionsDialogFragment dialogFragment = new SelectCommentOptionsDialogFragment();
             dialogFragment.setCommentOptionsListener(new SelectCommentOptionsDialogFragment.SelectCommentOptionsListener() {
@@ -512,10 +421,8 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void success(BaseResponse res) {
                 hideLoading();
-                EventBus.getDefault().post(new EventUpdateListPost());
-                mAdapter.getData().remove(comment);
-                mAdapter.setNewData(mAdapter.getData());
-                mCommentTextView.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
+                mAdapter.remove(mAdapter.getData().indexOf(comment));
+                mTvComment.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
             }
 
             @Override
@@ -531,10 +438,8 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void success(CommentResponse res) {
                 hideLoading();
-                EventBus.getDefault().post(new EventUpdateListPost());
-                mAdapter.getData().add(res.getComment());
-                mAdapter.setNewData(mAdapter.getData());
-                mCommentTextView.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
+                mAdapter.addData(res.getComment());
+                mTvComment.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
             }
 
             @Override
@@ -545,7 +450,19 @@ public class PostDetailActivity extends AppCompatActivity {
         });
     }
 
-    public class CommentAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
+    private class CategoryAdapter extends BaseQuickAdapter<Category, BaseViewHolder> {
+
+        public CategoryAdapter(List<Category> categories) {
+            super(R.layout.layout_category_item, categories);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder helper, Category item) {
+            helper.setText(R.id.txtCategoryName, item.getName());
+        }
+    }
+
+    private class CommentAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
 
         public CommentAdapter() {
             super(R.layout.item_comment, new ArrayList<Comment>());

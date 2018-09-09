@@ -6,14 +6,12 @@
     android:id="@+id/lnTopbar"
     android:background="@color/appColor"
     android:gravity="center_vertical"
-    android:elevation="@dimen/margin_8dp"
     android:orientation="horizontal">
 
     <FrameLayout
         android:layout_marginStart="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="5dp">
+        android:layout_height="match_parent">
 
             <ImageView
                 android:src="@drawable/ic_menu"
@@ -26,7 +24,6 @@
             android:id="@+id/tv_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:ellipsize="marquee"
             android:gravity="center_vertical"

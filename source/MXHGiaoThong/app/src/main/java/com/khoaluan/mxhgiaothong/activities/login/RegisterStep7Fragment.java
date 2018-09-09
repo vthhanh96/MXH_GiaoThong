@@ -125,9 +125,9 @@ public class RegisterStep7Fragment extends Fragment {
                 if (stringFood.trim().endsWith(",")) {
                     mactvFood.setText(stringFood.substring(0, stringFood.trim().lastIndexOf(",")));
                 }
-                RegisterStep1Fragment.user.setTargetCharacter(mactvCharacter.getText().toString());
-                RegisterStep1Fragment.user.setTargetStyle(mactvStyle.getText().toString());
-                RegisterStep1Fragment.user.setTargetFood(mactvFood.getText().toString());
+//                RegisterStep1Fragment.user.setTargetCharacter(mactvCharacter.getText().toString());
+//                RegisterStep1Fragment.user.setTargetStyle(mactvStyle.getText().toString());
+//                RegisterStep1Fragment.user.setTargetFood(mactvFood.getText().toString());
                 InsertUserIntoDB();
             }
         });

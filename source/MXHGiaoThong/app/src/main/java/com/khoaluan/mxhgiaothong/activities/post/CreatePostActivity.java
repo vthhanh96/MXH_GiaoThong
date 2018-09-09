@@ -167,7 +167,7 @@ public class CreatePostActivity extends AppCompatActivity {
             Glide.with(mContext).load(mPost.getImageUrl()).into(mImgPost);
         }
         mTvPlace.setText(mPost.getPlace());
-        mCategory = mPost.getCategory();
+//        mCategory = mPost.getCategory();
         mLevel = mPost.getLevel();
         updateUICategory();
         mLocation = new Location("");
@@ -267,63 +267,63 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void saveNewPost() {
         if(mCategory == null || mLocation == null) return;
-        CreatePostRequest request = new CreatePostRequest(
-                mEdtContent.getText().toString(),
-                mLocation.getLatitude(),
-                mLocation.getLongitude(),
-                mTvPlace.getText().toString(),
-                mCategory.getId(),
-                mLevel,
-                true,
-                mImageUrl);
-
-        ApiManager.getInstance().getPostService().createPost(token, request).enqueue(new RestCallback<CreatePostResponse>() {
-            @Override
-            public void success(CreatePostResponse res) {
-                hideLoading();
-                EventBus.getDefault().post(new EventUpdateListPost());
-                Toast.makeText(CreatePostActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-
-            @Override
-            public void failure(RestError error) {
-                hideLoading();
-                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
-                errorDialog.setError(error.message);
-                errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
-            }
-        });
+//        CreatePostRequest request = new CreatePostRequest(
+//                mEdtContent.getText().toString(),
+//                mLocation.getLatitude(),
+//                mLocation.getLongitude(),
+//                mTvPlace.getText().toString(),
+//                mCategory.getId(),
+//                mLevel,
+//                true,
+//                mImageUrl);
+//
+//        ApiManager.getInstance().getPostService().createPost(token, request).enqueue(new RestCallback<CreatePostResponse>() {
+//            @Override
+//            public void success(CreatePostResponse res) {
+//                hideLoading();
+//                EventBus.getDefault().post(new EventUpdateListPost());
+//                Toast.makeText(CreatePostActivity.this, "Success", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//
+//            @Override
+//            public void failure(RestError error) {
+//                hideLoading();
+//                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+//                errorDialog.setError(error.message);
+//                errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
+//            }
+//        });
     }
 
     private void updatePost() {
-        if(mPost == null) finish();
-        UpdatePostRequest request = new UpdatePostRequest(
-                mEdtContent.getText().toString(),
-                mLocation.getLatitude(),
-                mLocation.getLongitude(),
-                mTvPlace.getText().toString(),
-                mCategory,
-                mLevel,
-                TextUtils.isEmpty(mImageUrl) ? "" : mImageUrl);
-        ApiManager.getInstance().getPostService().updatePost(token, mPost.getId(), request).enqueue(new RestCallback<BaseResponse>() {
-            @Override
-            public void success(BaseResponse res) {
-                hideLoading();
-                EventBus.getDefault().post(new EventUpdatePost());
-                EventBus.getDefault().post(new EventUpdateListPost());
-                Toast.makeText(mContext, "Chỉnh sửa bài viết thành công", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-
-            @Override
-            public void failure(RestError error) {
-                hideLoading();
-                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
-                errorDialog.setError(error.message);
-                errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
-            }
-        });
+//        if(mPost == null) finish();
+//        UpdatePostRequest request = new UpdatePostRequest(
+//                mEdtContent.getText().toString(),
+//                mLocation.getLatitude(),
+//                mLocation.getLongitude(),
+//                mTvPlace.getText().toString(),
+//                mCategory,
+//                mLevel,
+//                TextUtils.isEmpty(mImageUrl) ? "" : mImageUrl);
+//        ApiManager.getInstance().getPostService().updatePost(token, mPost.getId(), request).enqueue(new RestCallback<BaseResponse>() {
+//            @Override
+//            public void success(BaseResponse res) {
+//                hideLoading();
+//                EventBus.getDefault().post(new EventUpdatePost());
+//                EventBus.getDefault().post(new EventUpdateListPost());
+//                Toast.makeText(mContext, "Chỉnh sửa bài viết thành công", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//
+//            @Override
+//            public void failure(RestError error) {
+//                hideLoading();
+//                ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+//                errorDialog.setError(error.message);
+//                errorDialog.show(getSupportFragmentManager(), CreatePostActivity.class.getName());
+//            }
+//        });
     }
 
     private void updateUICategory() {

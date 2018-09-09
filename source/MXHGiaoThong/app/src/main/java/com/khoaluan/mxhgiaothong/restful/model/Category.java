@@ -11,13 +11,9 @@ import java.io.Serializable;
 
 public class Category implements Serializable {
 
-    @SerializedName("_id")
-    @Expose
-    private String id;
+    @SerializedName("_id") @Expose private String id;
 
-    @SerializedName("name")
-    @Expose
-    private String name;
+    @SerializedName("name") @Expose private String name;
 
     private boolean isSelected;
 

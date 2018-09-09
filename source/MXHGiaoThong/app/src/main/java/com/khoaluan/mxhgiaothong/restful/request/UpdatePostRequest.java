@@ -7,6 +7,7 @@ import com.khoaluan.mxhgiaothong.restful.model.Location;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,31 +16,14 @@ import java.util.List;
 
 public class UpdatePostRequest implements Serializable {
 
-    @SerializedName("content")
-    @Expose
-    private String content;
+    @SerializedName("content") @Expose private String content;
+    @SerializedName("location") @Expose private Location location;
+    @SerializedName("place") @Expose private String place;
+    @SerializedName("categories") @Expose private List<Category> categories;
+    @SerializedName("amount") @Expose private int amount;
+    @SerializedName("time") @Expose private Date time;
 
-    @SerializedName("location")
-    @Expose
-    private Location location;
-
-    @SerializedName("place")
-    @Expose
-    private String place;
-
-    @SerializedName("category")
-    @Expose
-    private Category category;
-
-    @SerializedName("level")
-    @Expose
-    private int level;
-
-    @SerializedName("imageUrl")
-    @Expose
-    private String imageUrl;
-
-    public UpdatePostRequest(String content, Double latitude, Double longitude, String place, Category category, int level, String imageUrl) {
+    public UpdatePostRequest(String content, Double latitude, Double longitude, String place, List<Category> categories, int amount, Date time) {
         this.content = content;
         List<Float> coordinates = new ArrayList<>();
         coordinates.add(longitude.floatValue());
@@ -47,8 +31,8 @@ public class UpdatePostRequest implements Serializable {
         this.location = new Location();
         this.location.setCoordinates(coordinates);
         this.place = place;
-        this.category = category;
-        this.level = level;
-        this.imageUrl = imageUrl;
+        this.categories = categories;
+        this.amount = amount;
+        this.time = time;
     }
 }

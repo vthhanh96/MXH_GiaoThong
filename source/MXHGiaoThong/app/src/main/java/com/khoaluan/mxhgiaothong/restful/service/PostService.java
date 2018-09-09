@@ -24,6 +24,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Hong Hanh on 3/19/2018.
@@ -31,7 +32,10 @@ import retrofit2.http.Path;
 
 public interface PostService {
     @GET("post")
-    Call<GetAllPostResponse> getAllPost();
+    Call<GetAllPostResponse> getAllPost(
+            @Header("Authorization") String token,
+            @Query("page") int pageNumber
+    );
 
     @POST("post")
     Call<CreatePostResponse> createPost(
@@ -47,39 +51,40 @@ public interface PostService {
     @PUT("post/{postId}")
     Call<BaseResponse> updatePost(
             @Header("Authorization") String token,
-            @Path("postId") String id,
+            @Path("postId") Integer id,
             @Body UpdatePostRequest request
     );
 
     @DELETE("post/{postId}")
     Call<BaseResponse> deletePost(
             @Header("Authorization") String token,
-            @Path("postId") String id
+            @Path("postId") Integer id
     );
 
     @GET("post/{postId}")
     Call<PostResponse> getPostInfo(
-            @Path("postId") String id
+            @Header("Authorization") String token,
+            @Path("postId") Integer id
     );
 
     @POST("post/{postId}/reaction")
     Call<PostResponse> doReaction(
             @Header("Authorization") String token,
-            @Path("postId") String id,
+            @Path("postId") Integer id,
             @Body DoReactionRequest request
     );
 
     @POST("post/{postId}/comment")
     Call<CommentResponse> createComment(
             @Header("Authorization") String token,
-            @Path("postId") String id,
+            @Path("postId") Integer id,
             @Body CommentRequest request
     );
 
     @PUT("post/{postId}/comment/{commentId}")
     Call<CommentResponse> editComment(
             @Header("Authorization") String token,
-            @Path("postId") String postId,
+            @Path("postId") Integer postId,
             @Path("commentId") String commentId,
             @Body CommentRequest request
     );
@@ -87,7 +92,7 @@ public interface PostService {
     @DELETE("post/{postId}/comment/{commentId}")
     Call<BaseResponse> deleteComment(
             @Header("Authorization") String token,
-            @Path("postId") String postId,
+            @Path("postId") Integer postId,
             @Path("commentId") String commentId
     );
 
@@ -105,4 +110,9 @@ public interface PostService {
     Call<GetAllPostResponse> getPostNearMeFilter(
             @Body FilterNearMePostRequest request
     );
+
+    @POST("post/{postId}/interested")
+    Call<PostResponse> interested(
+            @Header("Authorization") String token,
+            @Path("postId") int postId);
 }

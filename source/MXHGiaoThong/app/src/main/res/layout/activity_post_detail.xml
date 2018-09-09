@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,223 +22,217 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@color/white">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="16dp">
 
                     <ImageView
                         android:id="@+id/imgAvatar"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_margin="@dimen/margin_8dp"
-                        android:contentDescription="@null" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:contentDescription="@null"
+                        android:layout_marginEnd="@dimen/margin_8dp"/>
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:layout_toEndOf="@id/imgAvatar"
+                        android:layout_toStartOf="@id/btnMenuPost">
 
                         <TextView
                             android:id="@+id/tvName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"
-                            tools:text="ABC" />
+                            tools:text="Hong Hanh"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
 
-                        <LinearLayout
-                            android:id="@+id/llPlace"
+                        <TextView
+                            android:id="@+id/tvTimeCreated"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/tvName"
-                            android:layout_marginTop="@dimen/margin_8dp">
+                            tools:text="1m"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:layout_marginTop="@dimen/margin_8dp"/>
+                    </LinearLayout>
 
-                            <ImageView
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:layout_marginEnd="4dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_marker" />
+                    <ImageButton
+                        android:id="@+id/btnMenuPost"
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_menu_post"
+                        android:layout_marginStart="@dimen/margin_8dp"
+                        android:contentDescription="@null"
+                        android:scaleType="fitCenter"
+                        android:background="?attr/selectableItemBackground"
+                        android:layout_alignParentEnd="true"/>
 
-                            <TextView
-                                android:id="@+id/tvPlace"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:textSize="10sp"
-                                tools:text="Tân Sơn Nhất" />
-                        </LinearLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rcvCategories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/imgAvatar"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/margin_8dp"/>
+                </RelativeLayout>
 
-                    </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="@dimen/margin_16dp"
-                        android:layout_marginStart="@dimen/margin_16dp"
-                        android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:id="@+id/imgPostOptions"
-                            android:layout_width="30dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_amount"
+                            android:contentDescription="@null"/>
+
+                        <TextView
+                            android:id="@+id/tvAmount"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginTop="4dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_menu_post" />
+                            tools:text="4 people"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="UseCompoundDrawables"
+                        android:layout_marginTop="@dimen/margin_8dp"
+                        android:layout_marginBottom="@dimen/margin_8dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_marker"
+                            android:contentDescription="@null"/>
+
+                        <TextView
+                            android:id="@+id/tvPlace"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="ABC Restaurant"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_clock"
+                            android:contentDescription="@null"/>
 
                         <TextView
                             android:id="@+id/tvTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            tools:text="10 giờ" />
+                            tools:text="18:30 20/8/2018"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:textSize="14sp"/>
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Nhà hàng ABC đang có khuyến mãi dành cho 5 người. Bạn nào có nhu cầu đi ăn chung không?"
+                        android:layout_marginTop="@dimen/margin_8dp"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"/>
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_8dp"
-                    android:layout_marginStart="@dimen/margin_16dp"
-                    android:background="@drawable/bg_corner_solid_red"
-                    android:paddingBottom="4dp"
-                    android:paddingEnd="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingTop="4dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    tools:text="Kẹt xe" />
-
-                <TextView
-                    android:id="@+id/tvContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_16dp"
-                    android:layout_marginEnd="@dimen/margin_16dp"
-                    android:layout_marginStart="@dimen/margin_16dp"
-                    android:layout_marginTop="@dimen/margin_8dp"
-                    android:textColor="@color/black"
-                    tools:text="Hàng nghìn ô tô và xe máy nối đuôi nhau đứng bánh hàng giờ trên đường Tân Sơn Nhất - Bình Lợi - Vành Đai Ngoài dẫn về đường Trường Sơn hướng vào sân bay Tân Sơn Nhất." />
-
-                <ImageView
-                    android:id="@+id/imgContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@null"
-                    android:scaleType="fitCenter" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/gray" />
+                    android:background="#dddddd"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_8dp"
-                    android:layout_marginTop="@dimen/margin_8dp">
+                    android:layout_marginStart="@dimen/margin_8dp">
 
                     <LinearLayout
-                        android:id="@+id/llLike"
+                        android:id="@+id/loInterest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_16dp"
-                        android:layout_marginStart="@dimen/margin_16dp">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:id="@+id/imgLike"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="4dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_like" />
+                            android:id="@+id/imgInterested"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_interested"
+                            android:contentDescription="@null"/>
 
                         <TextView
-                            android:id="@+id/tvLikeAmount"
+                            android:id="@+id/txtInterested"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:textColor="@color/black"
-                            android:textSize="13sp"
-                            tools:text="0" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/llDislike"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/imgDislike"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="4dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_dislike" />
-
-                        <TextView
-                            android:id="@+id/tvDislikeAmount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:textColor="@color/black"
-                            android:textSize="13sp"
-                            tools:text="0" />
+                            android:text="Quan tâm (0)"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:textColor="@color/black"/>
                     </LinearLayout>
 
                     <View
                         android:layout_width="0dp"
-                        android:layout_height="10dp"
-                        android:layout_weight="1" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
 
                     <LinearLayout
-                        android:id="@+id/llComments"
+                        android:id="@+id/loComment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_16dp"
-                        android:layout_marginStart="@dimen/margin_16dp"
-                        android:gravity="end">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="4dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_comment" />
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_comment"
+                            android:contentDescription="@null"/>
 
                         <TextView
-                            android:id="@+id/txtCommentAmount"
+                            android:id="@+id/txtComment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/comment_amount"
-                            android:textColor="@color/black"
-                            android:textSize="13sp" />
+                            android:text="Bình luận (0)"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:textColor="@color/black"/>
                     </LinearLayout>
-
-
                 </LinearLayout>
             </LinearLayout>
-            <android.support.v4.widget.NestedScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
 
-                <android.support.v7.widget.RecyclerView
-                    android:nestedScrollingEnabled="false"
-                    android:id="@+id/rcvComments"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </android.support.v4.widget.NestedScrollView>
-
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcvComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
-    </ScrollView>
+
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

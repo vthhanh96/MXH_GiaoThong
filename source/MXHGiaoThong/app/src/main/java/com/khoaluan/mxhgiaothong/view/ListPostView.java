@@ -1,7 +1,6 @@
 package com.khoaluan.mxhgiaothong.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -9,10 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -182,38 +179,38 @@ public class ListPostView extends FrameLayout{
 
         Post post = mAdapter.getItem(position);
         Reaction reaction = getReaction(post.getReaction());
-        if(reaction == null) {
-            reaction = new Reaction();
-            reaction.setCreator(mUser);
-            reaction.setStatus_reaction(typeReaction);
-            post.getReaction().add(reaction);
-            if(typeReaction == 1) {
-                post.setLikeAmount(post.getLikeAmount() + 1);
-            } else {
-                post.setDislikeAmount(post.getDislikeAmount() + 1);
-            }
-        } else {
-            if(reaction.getStatus_reaction() == typeReaction) {
-                post.getReaction().remove(reaction);
-                if(typeReaction == 1) {
-                    post.setLikeAmount(post.getLikeAmount() - 1);
-                } else {
-                    post.setDislikeAmount(post.getDislikeAmount() - 1);
-                }
-            } else {
-                int reactionPosition = post.getReaction().indexOf(reaction);
-                reaction.setStatus_reaction(typeReaction);
-                if(typeReaction == 1) {
-                    post.setLikeAmount(post.getLikeAmount() + 1);
-                    post.setDislikeAmount(post.getDislikeAmount() - 1);
-                } else {
-                    post.setLikeAmount(post.getLikeAmount() - 1);
-                    post.setDislikeAmount(post.getDislikeAmount() + 1);
-                }
-                post.getReaction().set(reactionPosition, reaction);
-            }
-
-        }
+//        if(reaction == null) {
+//            reaction = new Reaction();
+//            reaction.setCreator(mUser);
+//            reaction.setStatus_reaction(typeReaction);
+//            post.getReaction().add(reaction);
+//            if(typeReaction == 1) {
+//                post.setAmount(post.getAmount() + 1);
+//            } else {
+//                post.setDislikeAmount(post.getDislikeAmount() + 1);
+//            }
+//        } else {
+//            if(reaction.getStatus_reaction() == typeReaction) {
+//                post.getReaction().remove(reaction);
+//                if(typeReaction == 1) {
+//                    post.setAmount(post.getAmount() - 1);
+//                } else {
+//                    post.setDislikeAmount(post.getDislikeAmount() - 1);
+//                }
+//            } else {
+//                int reactionPosition = post.getReaction().indexOf(reaction);
+//                reaction.setStatus_reaction(typeReaction);
+//                if(typeReaction == 1) {
+//                    post.setAmount(post.getAmount() + 1);
+//                    post.setDislikeAmount(post.getDislikeAmount() - 1);
+//                } else {
+//                    post.setAmount(post.getAmount() - 1);
+//                    post.setDislikeAmount(post.getDislikeAmount() + 1);
+//                }
+//                post.getReaction().set(reactionPosition, reaction);
+//            }
+//
+//        }
         mAdapter.getData().set(position, post);
         mAdapter.notifyItemChanged(position);
 

@@ -24,7 +24,10 @@ router.post('/', (req, res, next) => {
 });
 
 router.get('/', (req, res, next) => {
-    Category.find({}).exec((err, categories) => {
+    var page = req.param("page");
+    var query = req.param("q");
+    if(!query) query = "";
+    Category.find({name: {$regex : new RegExp(query, "i")}}).limit(10).skip(page * 10).exec((err, categories) => {
         if (err) {
             res.json({
                 success: false,

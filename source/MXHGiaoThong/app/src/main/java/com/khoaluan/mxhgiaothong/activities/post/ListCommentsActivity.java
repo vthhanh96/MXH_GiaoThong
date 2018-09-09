@@ -53,14 +53,14 @@ public class ListCommentsActivity extends AppCompatActivity{
     RecyclerView mCommentsRecyclerView;
 
     private Context mContext;
-    private String mPostId;
+    private Integer mPostId;
     private CommentAdapter mAdapter;
     private CustomProgressDialog mProgressDialog;
 
     private String mToken;
     private User mUser;
 
-    public static void start(Context context, String postId) {
+    public static void start(Context context, Integer postId) {
         Intent intent = new Intent(context, ListCommentsActivity.class);
         intent.putExtra(ARG_KEY_POST_ID, postId);
         context.startActivity(intent);
@@ -101,7 +101,7 @@ public class ListCommentsActivity extends AppCompatActivity{
     }
 
     private void getExtras() {
-        mPostId = getIntent().getStringExtra(ARG_KEY_POST_ID);
+        mPostId = getIntent().getIntExtra(ARG_KEY_POST_ID, -1);
     }
 
     private void getToken() {
@@ -164,7 +164,7 @@ public class ListCommentsActivity extends AppCompatActivity{
 
     private void getPostInfo() {
         showLoading();
-        ApiManager.getInstance().getPostService().getPostInfo(mPostId).enqueue(new RestCallback<PostResponse>() {
+        ApiManager.getInstance().getPostService().getPostInfo(mToken, mPostId).enqueue(new RestCallback<PostResponse>() {
             @Override
             public void success(PostResponse res) {
                 hideLoading();
