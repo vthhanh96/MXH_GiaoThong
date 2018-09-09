@@ -2,43 +2,24 @@ package com.khoaluan.mxhgiaothong.restful.request;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.khoaluan.mxhgiaothong.restful.model.Category;
 import com.khoaluan.mxhgiaothong.restful.model.Location;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CreatePostRequest implements Serializable {
 
-    @SerializedName("content")
-    @Expose
-    private String mContent;
+    @SerializedName("content") @Expose private String mContent;
+    @SerializedName("location") @Expose private Location location;
+    @SerializedName("place") @Expose private String place;
+    @SerializedName("categories") @Expose private List<Category> categories;
+    @SerializedName("amount") @Expose private int amount;
+    @SerializedName("time") @Expose private Date time;
 
-    @SerializedName("location")
-    @Expose
-    private Location location;
-
-    @SerializedName("place")
-    @Expose
-    private String place;
-
-    @SerializedName("category")
-    @Expose
-    private String category;
-
-    @SerializedName("level")
-    @Expose
-    private Integer level;
-
-    @SerializedName("isActive")
-    @Expose
-    private Boolean isActive;
-
-    @SerializedName("imageUrl")
-    @Expose
-    private String imageUrl;
-
-    public CreatePostRequest(String content, Double latitude, Double longitude, String place, String category, Integer level, Boolean isActive, String imageUrl) {
+    public CreatePostRequest(String content, Double latitude, Double longitude, String place, List<Category> categories, Date time, int amount) {
         mContent = content;
         List<Float> coordinates = new ArrayList<>();
         coordinates.add(longitude.floatValue());
@@ -46,9 +27,8 @@ public class CreatePostRequest implements Serializable {
         this.location = new Location();
         this.location.setCoordinates(coordinates);
         this.place = place;
-        this.category = category;
-        this.level = level;
-        this.isActive = isActive;
-        this.imageUrl = imageUrl;
+        this.categories = categories;
+        this.time = time;
+        this.amount = amount;
     }
 }

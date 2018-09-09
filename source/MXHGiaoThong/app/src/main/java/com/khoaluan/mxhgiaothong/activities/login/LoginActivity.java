@@ -25,6 +25,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.main.MainActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
 import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
 import com.khoaluan.mxhgiaothong.restful.ApiManager;
@@ -137,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void success(GetUserInfoResponse res) {
                 PreferManager.getInstance(LoginActivity.this).saveUser(res.getUser());
-                ListPostActivity.start(LoginActivity.this);
+                MainActivity.start(LoginActivity.this);
             }
 
             @Override

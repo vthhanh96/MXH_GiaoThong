@@ -3,6 +3,7 @@ package com.khoaluan.mxhgiaothong.activities;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.activities.main.MainActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
 import com.khoaluan.mxhgiaothong.utils.FontHelper;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
@@ -27,6 +28,6 @@ public class LoadingActivity extends AwesomeSplash {
 
     @Override
     public void animationsFinished() {
-        ListPostActivity.start(LoadingActivity.this);
+        MainActivity.start(LoadingActivity.this);
     }
 }

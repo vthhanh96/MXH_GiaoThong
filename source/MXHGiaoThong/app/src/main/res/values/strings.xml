@@ -12,6 +12,9 @@
     <string name="label_Speak">Bạn muốn đi đâu ?</string>
     <string name="speech_not_supported">Thiết bị của bạn không hỗ trợ chức năng này</string>
     <string name="comment_amount">Bình luận (%d)</string>
+    <string name="interested">Quan tâm (%d)</string>
+    <string name="save">Lưu</string>
+    <string name="update_post">Cập nhật bài viết</string>
 
     <!--Strings for register screen-->
     <string name="register_step_1_title">Nhập Số Điện Thoại Của Bạn.</string>
@@ -534,5 +537,4 @@
         <item>	Trà	</item>
         <item>	Trà Sữa	</item>
     </string-array>
-
 </resources>

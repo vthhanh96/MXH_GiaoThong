@@ -141,7 +141,7 @@ public class RegisterStep5Fragment extends Fragment implements PlaceSelectionLis
                     tilErrorAddress.setError(getString(R.string.empty_address));
                 } else {
                     user.setAddress((txtAddress.getText().toString()));
-                    user.setLatlngAdress(location);
+//                    user.setLatlngAdress(location);
                     _mViewPager.setCurrentItem(5, true);
                 }
             }

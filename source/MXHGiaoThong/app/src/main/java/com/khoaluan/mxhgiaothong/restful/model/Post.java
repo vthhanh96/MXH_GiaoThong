@@ -9,71 +9,29 @@ import java.util.List;
 
 public class Post implements Serializable {
 
-    @SerializedName("_id")
-    @Expose
-    private String id;
+    @SerializedName("_id") @Expose private Integer id;
+    @SerializedName("creator") @Expose private User creator;
+    @SerializedName("categories") @Expose private List<Category> categories;
+    @SerializedName("level") @Expose private int level;
+    @SerializedName("isActive") @Expose private Boolean isActive;
+    @SerializedName("content") @Expose private String content;
+    @SerializedName("imageUrl") @Expose private String imageUrl;
+    @SerializedName("created_date") @Expose private Date createdDate;
+    @SerializedName("modified_date") @Expose private Date modifyDate;
+    @SerializedName("place") @Expose private String place;
+    @SerializedName("location") @Expose private Location location;
+    @SerializedName("amount") @Expose private int amount;
+    @SerializedName("comments") @Expose private List<Comment> comments;
+    @SerializedName("reaction") @Expose private List<Reaction> reaction;
+    @SerializedName("time") @Expose private Date mTime;
+    @SerializedName("interested_people") @Expose private List<User> mInterestedPeople;
+    @SerializedName("joined_people") @Expose private List<User> mJoinedPeople;
 
-    @SerializedName("creator")
-    @Expose
-    private User creator;
-
-    @SerializedName("category")
-    @Expose
-    private Category category;
-
-    @SerializedName("level")
-    @Expose
-    private int level;
-
-    @SerializedName("isActive")
-    @Expose
-    private Boolean isActive;
-
-    @SerializedName("content")
-    @Expose
-    private String content;
-
-    @SerializedName("imageUrl")
-    @Expose
-    private String imageUrl;
-
-    @SerializedName("created_date")
-    @Expose
-    private Date createdDate;
-
-    @SerializedName("modify_date")
-    @Expose
-    private Date modifyDate;
-
-    @SerializedName("place")
-    @Expose
-    private String place;
-
-    @SerializedName("location")
-    @Expose
-    private Location location;
-
-    @SerializedName("like_amount")
-    @Expose
-    private int likeAmount;
-
-    @SerializedName("dislike_amount")
-    @Expose
-    private int dislikeAmount;
-
-    @SerializedName("comments")
-    @Expose
-    private List<Comment> comments;
-
-    @SerializedName("reaction")
-    @Expose
-    private List<Reaction> reaction;
-
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -86,11 +44,15 @@ public class Post implements Serializable {
     }
 
     public Category getCategory() {
-        return category;
+        return new Category();
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     public int getLevel() {
@@ -157,20 +119,12 @@ public class Post implements Serializable {
         this.location = location;
     }
 
-    public int getLikeAmount() {
-        return likeAmount;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setLikeAmount(int likeAmount) {
-        this.likeAmount = likeAmount;
-    }
-
-    public int getDislikeAmount() {
-        return dislikeAmount;
-    }
-
-    public void setDislikeAmount(int dislikeAmount) {
-        this.dislikeAmount = dislikeAmount;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public List<Comment> getComments() {
@@ -187,5 +141,29 @@ public class Post implements Serializable {
 
     public void setReaction(List<Reaction> reaction) {
         this.reaction = reaction;
+    }
+
+    public Date getTime() {
+        return mTime;
+    }
+
+    public void setTime(Date time) {
+        mTime = time;
+    }
+
+    public List<User> getInterestedPeople() {
+        return mInterestedPeople;
+    }
+
+    public void setInterestedPeople(List<User> interestedPeople) {
+        mInterestedPeople = interestedPeople;
+    }
+
+    public List<User> getJoinedPeople() {
+        return mJoinedPeople;
+    }
+
+    public void setJoinedPeople(List<User> joinedPeople) {
+        mJoinedPeople = joinedPeople;
     }
 }

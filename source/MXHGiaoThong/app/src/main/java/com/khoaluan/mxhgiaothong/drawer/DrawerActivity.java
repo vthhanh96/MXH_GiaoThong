@@ -3,6 +3,7 @@ package com.khoaluan.mxhgiaothong.drawer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,9 +16,9 @@ import com.khoaluan.mxhgiaothong.AppConstants;
 import com.khoaluan.mxhgiaothong.PreferManager;
 import com.khoaluan.mxhgiaothong.R;
 import com.khoaluan.mxhgiaothong.activities.login.LoginActivity;
+import com.khoaluan.mxhgiaothong.activities.main.MainActivity;
 import com.khoaluan.mxhgiaothong.activities.map.view.MapActivity;
 import com.khoaluan.mxhgiaothong.activities.post.ListPostActivity;
-import com.khoaluan.mxhgiaothong.activities.profile.EditProfileActivity;
 import com.khoaluan.mxhgiaothong.activities.profile.ProfileDetailActivity;
 import com.khoaluan.mxhgiaothong.customView.dialog.QuestionDialog;
 import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionListener;
@@ -61,8 +62,6 @@ abstract public class DrawerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         ButterKnife.bind(this);
-//        MainApplication.getAppComponent().inject(this);
-//        mEventManager.register(this);
         userLogin = PreferManager.getInstance(DrawerActivity.this).getUser();
         mMenuList = new ArrayList<>();
         setupListDrawer();
@@ -78,7 +77,7 @@ abstract public class DrawerActivity extends AppCompatActivity {
 
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
-            public void onDrawerClosed(View drawerView) {
+            public void onDrawerClosed(@NonNull View drawerView) {
 
             }
 
@@ -88,13 +87,13 @@ abstract public class DrawerActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onDrawerOpened(View drawerView) {
+            public void onDrawerOpened(@NonNull View drawerView) {
                 mRvMenu.scrollToPosition(mMenuAdapter.getCurrentPosition());
             }
 
 
             @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
             }
         });
 
@@ -113,7 +112,6 @@ abstract public class DrawerActivity extends AppCompatActivity {
                 if (!isSelected && userLogin != null) {
                     mDrawerLayout.closeDrawer(Gravity.START);
                     ProfileDetailActivity.start(DrawerActivity.this, userLogin.getId());
-//                    finish();
                 }else if(userLogin == null) {
                     Toast.makeText(DrawerActivity.this, "Bạn chưa đăng nhập!", Toast.LENGTH_SHORT).show();
                 }
@@ -171,9 +169,8 @@ abstract public class DrawerActivity extends AppCompatActivity {
         Intent intent;
         switch (item.key) {
             // region -- MENU ---
-            case AppConstants.NAV_DRAWER_LIST_POST: {
-                intent = new Intent(this, ListPostActivity.class);
-                startActivity(intent);
+            case AppConstants.NAV_DRAWER_MAIN: {
+                MainActivity.start(this);
                 finish();
                 break;
             }
@@ -181,16 +178,24 @@ abstract public class DrawerActivity extends AppCompatActivity {
                 Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
                 break;
             }
-            case AppConstants.NAV_DRAWER_SEARCH: {
+            case AppConstants.NAV_DRAWER_MEETING: {
                 Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
                 break;
             }
-            case AppConstants.NAV_DRAWER_MAP: {
-                intent = new Intent(this, MapActivity.class);
-                startActivity(intent);
-                finish();
+            case AppConstants.NAV_DRAWER_REQUEST: {
+                Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
                 break;
             }
+            case AppConstants.NAV_DRAWER_SETTINGS: {
+                Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+                break;
+            }
+//            case AppConstants.NAV_DRAWER_MAP: {
+//                intent = new Intent(this, MapActivity.class);
+//                startActivity(intent);
+//                finish();
+//                break;
+//            }
         }
     }
 
@@ -206,16 +211,9 @@ abstract public class DrawerActivity extends AppCompatActivity {
 
         // Body
         mMenuList.add(new BodyDto(
-                AppConstants.NAV_DRAWER_LIST_POST,
+                AppConstants.NAV_DRAWER_MAIN,
                 R.drawable.ic_home,
                 "Trang chủ",
-                getNavId())
-        );
-
-        mMenuList.add(new BodyDto(
-                AppConstants.NAV_DRAWER_MAP,
-                R.drawable.ic_map,
-                "Chỉ đường",
                 getNavId())
         );
 
@@ -227,9 +225,30 @@ abstract public class DrawerActivity extends AppCompatActivity {
         );
 
         mMenuList.add(new BodyDto(
-                AppConstants.NAV_DRAWER_SEARCH,
-                R.drawable.ic_search,
-                "Tìm kiếm",
+                AppConstants.NAV_DRAWER_MEETING,
+                R.drawable.ic_alarm,
+                "Lịch hẹn",
+                getNavId())
+        );
+
+
+        mMenuList.add(new BodyDto(
+                AppConstants.NAV_DRAWER_REQUEST,
+                R.drawable.ic_alarm,
+                "Yêu cầu",
+                getNavId())
+        );
+//        mMenuList.add(new BodyDto(
+//                AppConstants.NAV_DRAWER_MAP,
+//                R.drawable.ic_map,
+//                "Chỉ đường",
+//                getNavId())
+//        );
+
+        mMenuList.add(new BodyDto(
+                AppConstants.NAV_DRAWER_SETTINGS,
+                R.drawable.ic_setting,
+                "Cài đặt",
                 getNavId())
         );
 

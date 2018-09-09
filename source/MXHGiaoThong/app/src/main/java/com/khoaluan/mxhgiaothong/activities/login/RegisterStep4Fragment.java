@@ -116,7 +116,7 @@ public class RegisterStep4Fragment extends Fragment {
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
                 if ((calendar.get(Calendar.YEAR) - Integer.parseInt(yearWheelPicker.getData().get(yearWheelPicker.getCurrentItemPosition()).toString())) > 15) {
-                    user.setBirthday(toStringDate());
+//                    user.setBirthday(toStringDate());
                     _mViewPager.setCurrentItem(4, true);
                 } else {
                     txtTutorial.setText(getResources().getString(R.string.invalid_age));

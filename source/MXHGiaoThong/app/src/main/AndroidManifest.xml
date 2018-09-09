@@ -58,6 +58,10 @@
         <activity android:name=".activities.post.ListCommentsActivity"/>
         <activity android:name=".activities.map.view.MapActivity"/>
         <activity android:name=".activities.post.PostDetailActivity"/>
+        <activity android:name=".activities.main.MainActivity" />
+        <activity android:name=".activities.main.AddPostActivity" />
+        <activity android:name=".activities.main.CategoryActivity" />
+        <activity android:name=".activities.main.EditPostActivity" />
     </application>
 
 </manifest>

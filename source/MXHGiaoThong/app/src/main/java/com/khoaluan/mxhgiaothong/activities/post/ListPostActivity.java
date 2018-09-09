@@ -25,8 +25,6 @@ import com.khoaluan.mxhgiaothong.customView.dialog.listener.CustomDialogActionLi
 import com.khoaluan.mxhgiaothong.drawer.DrawerActivity;
 import com.khoaluan.mxhgiaothong.restful.model.User;
 
-import java.util.Objects;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,7 +54,7 @@ public class ListPostActivity extends DrawerActivity {
 
     @Override
     protected int getNavId() {
-        return AppConstants.NAV_DRAWER_LIST_POST;
+        return AppConstants.NAV_DRAWER_MAIN;
     }
 
     public static void start(Context context) {
