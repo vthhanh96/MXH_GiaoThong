@@ -1,6 +1,8 @@
 package com.khoaluan.mxhgiaothong.activities.login;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -30,7 +32,7 @@ public class RegisterStep1Fragment extends Fragment {
     private Button btnSendCode, btnNext;
     private EditText edtCode, edtPhone;
     private TextInputLayout tilErrorCode, tilErrorPhone;
-
+    private String codeAuth;
     private LinearLayout llRoot;
 
     public static Fragment newInstance() {
@@ -50,6 +52,8 @@ public class RegisterStep1Fragment extends Fragment {
         init();
 
         llRootTouch();
+
+        sendCode();
 
         changeDataEdtPhone();
 
@@ -78,6 +82,38 @@ public class RegisterStep1Fragment extends Fragment {
 
     }
 
+    public void sendCode() {
+        btnSendCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppUtils.hideSoftKeyboard(getActivity());
+                if (TextUtils.isEmpty(edtPhone.getText().toString())) {
+                    tilErrorPhone.setError(getString(R.string.empty_mail));
+                } else {
+                    tvVerifyCode.setVisibility(View.VISIBLE);
+                    edtCode.setVisibility(View.VISIBLE);
+                    btnNext.setVisibility(View.VISIBLE);
+//                    ApiManager.getInstance().getUserService().forgotPassword(new LoginUseRequest(edtPhone.getText().toString())).enqueue(new RestCallback<BaseResponse>() {
+//                        @Override
+//                        public void success(BaseResponse res) {
+//                            codeAuth = res.message;
+//                            tvVerifyCode.setVisibility(View.VISIBLE);
+//                            edtCode.setVisibility(View.VISIBLE);
+//                            btnNext.setVisibility(View.VISIBLE);
+//                        }
+//
+//                        @Override
+//                        public void failure(RestError error) {
+//                            ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+//                            errorDialog.setError(error.message);
+//                            errorDialog.show(getFragmentManager(), ForgotPassActivity.class.getName());
+//                        }
+//                    });
+                }
+            }
+        });
+    }
+
     public void changeDataEdtPhone() {
         edtPhone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -103,25 +139,30 @@ public class RegisterStep1Fragment extends Fragment {
 
     /* hide soft keyboard when touch outsite edittext*/
     private void llRootTouch() {
-            llRoot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AppUtils.touchOutsideHideSoftKeyboard(getActivity());
-                }
-            });
+        llRoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppUtils.touchOutsideHideSoftKeyboard(getActivity());
+            }
+        });
     }
 
     //IN HERE, HAVEN'T METHOD CHECK CODE
     private void rlNextClick() {
         btnNext.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(edtCode.getText().toString())) {
-                    tilErrorCode.setError(getString(R.string.empty_verify));
-                } else {
-                    user.setPhone(edtPhone.getText().toString());
-                    _mViewPager.setCurrentItem(1, true);
-                }
+                user.setEmail(edtPhone.getText().toString());
+                _mViewPager.setCurrentItem(1, true);
+//                if (TextUtils.isEmpty(edtCode.getText().toString())) {
+//                    tilErrorCode.setError(getString(R.string.empty_verify));
+//                }else if(!Objects.equals(edtCode.getText().toString(), codeAuth)) {
+//                    Toast.makeText(getActivity(), "Mã xác thực không đúng?", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    user.setEmail(edtPhone.getText().toString());
+//                    _mViewPager.setCurrentItem(1, true);
+//                }
             }
         });
     }

@@ -14,9 +14,9 @@
     <string name="comment_amount">Bình luận (%d)</string>
 
     <!--Strings for register screen-->
-    <string name="register_step_1_title">Nhập Số Điện Thoại Của Bạn.</string>
-    <string name="register_step_1_suggest">Bạn sẽ sử dụng số điện thoại này để đăng nhập hoặc khi cần đặt lại mật khẩu.</string>
-    <string name="register_step_1_send_virify_code">Gửi mã xác thực đến điện thoại của tôi</string>
+    <string name="register_step_1_title">Nhập Email Của Bạn.</string>
+    <string name="register_step_1_suggest">Bạn sẽ sử dụng số email này để đăng nhập hoặc khi cần đặt lại mật khẩu.</string>
+    <string name="register_step_1_send_virify_code">Gửi mã xác thực đến email của tôi</string>
 
     <string name="register_step_2_title_name">Tên Của Bạn Là Gì?</string>
     <string name="register_step_2_suggest_name">Sử dụng tên thật của bạn giúp mọi người dễ dàng nhận ra bạn hơn.</string>
@@ -87,6 +87,8 @@
     <string name="formatted_place_data">
          %1$s, %2$s
     </string>
+    <string name="email">Email</string>
+    <string name="empty_mail">Bạn cần phải nhập Email</string>
 
 
     <string-array name="Day_31">

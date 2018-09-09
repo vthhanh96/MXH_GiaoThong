@@ -15,6 +15,12 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
+import com.khoaluan.mxhgiaothong.restful.ApiManager;
+import com.khoaluan.mxhgiaothong.restful.RestCallback;
+import com.khoaluan.mxhgiaothong.restful.RestError;
+import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
+import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.utils.AppUtils;
 
 
@@ -131,25 +137,35 @@ public class RegisterStep7Fragment extends Fragment {
         if (!AppUtils.isNetworkAvailable(getContext())) {
             Toast.makeText(getContext(), getResources().getString(R.string.invalid_network), Toast.LENGTH_SHORT).show();
         } else {
-//            ApiManager.getInstance().getUserService().register(new LoginUseRequest(
-//                    edtEmail.getText().toString(),
-//                    edtPassword.getText().toString(),
-//                    edtFullName.getText().toString(),
-//                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqZJOzhw6-xhnjU2qnCi_U0aEE2u7ngwrCzKJXHuQvMYzxcboY"
-//            )).enqueue(new RestCallback<BaseResponse>() {
-//                @Override
-//                public void success(BaseResponse res) {
-//                    Toast.makeText(getActivity(), "Đăng kí thành công", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                @Override
-//                public void failure(RestError error) {
-//                    ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
-//
-//                    errorDialog.setError(error.message);
-//                    errorDialog.show(getFragmentManager(), RegisterActivity.class.getName());
-//                }
-//            });
+            ApiManager.getInstance().getUserService().register(new LoginUseRequest(
+                    RegisterStep1Fragment.user.getEmail(),
+                    RegisterStep1Fragment.user.getPassword(),
+                    RegisterStep1Fragment.user.getFullName(),
+                    RegisterStep1Fragment.user.getAvatar(),
+                    RegisterStep1Fragment.user.getAddress(),
+                    RegisterStep1Fragment.user.getGender(),
+                    RegisterStep1Fragment.user.getBirthday(),
+                    RegisterStep1Fragment.user.getPhone(),
+                    RegisterStep1Fragment.user.getLatlngAdress(),
+                    RegisterStep1Fragment.user.getMyCharacter(),
+                    RegisterStep1Fragment.user.getMyStyle(),
+                    RegisterStep1Fragment.user.getTargetCharacter(),
+                    RegisterStep1Fragment.user.getTargetStyle(),
+                    RegisterStep1Fragment.user.getTargetFood()
+            )).enqueue(new RestCallback<BaseResponse>() {
+                @Override
+                public void success(BaseResponse res) {
+                    Toast.makeText(getActivity(), "Đăng kí thành công", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failure(RestError error) {
+                    ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+
+                    errorDialog.setError(error.message);
+                    errorDialog.show(getFragmentManager(), RegisterActivity.class.getName());
+                }
+            });
 
         }
     }
