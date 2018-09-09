@@ -23,7 +23,7 @@ var UserSchema = new Schema({
         type: String,
         match: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
     },
-    avatar_url: {
+    avatar: {
         type: String,
     },
     address: {
@@ -32,12 +32,30 @@ var UserSchema = new Schema({
     gender: {
         type: String,
     },
-    birthDate:{
+    birthday:{
         type: String,
     },
-    id_fb_gg:{
-        type: String
-    }
+    phone: {
+        type: String,
+    },
+    latlngAdress: {
+        type : String,
+    },
+    myCharacter: {
+        type : String,
+    },
+    myStyle: {
+        type : String,
+    },
+    targetCharacter: {
+        type : String,
+    },
+    targetStyle: {
+        type : String,
+    },
+    targetFood: {
+        type : String,
+    },
 }, {
     versionKey: false
 });

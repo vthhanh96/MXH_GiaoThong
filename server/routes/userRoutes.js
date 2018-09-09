@@ -25,7 +25,17 @@ router.post('/register', function (req, res) {
             email: req.body.email,
             password: req.body.password,
             fullName: req.body.fullName,
-            avatar_url: req.body.avatar_url
+            avatar: req.body.avatar,
+            address: req.body.address,
+            gender: req.body.gender,
+            birthday: req.body.birthday,
+            phone: req.body.phone,
+            latlngAdress: req.body.latlngAdress,
+            myCharacter: req.body.myCharacter,
+            myStyle: req.body.myStyle,
+            targetCharacter: req.body.targetCharacter,
+            targetStyle: req.body.targetStyle,
+            targetFood: req.body.targetFood
         });
 
         // Attempt to save the user
