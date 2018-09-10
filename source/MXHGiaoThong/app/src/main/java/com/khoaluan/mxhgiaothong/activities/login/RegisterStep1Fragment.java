@@ -16,10 +16,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.khoaluan.mxhgiaothong.R;
+import com.khoaluan.mxhgiaothong.customView.dialog.ErrorMessageDialogFragment;
+import com.khoaluan.mxhgiaothong.restful.ApiManager;
+import com.khoaluan.mxhgiaothong.restful.RestCallback;
+import com.khoaluan.mxhgiaothong.restful.RestError;
 import com.khoaluan.mxhgiaothong.restful.model.User;
+import com.khoaluan.mxhgiaothong.restful.request.LoginUseRequest;
+import com.khoaluan.mxhgiaothong.restful.response.BaseResponse;
 import com.khoaluan.mxhgiaothong.utils.AppUtils;
+
+import java.util.Objects;
 
 public class RegisterStep1Fragment extends Fragment {
 
@@ -90,25 +99,23 @@ public class RegisterStep1Fragment extends Fragment {
                 if (TextUtils.isEmpty(edtPhone.getText().toString())) {
                     tilErrorPhone.setError(getString(R.string.empty_mail));
                 } else {
-                    tvVerifyCode.setVisibility(View.VISIBLE);
-                    edtCode.setVisibility(View.VISIBLE);
-                    btnNext.setVisibility(View.VISIBLE);
-//                    ApiManager.getInstance().getUserService().forgotPassword(new LoginUseRequest(edtPhone.getText().toString())).enqueue(new RestCallback<BaseResponse>() {
-//                        @Override
-//                        public void success(BaseResponse res) {
-//                            codeAuth = res.message;
-//                            tvVerifyCode.setVisibility(View.VISIBLE);
-//                            edtCode.setVisibility(View.VISIBLE);
-//                            btnNext.setVisibility(View.VISIBLE);
-//                        }
-//
-//                        @Override
-//                        public void failure(RestError error) {
-//                            ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
-//                            errorDialog.setError(error.message);
-//                            errorDialog.show(getFragmentManager(), ForgotPassActivity.class.getName());
-//                        }
-//                    });
+
+                    ApiManager.getInstance().getUserService().forgotPassword(new LoginUseRequest(edtPhone.getText().toString())).enqueue(new RestCallback<BaseResponse>() {
+                        @Override
+                        public void success(BaseResponse res) {
+                            codeAuth = res.message;
+                            tvVerifyCode.setVisibility(View.VISIBLE);
+                            edtCode.setVisibility(View.VISIBLE);
+                            btnNext.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void failure(RestError error) {
+                            ErrorMessageDialogFragment errorDialog = new ErrorMessageDialogFragment();
+                            errorDialog.setError(error.message);
+                            errorDialog.show(getFragmentManager(), ForgotPassActivity.class.getName());
+                        }
+                    });
                 }
             }
         });
@@ -153,16 +160,14 @@ public class RegisterStep1Fragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                user.setEmail(edtPhone.getText().toString());
-                _mViewPager.setCurrentItem(1, true);
-//                if (TextUtils.isEmpty(edtCode.getText().toString())) {
-//                    tilErrorCode.setError(getString(R.string.empty_verify));
-//                }else if(!Objects.equals(edtCode.getText().toString(), codeAuth)) {
-//                    Toast.makeText(getActivity(), "Mã xác thực không đúng?", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    user.setEmail(edtPhone.getText().toString());
-//                    _mViewPager.setCurrentItem(1, true);
-//                }
+                if (TextUtils.isEmpty(edtCode.getText().toString())) {
+                    tilErrorCode.setError(getString(R.string.empty_verify));
+                }else if(!Objects.equals(edtCode.getText().toString(), codeAuth)) {
+                    Toast.makeText(getActivity(), "Mã xác thực không đúng?", Toast.LENGTH_SHORT).show();
+                } else {
+                    user.setEmail(edtPhone.getText().toString());
+                    _mViewPager.setCurrentItem(1, true);
+                }
             }
         });
     }

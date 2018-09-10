@@ -112,17 +112,16 @@ router.post('/forgotPassword', function (req, res, next) {
     });
 
     var codeGenerates = voucher_codes.generate({
-        length: 5,
+        length: 6,
         count: 1,
-        charset: voucher_codes.charset("alphanumeric"),
-        prefix: "UIT"
+        charset: "0123456789"
     });
 
     var data = {
         from: 'NetFicUIT@gmail.com',
         to: req.body.email,
-        subject: 'Đặt lại mật khẩu của bạn',
-        text: `Mật khẩu mới của bạn là : ${codeGenerates}`
+        subject: 'Mã xác nhận Yummy',
+        text: `Mã xác nhận của bạn là : ${codeGenerates}`
     };
 
     transporter.sendMail(data, (err, info) => {
