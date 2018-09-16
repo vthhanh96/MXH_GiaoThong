@@ -10,3 +10,5 @@
  * Nếu người dùng không cho điểm tin cậy sau khi ăn thì hệ thống sẽ tự động cho là 5đ (khi rõ là điểm hệ thống cho ở timeline)
 - Cuộc hẹn sau khi hết thời gian một ngày sẽ trở thành lịch sử hiển thị trên timeline (thời gian người dùng đánh giá cho user khác sau khi cuộc hẹn kết thúc là 1 ngày)
 - Lấy danh sách bài đăng lọc theo độ tương thích, hiển thị độ tương thích trên từng bài (lấy mỗi lần 10 với vị trí gần nhất sau đó tính độ tương thích cho từng bài)
+
+# Deadline 22/9
