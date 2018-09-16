@@ -12,3 +12,15 @@
 - Lấy danh sách bài đăng lọc theo độ tương thích, hiển thị độ tương thích trên từng bài (lấy mỗi lần 10 với vị trí gần nhất sau đó tính độ tương thích cho từng bài)
 
 # Deadline 22/9
+Hiếu:
+- Chuyển project server
+- Lấy danh sách bài đăng
+- Tạo form khảo sát
+
+Hạnh:
+- Chuyển project
+- Hoàn thành các chức năng: 
+  + Đăng nhập
+  + Xử lý bài đăng
+  + Profile
+  + Register (nếu kịp)
